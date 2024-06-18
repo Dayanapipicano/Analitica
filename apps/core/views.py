@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+def menu(request):
+    return render(request,'home.html')
+
+def inicio_sesion(request):
+    return render(request,'inicio_sesion.html')
