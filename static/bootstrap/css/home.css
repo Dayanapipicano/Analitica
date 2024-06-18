@@ -40,7 +40,10 @@ body {
     transition: all 0.35s ease-in-out;
     background-color: #fafbfe;
     position: fixed;
+    top: 67px;
+    height: calc(100vh - 67px); 
 }
+
 
 #sidebar {
     width: 70px;
@@ -51,10 +54,10 @@ body {
     display: flex;
     flex-direction: column;
     position: fixed;
-    height: calc(100vh - 50px); /* Ajusta según el tamaño del header */
-
-
+    top: 67px; /* Ajusta esto a la altura de tu navbar */
+    height: calc(100vh - 67px); /* Ajusta esto a la altura de tu navbar */
 }
+
 
 #sidebar.expand {
     width: 260px;

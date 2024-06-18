@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/home.css'%}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/navbar.css'%}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
    
 </head>
 
@@ -19,19 +20,25 @@
 
 <body>
 
-    <header class="header">
-        <div class="logo">
-            <img src="{% static 'bootstrap/img/perfil.png'%}" alt="Logo de la marca">
-        </div>
-        <nav>
-           <ul class="nav-links">
-                <li><a href="#">Reporteador</a></li>
-            
-           </ul>            
-        </nav>
+  
       
-    </header>
- 
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <a class="navbar-brand" href="{% url 'inicio_sesion'%}">Reservas</a>
+    
+        <!-- Elementos principales del navbar -->
+        
+        <!-- Utilizamos ml-auto para colocar elementos en la parte derecha -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <!-- Agrega tu imagen de perfil aquí -->
+                <img src="{% static 'bootstrap/img/perfil.png'%}" alt="Foto de perfil" class="rounded-circle" style="width: 40px; height: 40px;">
+            </li>
+        </ul>
+    </nav>
+    
+<section class="contenedor ">
+
     <div class="wrapper">
        
         <aside id="sidebar">
@@ -46,34 +53,34 @@
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">
                         <i class="lni lni-user"></i>
-                        <span>Profile</span>
+                        <span>Admin</span>
                     </a>
                 </li>
              
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                        <i class="lni lni-protection"></i>
+                        <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Reportes</span>
                     </a>
                     <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">General</a>
+                            <a href="{% url 'general'%}" class="sidebar-link">General</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Cobertura</a>
+                            <a href="{% url 'cobertura'%}" class="sidebar-link">Cobertura</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Programa</a>
+                            <a href="{% url 'programa'%}" class="sidebar-link">Programa</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Desercion</a>
+                            <a href="{% url 'desercion'%}" class="sidebar-link">Desercion</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Estrategias</a>
+                            <a href="{% url 'estrategias'%}" class="sidebar-link">Estrategias</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Poblacion Vulnerable</a>
+                            <a href="{% url 'poblacion_vulnerable'%}" class="sidebar-link">Poblacion Vulnerable</a>
                         </li>
                     </ul>
                 </li>
@@ -81,15 +88,17 @@
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
                     
-                        <i><link rel="stylesheet" href="{% static 'bootstrap/logos/metas.png'}"></i>
+                      
+                        <img src="{% static 'bootstrap/img/meta.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
+
                         <span>Metas</span>
                     </a>
                     <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Formacion Regular</a>
+                            <a href="{% url 'formacion_regular'%}" class="sidebar-link">Formacion Regular</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Estrategias Institucionales</a>
+                            <a href="{% url 'estrategias_institucionales'%}" class="sidebar-link">Estrategias Institucionales</a>
                         </li>
                     </ul>
                 </li>
@@ -97,23 +106,27 @@
               
             </ul>
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-link">
+                <a href="{% url 'inicio_sesion'%}" class="sidebar-link">
                     <i class="lni lni-exit"></i>
                     <span>Logout</span>
                 </a>
             </div>
         </aside>
+        {% block contenido%}
         <div class="main p-3">
             <div class="text-center">
                 <h1>
                     Sidebar Bootstrap 5
                 </h1>
+              
+               
             </div>
         </div>
+        {% endblock contenido%}
     </div>
         <script src="{% static 'bootstrap/js/home.js'%}"></script>
         <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js'%}"></script>
-
+    </section>
 </body>
 
 </html>

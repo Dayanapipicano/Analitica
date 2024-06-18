@@ -3,30 +3,26 @@
 
 <head>
     {%load static%}
-    <link rel="stylesheet" href="{% static 'bootstrap/css/navbar.css'%}">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/navbar.css'%}">
+
+   
     <link rel="stylesheet" href="{% static 'bootstrap/css/inicio_sesion.css'%}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Inicio_sesion</title>
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo">
-            <img src="">
-        </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#">Reporteador</a></li>
-
-            </ul>
-        </nav>
-
-    </header>
-    <section>
-        <div class="form-box">
+    
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <a class="navbar-brand" href="{% url 'inicio_sesion'%}">Reservas</a>
+    
+        
+    </nav>
+    <section class="sesiones">
+        <div class="form-boxes">
             <div class="form-value">
                 <form action="">
-                    <h2>Login</h2>
+                    <h2 class="login_titulo">Inicio de sesion</h2>
                     <div class="inputbox">
                         <ion-icon name="mail-outline"></ion-icon>
                         <input type="text" required>
@@ -38,12 +34,13 @@
                         <label for="">Contraseña</label>
                     </div>
 
-
-                    <button>Iniciar Sesión</button>
+                 <div class="container">
+                    <button class="boton_registro">Iniciar Sesión</button>
+                </div>
                     <div class="bottom-links">
                      
                         <a class="contra" href="#">Olvidé mi contraseña</a>
-                            <a href="#">Registrarse</a>
+                            <a href="{% url 'registro'%}">Registrarse</a>
                        
                          
 

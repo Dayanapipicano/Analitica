@@ -21,5 +21,17 @@ from apps.core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.menu, name="menu"),
-    path('inicio_sesion/', views.inicio_sesion, name='inicio_session'),
+    path('inicio_sesion/', views.inicio_sesion, name='inicio_sesion'),
+    path('registro/', views.registro, name="registro"),
+    
+    #COBERTURA
+    
+    path('cobertura/index', views.cobertura, name="cobertura"),
+    path('desercion/index', views.desercion, name="desercion"),
+    path('estrategias/index', views.estrategias, name="estrategias"),
+    path('estrategias_institucionales/index', views.estrategias_institucionales, name="estrategias_institucionales"),
+    path('formacion_regular/index', views.formacion_regular, name="formacion_regular"),
+    path('general/index', views.general, name="general"),
+    path('poblacion_vulnerable/index', views.poblacion_vulnerable, name="poblacion_vulnerable"),
+    path('programa/index', views.programa, name="programa")
 ]
