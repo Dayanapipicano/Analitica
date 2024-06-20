@@ -1,13 +1,54 @@
-{% extends 'home.html'%}
+{% extends 'home.html' %}
 
-{% block contenido%}
+{% block contenido %}
+
 <div class="main p-3">
     <div class="text-center">
-        <h1>
-           Hola desde cobertura
-        </h1>
-      
-       
+        <div class="container">
+            <div class="mapadiv">
+                <h1 class="h4 mb-4">Cobertura</h1>
+                
+                <!-- Filtros usando Bootstrap en una línea -->
+                <div class="row justify-content-center">
+                    <div class="col-md-3 mb-3 offset-md-1"> <!-- Añadida clase offset-md-1 para mover los filtros un poco a la derecha -->
+                        <div class="form-group row">
+                            <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
+                            <div class="col-sm-7">
+                                <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-group row">
+                            <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
+                            <div class="col-sm-7">
+                                <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-3"> <!-- Ajustado el ancho de la columna para Municipio -->
+                        <div class="form-group row">
+                            <label for="filtroSeleccion" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control form-control-sm custom-select" id="filtroSeleccion">
+                                    <option selected>Seleccionar una opción</option>
+                                    <option value="opcion1">Popayán</option>
+                                    <option value="opcion2">Silvia</option>
+                                    <option value="opcion3">Piendamó</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="map-container mt-4">
+        <div class="container">
+            {% include 'Cobertura/mapa.html' %}
+        </div>
     </div>
 </div>
-{% endblock contenido%}
+
+{% endblock contenido %}

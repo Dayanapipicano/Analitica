@@ -96,6 +96,9 @@ body {
     flex: 1 1 auto;
 }
 
+.sidebar-dropdown.show {
+    display: block; /* Mostrar cuando tiene la clase 'show' */
+}
 a.sidebar-link {
     padding: .625rem 1.625rem;
     color: #FFF;
@@ -154,3 +157,5 @@ a.sidebar-link:hover {
     transform: rotate(45deg);
     transition: all .2s ease-out;
 }
+
+
