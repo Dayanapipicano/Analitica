@@ -1,9 +1,5 @@
 
 
-.mapadiv {
-    margin: 0 auto;
-}
-
 .mapadiv svg {
     width: 100%; /* Ajusta el ancho del SVG al 100% del contenedor */
     height: auto; /* Permite que la altura se ajuste proporcionalmente al ancho */
@@ -22,7 +18,7 @@
 }
 
 .mapa{
-    width: 45%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
