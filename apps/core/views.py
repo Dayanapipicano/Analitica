@@ -37,5 +37,7 @@ def programa(request):
 
 
 
-def modal(request):
-    return render(request, 'modal.html')
+def recuperar_contraseña(request):
+    return render(request, 'recuperar_contraseña.html')
+def grafica(request):
+    return render(request, 'Estrategias/grafica.html')
