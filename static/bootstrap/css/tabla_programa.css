@@ -1,31 +1,45 @@
 .custom-table {
-    width: 50%; /* Ajusta el ancho de la tabla según tus necesidades */
-    margin-left: auto; /* Margen izquierdo automático para mover la tabla a la derecha */
-    border-radius: 10px; /* Bordes redondeados */
-    overflow: hidden; /* Oculta los bordes en las esquinas redondeadas */
-    border-collapse: separate; /* Separar los bordes de las celdas */
-    border-spacing: 0; /* Espacio entre las celdas */
+    width: 50%; 
+    margin-left: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: separate; 
+    border-spacing: 0;
+    margin-top: 40px; 
   }
 
   .custom-table th,
   .custom-table td {
-    border: 1px solid #dee2e6; /* Borde de las celdas */
-    padding: 10px; /* Espaciado interno de las celdas */
-    text-align: center; /* Alineación del texto en las celdas */
+    border: 1px solid #a2a1a1; 
+    padding: 10px; 
+    text-align: center; 
   }
 
-  .custom-table thead {
-    background-color: #343a40; /* Color de fondo del encabezado */
-    color: #fff; /* Color del texto del encabezado */
+  .custom-table .custom-thead {
+    background-color: #274f3b;/* Cambia este valor al color de fondo deseado */
+    color: #ffffff; /* Color del texto del encabezado */
   }
-
+  
+ 
   .custom-table tbody tr:nth-child(even) {
-    background-color: #f8f9fa; /* Color de fondo de filas pares */
+    background-color: #f8f9fa;
   }
 
   .custom-table tbody tr:hover {
-    background-color: #e9ecef; /* Color de fondo al pasar el ratón */
+    background-color: #e9ecef; 
   }
   .map-container {
    margin-left: 15%;
+  }
+  .custom-scroll-table tbody {
+    display: block;
+    max-height: 320px; 
+    overflow-y: auto;
+  }
+  
+  .custom-scroll-table thead,
+  .custom-scroll-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
   }
