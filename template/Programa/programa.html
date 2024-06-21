@@ -1,14 +1,117 @@
-{% extends 'home.html'%}
+{% extends 'home.html' %}
 
-{% block contenido%}
+{% block contenido %}
+
+{%load static%}
+<link rel="stylesheet" href="{% static 'bootstrap/css/tabla_programa.css'%}">
 <div class="main p-3">
+   
+    
     <div class="text-center">
-        <h1>
-           Hola desde programa
-        </h1>
+        <div class="container">
+            <div class="mapadiv">
+                <h1 class="h4 mb-4">Programa</h1>
+                
+                <!-- Filtros usando Bootstrap en una línea -->
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group row">
+                            <label for="filtroSeleccion1" class="col-sm-5 col-form-label col-form-label-sm text-md-right">Tipo de formación:</label>
+                            <div class="col-sm-7">
+                                <select class="form-control form-control-sm custom-select" id="filtroSeleccion1">
+                                    <option selected>Seleccionar una opción</option>
+                                    <option value="opcion1">Opción 1</option>
+                                    <option value="opcion2">Opción 2</option>
+                                    <option value="opcion3">Opción 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group row">
+                            <label for="filtroSeleccion2" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Nombre:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control form-control-sm custom-select" id="filtroSeleccion2">
+                                    <option selected>Seleccionar una opción</option>
+                                    <option value="opcion1">Opción 1</option>
+                                    <option value="opcion2">Opción 2</option>
+                                    <option value="opcion3">Opción 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3"> <!-- Ajustado el ancho de la columna para Modalidad -->
+                        <div class="form-group row">
+                            <label for="filtroSeleccion3" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Modalidad:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control form-control-sm custom-select" id="filtroSeleccion3">
+                                    <option selected>Seleccionar una opción</option>
+                                    <option value="opcion1">Opción 1</option>
+                                    <option value="opcion2">Opción 2</option>
+                                    <option value="opcion3">Opción 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         
-      
-       
+            </div>
+        </div>
     </div>
-</div>
-{% endblock contenido%}
+    
+ 
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4">
+                <!-- Tabla 1 -->
+                <div class="custom-scroll-table">
+                    <table class="table-hover custom-table">
+                        <thead class="custom-thead">
+                            <tr>
+                                <th scope="col">Municipios</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Programa 1</td></tr>
+                            <tr><td>Programa 2</td></tr>
+                            <tr><td>Programa 3</td></tr>
+                            <tr><td>Programa 4</td></tr>
+                            <tr><td>Programa 5</td></tr>
+                            <!-- Aquí continuarías con las filas de la tabla -->
+                            <tr><td>Programa 28</td></tr>
+                            <tr><td>Programa 29</td></tr>
+                            <tr><td>Programa 30</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-5 mb-4">
+                <!-- Tabla 2 (duplicada) -->
+                <div class="custom-scroll-table">
+                    <table class=" table-hover custom-table">
+                        <thead class="custom-thead">
+                            <tr>
+                                <th scope="col">Ficha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Programa 1</td></tr>
+                            <tr><td>Programa 2</td></tr>
+                            <tr><td>Programa 3</td></tr>
+                            <tr><td>Programa 4</td></tr>
+                            <tr><td>Programa 5</td></tr>
+                            <!-- Aquí continuarías con las filas de la tabla -->
+                            <tr><td>Programa 28</td></tr>
+                            <tr><td>Programa 29</td></tr>
+                            <tr><td>Programa 30</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+
+{% endblock contenido %}

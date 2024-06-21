@@ -19,7 +19,7 @@
     background-color: #274f3b;/* Cambia este valor al color de fondo deseado */
     color: #ffffff; /* Color del texto del encabezado */
   }
-  
+
  
   .custom-table tbody tr:nth-child(even) {
     background-color: #f8f9fa;
@@ -43,3 +43,4 @@
     width: 100%;
     table-layout: fixed;
   }
+
