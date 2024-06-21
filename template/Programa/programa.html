@@ -4,7 +4,7 @@
 
 {%load static%}
 <link rel="stylesheet" href="{% static 'bootstrap/css/tabla_programa.css'%}">
-<div class="main p-3">
+<div  class="main p-3" style="">
    
     
     <div class="text-center">
@@ -57,6 +57,9 @@
         
             </div>
         </div>
+
+         
+  
     </div>
     
  
@@ -72,15 +75,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Programa 1</td></tr>
-                            <tr><td>Programa 2</td></tr>
-                            <tr><td>Programa 3</td></tr>
-                            <tr><td>Programa 4</td></tr>
-                            <tr><td>Programa 5</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
                             <!-- Aquí continuarías con las filas de la tabla -->
-                            <tr><td>Programa 28</td></tr>
-                            <tr><td>Programa 29</td></tr>
-                            <tr><td>Programa 30</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
+                            <tr><td>Programa </td><td>1</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -95,23 +98,68 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Programa 1</td></tr>
-                            <tr><td>Programa 2</td></tr>
-                            <tr><td>Programa 3</td></tr>
-                            <tr><td>Programa 4</td></tr>
-                            <tr><td>Programa 5</td></tr>
+                            <tr><td>Programa </td><td><button type="button"  class="btn-icon" id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
                             <!-- Aquí continuarías con las filas de la tabla -->
-                            <tr><td>Programa 28</td></tr>
-                            <tr><td>Programa 29</td></tr>
-                            <tr><td>Programa 30</td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></tr>
+                            <tr><td>Programa </td><td><button type="button"  id="mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Open Modal
+      </button>
+      <div class="col-md-3">
+        <button type="button" class="btn btn-primary w-100" id="mostrarFormulario">Registrar Implemento</button>
+    </div>
 
+        <!-- Modal -->
+        <div id="ventanaEmergente">
+            <div id="formularioEmergente" class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                       
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" id="nombre" name="nombre" class="form-control" required placeholder="Nombre del Implemento">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" class="btn-cerrar" aria-label="Close">
+                                    Cerrar
+                                </button>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+        </div>
+    </div>
+    </div>
+</div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="{% static 'bootstrap/js/home.js'%}"></script>
+</div>
 {% endblock contenido %}

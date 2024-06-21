@@ -37,3 +37,5 @@ def programa(request):
 
 
 
+def modal(request):
+    return render(request, 'modal.html')

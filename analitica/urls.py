@@ -33,5 +33,6 @@ urlpatterns = [
     path('formacion_regular/index', views.formacion_regular, name="formacion_regular"),
     path('general/index', views.general, name="general"),
     path('poblacion_vulnerable/index', views.poblacion_vulnerable, name="poblacion_vulnerable"),
-    path('programa/index', views.programa, name="programa")
+    path('programa/index', views.programa, name="programa"),
+    path('modal', views.modal, name="modal")
 ]

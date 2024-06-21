@@ -29,7 +29,7 @@ body {
 .wrapper {
  
     display: flex;
-    
+  
   
 }
 
@@ -39,10 +39,11 @@ body {
     overflow: hidden;
     transition: all 0.35s ease-in-out;
     background-color: #fafbfe;
-    position: fixed;
     top: 67px;
+    position: fixed;
     height: calc(100vh - 67px); 
 }
+
 
 
 #sidebar {
@@ -159,3 +160,6 @@ a.sidebar-link:hover {
 }
 
 
+.btn-cerrar{
+    width: 24px;
+}
