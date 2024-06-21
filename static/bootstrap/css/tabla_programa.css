@@ -116,14 +116,27 @@
   background-color: #ffffff; /* Fondo blanco del modal */
   border: none;
   border-radius: 10px;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Sombra */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); 
+  width: 900px;
+  height: 500px;
+ 
 }
 
 .modal-header {
-  border-bottom: none; /* Sin borde inferior en el encabezado */
-  padding-bottom: 0; /* Sin espacio inferior en el encabezado */
+  background-color: #274f3b;
+  padding-bottom: 0; 
+  color: #ffffff;
 }
-
+.modal-title{
+  
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 10px;
+}
+.btn-danger{
+  margin-left: auto;
+  margin-right: auto;
+}
 .modal-title {
   margin-bottom: 0; /* Sin margen inferior en el título */
 }
@@ -132,18 +145,3 @@
   padding: 20px; /* Relleno interno */
 }
 
-.btn-cerrar {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.btn-cerrar img {
-  width: 20px;
-  height: 20px;
-}
-
-.btn-cerrar:focus {
-  outline: none;
-}

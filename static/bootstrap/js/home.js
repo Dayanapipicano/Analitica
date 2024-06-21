@@ -14,8 +14,10 @@ botonMostrar.addEventListener("click", () => {
 
 
 
-const btnCerrar = document.querySelector("#formularioEmergente .btn-cerrar");
+
+const btnCerrar = document.querySelector(".btn-danger");
 
 btnCerrar.addEventListener("click", function() {
+    const ventanaEmergente = document.getElementById("ventanaEmergente");
     ventanaEmergente.style.display = "none";
 });
