@@ -1,28 +1,97 @@
-{% extends 'home.html'%}
+{% extends 'home.html' %}
 
-{% block contenido%}
-{% load static%}
-<link rel="stylesheet" href="{% static 'bootstrap/css/desercion.css'%}">
+{% block contenido %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/desercion.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/grafica2.css' %}">
 <div class="main p-3">
     <div class="text-center">
         <div class="container">
             <div class="mapadiv">
-                <h1 class="h4 mb-4">Cobertura</h1>
+                <h1 class="h4 mb-4">Estrategias</h1>
+                <!-- Filtros usando Bootstrap en una línea -->
+                <div class="row justify-content-start align-items-center">
+                    <div class="col-md-3 mb-3"> <!-- Fecha Inicio -->
+                        <div class="form-group row">
+                            <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
+                            <div class="col-sm-7">
+                                <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3"> <!-- Fecha Fin -->
+                        <div class="form-group row">
+                            <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
+                            <div class="col-sm-7">
+                                <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3"> <!-- Municipio -->
+                        <div class="form-group row">
+                            <label for="filtroSeleccion" class="col-sm-5 col-form-label col-form-label-sm">Municipio:</label>
+                            <div class="col-sm-7">
+                                <select class="form-control form-control-sm custom-select" id="filtroSeleccion">
+                                    <option selected>Seleccionar una opción</option>
+                                    <option value="opcion1">Popayán</option>
+                                    <option value="opcion2">Silvia</option>
+                                    <option value="opcion3">Piendamó</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3"> <!-- Espacio para metas visuales -->
+                        <div class="metas-visual-horizontal">
+                            <div class="meta">
+                                <div class="cuadro verde"></div> <span>60-100%</span>
+                            </div>
+                            <div class="meta">
+                                <div class="cuadro amarilla"></div> <span>50-59%</span>
+                            </div>
+                            <div class="meta">
+                                <div class="cuadro naranja"></div> <span>30-49%</span>
+                            </div>
+                            <div class="meta">
+                                <div class="cuadro roja"></div> <span>0-29%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-               
-    <div class="container">
-        <div class="chart">
-            <div>
-                <canvas id="barchart" width="300" height="300"></canvas>
-              </div>
+                
+            </div>
+        </div>
+        <div class="row justify-content-center" style="margin-left: 50px;">
+            <div class="col-md-4">
+                <div class="container">
+                    <div class="chart">
+                        <canvas id="barchart1" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="container">
+                    <div class="chart">
+                        <canvas id="barchart2" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="container">
+                    <div class="chart">
+                        <canvas id="barchart3" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
         
+        
     </div>
-
-       
-    </div>
-
+   
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{% static 'bootstrap/js/chart1.js'%}"></script>
+    <script src="{% static 'bootstrap/js/chart1.js' %}"></script>
+    <script src="{% static 'bootstrap/js/chart2.js' %}"></script>
+    <script src="{% static 'bootstrap/js/chart3.js' %}"></script>
 </div>
-{% endblock contenido%}
+{% endblock contenido %}

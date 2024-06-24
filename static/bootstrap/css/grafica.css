@@ -1,29 +1,23 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 
-}
 
-body{
-    background: #d4bdde;
-    display: flex ;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-
-.container{
+.container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 200px;
+    gap: 50px; /* Reduce the gap between elements */
 }
-.chart{
-    padding: 2rem;
-    border: 1px solid  #f49131;
-    border-radius: 1rem;
+
+.chart {
+    padding: 1rem; /* Reduce padding */
+    border: 1px solid #f49131;
+    border-radius: 0.5rem; /* Reduce border radius */
     background: #251c35;
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
-    
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Reduce shadow size */
+    width: 200px; /* Set fixed width for the chart */
+    height: 200px; /* Set fixed height for the chart */
+}
+
+.chart canvas {
+    width: 100% !important; /* Make the canvas fit the container */
+    height: 100% !important; /* Make the canvas fit the container */
 }
