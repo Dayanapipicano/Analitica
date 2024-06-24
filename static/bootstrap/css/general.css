@@ -1,0 +1,32 @@
+
+.meta {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+}
+
+.cuadro {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 4px; /* Para esquinas redondeadas opcionales */
+}
+
+.verde {
+    background-color: green;
+}
+
+.amarilla {
+    background-color: yellow;
+}
+
+.naranja {
+    background-color: orange;
+}
+
+.roja {
+    background-color: red;
+}
+.align-middle {
+    align-items: center;
+}

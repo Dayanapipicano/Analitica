@@ -1,11 +1,82 @@
 {% extends 'home.html'%}
 
 {% block contenido%}
+{%load static%}
+<link rel="stylesheet" href="{% static 'bootstrap/css/formacion_regular.css'%}">
+
+
 <div class="main p-3">
     <div class="text-center">
-        <h1>
-           Hola desde formacion regular 
-        </h1>
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    Título de la Tarjeta
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row result-row">
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Auxiliar</div>
+                                <div class="result-value mx-auto">100</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title mx-auto">Evento</div>
+                                <div class="result-value mx-auto">200</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Técnico</div>
+                                <div class="result-value mx-auto">300</div>
+                            </div>
+                        </div>
+                        <div class="row result-row">
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Tecnólogo</div>
+                                <div class="result-value d-flex justify-content-center align-items-center mx-auto">
+                                    400
+                                </div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Operario</div>
+                                <div class="result-value mx-auto">500</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Curso especial</div>
+                                <div class="result-value mx-auto">600</div>
+                            </div>
+                        </div>
+                        <div class="row result-row">
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Profundización técnica</div>
+                                <div class="result-value mx-auto">700</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Otro título</div>
+                                <div class="result-value mx-auto">800</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Otro título más</div>
+                                <div class="result-value mx-auto">900</div>
+                            </div>
+                        </div>
+                        <div class="row result-row">
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Último título</div>
+                                <div class="result-value mx-auto">1000</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Título adicional</div>
+                                <div class="result-value mx-auto">1100</div>
+                            </div>
+                            <div class="col-md-4 result-col">
+                                <div class="result-title">Título extra</div>
+                                <div class="result-value mx-auto">1200</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
       
        
     </div>

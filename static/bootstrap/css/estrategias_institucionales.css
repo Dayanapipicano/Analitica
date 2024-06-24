@@ -1,0 +1,107 @@
+
+.left {
+
+    border: 1px solid #000;
+    padding: 20px;
+    float: left;
+    background-color: #eee;
+    border-radius: 0 0 20px 20px ;
+}
+.card{
+    width: 400px;
+    border-radius: 100px;
+  
+    float: left;
+    background-color: #eee;
+    border-radius: 20px;
+}
+
+label {
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid #42b37b;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+    outline: none;
+    background-color: #eee;
+}
+.titulo {
+    background-color: #274f3b;
+    border-radius: 20px 20px 0 0;
+
+}
+
+.tarjetas{
+   
+}
+.titulo h1{
+   color: #fff;
+   font-size: 20px;
+   padding: 9px;
+}
+.dato{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#titulo {
+    font-weight: bold;
+}
+
+.dato .serie {
+    width: 500%;
+    margin-right: 15px;
+}
+
+.serie, .valor{
+    display: inline-block;
+}
+
+.dato .valor {
+    width: 40%;
+}
+.datos{
+    padding-bottom: 30px;
+}
+.resultado{
+
+    background-color: #989a98;
+    border-radius: 20px;
+    width: 150px;
+    height: 30px;
+
+}
+.valor_total{
+    font-size: 14px;
+    padding: 4px;
+}
+.agregar {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background-color: #18936f;
+    border: none;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 20px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.crear-grafico {
+    float: right;
+    background-color: #18936f;
+    border: none;
+    padding: 10px;
+    color: #fff;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.right {
+    float: left;
+    border: 1px solid #000;
+    max-width: 605px;
+    margin-left: 15px;
+}

@@ -1,13 +1,106 @@
 {% extends 'home.html'%}
 
+
 {% block contenido%}
+{%load static%}
+<link rel="stylesheet" href="{% static 'bootstrap/css/estrategias_institucionales.css'%}">
+
+
+
+   
 <div class="main p-3">
     <div class="text-center">
-        <h1>
-           Hola desde estrategias institucionales
-        </h1>
-      
-       
+        <div class="container">
+            <div class="mapadiv">
+                <h1 class="h4 mb-4">Cobertura</h1>
+    
+                <div class="container mt-5">
+                    <div class="d-flex justify-content-center gap-3">
+                   
+                        <div class="card">
+                            <div class="titulo">
+                                <h1>Economía Popular</h1>
+                            </div>
+                            <div class="left">
+                                <div class="datos" id="datos">
+                                    <div class="dato">
+                                        <label class="serie">Auxiliar</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Evento</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Técnico</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Tecnólogo</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Operario</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Curso especial</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Profundización técnica</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                </div>
+                                <div class="resultado">
+                                    <h1 class="valor_total"><span>Gran total: </span>100</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="titulo">
+                                <h1>Campesena</h1>
+                            </div>
+                            <div class="left">
+                                <div class="datos" id="datos">
+                                    <div class="dato">
+                                        <label class="serie">Auxiliar</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Evento</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Técnico</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Tecnólogo</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Operario</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Curso especial</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                    <div class="dato">
+                                        <label class="serie">Profundización técnica</label>
+                                        <label class="valor">100</label>
+                                    </div>
+                                </div>
+                                <div class="resultado">
+                                    <h1 class="valor_total"><span>Gran total: </span>100</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        
     </div>
 </div>
 {% endblock contenido%}

@@ -2,18 +2,73 @@
 
 {% block contenido %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'bootstrap/css/desercion.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/general.css' %}">
 
 <div class="main p-3">
     <div class="text-center">
         <div class="container">
-            <div class="mapadiv">
                 <h1 class="h4 mb-4">Cobertura</h1>
+
                 <div class="container">
-                    <div class="chart">
-                        <canvas id="barchart"></canvas>
+                    <div class="row align-middle">
+                        <div class="col-md-3 mb-3"> <!-- Fecha Inicio -->
+                            <div class="form-group row">
+                                <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
+                                <div class="col-sm-7">
+                                    <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3"> <!-- Fecha Fin -->
+                            <div class="form-group row">
+                                <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
+                                <div class="col-sm-7">
+                                    <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex " height="300"> <!-- Cuadros de colores -->
+                            <div class="meta">
+                                60-100%
+                                <div class="cuadro verde"></div>
+                            </div>
+                            <div class="meta">
+                                50-59%
+                                <div class="cuadro amarilla"></div>
+                            </div>
+                            <div class="meta">
+                                30-49%
+                                <div class="cuadro naranja"></div>
+                            </div>
+                            <div class="meta">
+                                0-29%
+                                <div class="cuadro roja"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                
+
+
+
+                <div class="container my-4">
+                    <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary" onclick="showChart('chart1')">Titulada</button>
+                        <button type="button" class="btn btn-secondary" onclick="showChart('chart2')">Complementaria</button>
+                    </div>
+
+                    <div id="chart1" class="chart">
+                        <canvas id="barchart_titulada" ></canvas>
+                    </div>
+                   
+                    <div id="chart2" class="chart" style="display: none;" >
+                        <canvas id="barchart_complementaria" ></canvas>
+                    </div>
+                
+                </div>
+
+              
             </div>
         </div>
     </div>
