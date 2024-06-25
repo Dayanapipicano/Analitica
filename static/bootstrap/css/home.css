@@ -42,6 +42,9 @@ body {
     top: 67px;
     position: fixed;
     height: calc(100vh - 67px); 
+    margin-left: 70px; /* Ajusta el margen izquierdo para dejar espacio al menú lateral */
+    
+    
 }
 
 
@@ -163,3 +166,4 @@ a.sidebar-link:hover {
 .btn-cerrar{
     width: 24px;
 }
+

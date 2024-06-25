@@ -9,7 +9,8 @@
     width: 20px;
     height: 20px;
     margin-left: 10px;
-    border-radius: 4px; /* Para esquinas redondeadas opcionales */
+    border-radius: 4px; 
+    
 }
 
 .verde {
@@ -27,6 +28,9 @@
 .roja {
     background-color: red;
 }
-.align-middle {
-    align-items: center;
+
+
+.prueba{
+  margin-top: -15px;
+  
 }

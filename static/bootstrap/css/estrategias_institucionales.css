@@ -8,9 +8,9 @@
     border-radius: 0 0 20px 20px ;
 }
 .card{
-    width: 400px;
+    width: 380px;
     border-radius: 100px;
-  
+   
     float: left;
     background-color: #eee;
     border-radius: 20px;
@@ -19,7 +19,7 @@
 label {
     display: inline-block;
     border: none;
-    border-bottom: 1px solid #42b37b;
+    border-bottom: 1px solid #eee;
     margin-bottom: 10px;
     width: 100%;
     padding: 5px;
@@ -32,9 +32,7 @@ label {
 
 }
 
-.tarjetas{
-   
-}
+
 .titulo h1{
    color: #fff;
    font-size: 20px;
@@ -45,9 +43,7 @@ label {
     align-items: center;
     gap: 10px;
 }
-#titulo {
-    font-weight: bold;
-}
+
 
 .dato .serie {
     width: 500%;
@@ -66,12 +62,19 @@ label {
 }
 .resultado{
 
-    background-color: #989a98;
-    border-radius: 20px;
-    width: 150px;
-    height: 30px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #b6b9bb; /* Light background for the total container */
+    border: 1px solid #dee2e6; /* Border color */
+    border-radius: 9px; /* Rounded corners */
+    padding: 3px 15px; /* Padding inside the container */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Font weight */
+
 
 }
+
 .valor_total{
     font-size: 14px;
     padding: 4px;
@@ -104,4 +107,23 @@ label {
     border: 1px solid #000;
     max-width: 605px;
     margin-left: 15px;
+}
+
+.card .datos {
+    display: flex;
+    flex-direction: column;
+}
+
+.card .dato {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.card .dato .serie {
+    text-align: left;
+}
+
+.card .dato .valor {
+    text-align: right;
 }
