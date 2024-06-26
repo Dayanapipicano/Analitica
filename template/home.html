@@ -52,7 +52,7 @@
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
                     <a href="{% url 'administrador'%}" class="sidebar-link">
-                        <i class="lni lni-user"></i>
+                        <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Admin</span>
                     </a>
                 </li>
@@ -117,14 +117,11 @@
         </aside>
         {% block contenido%}
         <div class="main p-3">
-            <div class="daya">
             <div class="text-center">
                 <h1>
                     Sidebar Bootstrap 5
                 </h1>
-              
-               
-            </div>
+    
         </div>
         </div>
         {% endblock contenido%}

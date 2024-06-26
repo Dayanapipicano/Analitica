@@ -29,7 +29,8 @@ body {
 .wrapper {
  
     display: flex;
-  
+    flex-direction: column; /* Cambio para soportar el navbar y el contenido principal */
+    height: 100vh;
   
 }
 
@@ -39,11 +40,10 @@ body {
     overflow: hidden;
     transition: all 0.35s ease-in-out;
     background-color: #fafbfe;
-    top: 67px;
-    position: fixed;
+    margin-top: 67px;
     height: calc(100vh - 67px); 
     margin-left: 70px; /* Ajusta el margen izquierdo para dejar espacio al menú lateral */
-    
+   
     
 }
 
