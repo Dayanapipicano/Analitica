@@ -36,5 +36,6 @@ urlpatterns = [
     path('programa/index', views.programa, name="programa"),
     path('recuperar_contraseña', views.recuperar_contraseña, name="recuperar_contraseña"),
     path('grafica', views.grafica, name="grafica"),
-    path('P04/', views.p04, name="P04")
+    path('P04/', views.p04, name="P04"),
+    path('administrador/', views.administrador, name="administrador")
 ]

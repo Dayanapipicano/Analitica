@@ -44,3 +44,6 @@ def grafica(request):
 
 def p04(request):
     return render(request, 'p04.html')
+
+def administrador(request):
+    return render(request, 'administrador.html')

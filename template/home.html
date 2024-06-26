@@ -51,19 +51,19 @@
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{% url 'administrador'%}" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Admin</span>
                     </a>
                 </li>
              
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    <a href="{% url 'general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
                         <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Reportes</span>
                     </a>
-                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" >
                         <li class="sidebar-item">
                             <a href="{% url 'general'%}" class="sidebar-link">General</a>
                         </li>
@@ -88,7 +88,7 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    <a href="{% url 'formacion_regular'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
                     
                       
@@ -96,7 +96,7 @@
 
                         <span>Metas</span>
                     </a>
-                    <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <ul id="multi" class="sidebar-dropdown list-unstyled collapse" >
                         <li class="sidebar-item">
                             <a href="{% url 'formacion_regular'%}" class="sidebar-link">Formacion Regular</a>
                         </li>
