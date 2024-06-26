@@ -12,7 +12,7 @@
                 <h1 class="h1 mb-4">Estrategias</h1>
                
                 
-                <div class="container mt-3">
+                <div class="container mt-1 filtros" >
                     <div class="row align-items-center">
                         <div class="col-md-3 mb-2"> <!-- Fecha Inicio -->
                             <div class="form-group row">
@@ -65,40 +65,80 @@
                         </div>
                     </div>
                 </div>
-                
-        </div>
-        </div>
-        <div class="row justify-content-center" style="margin-left: 50px;">
-            <div class="col-md-4">
-                <div class="container_tablas">
+            
+       
+    </div>
+       
+    <div class="container text-center ">
+        <div class="row row-cols-3 row-cols-lg-3  ">
+            <div class="col p-1">
+               
                     <div class="chart">
-                        <canvas id="barchart1" width="300" height="300"></canvas>
+                        <canvas id="auxiliar" width="300" height="300"></canvas>
+                    </div>
+           
+            </div>
+            <div class="col p-1">
+               
+                    <div class="chart">
+                        <canvas id="tecnico" width="300" height="300"></canvas>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="container_tablas">
+          
+            <div class="col p-1 ">
+               
                     <div class="chart">
-                        <canvas id="barchart2" width="300" height="300"></canvas>
+                        <canvas id="tecnologo" width="300" height="300"></canvas>
                     </div>
-                </div>
+            
             </div>
-            <div class="col-md-4">
-                <div class="container_tablas">
+       
+            <div class="col p-1">
+              
                     <div class="chart">
-                        <canvas id="barchart3" width="300" height="300"></canvas>
+                        <canvas id="profundizacion_tecnica" width="300" height="300"></canvas>
                     </div>
-                </div>
+         
+            </div>
+            <div class="col p-1">
+           
+                    <div class="chart">
+                        <canvas id="evento" width="300" height="300"></canvas>
+                    </div>
+               
+            </div>
+            <div class="col p-1">
+              
+                    <div class="chart">
+                        <canvas id="operario" width="300" height="300"></canvas>
+                    </div>
+           
+            </div>
+     
+       
+            <div class="col p-1">
+               
+                    <div class="chart">
+                        <canvas id="curso_especial" width="300" height="300"></canvas>
+                    </div>
+         
             </div>
         </div>
+    </div>
         
         
     </div>
    
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{% static 'bootstrap/js/chart1.js' %}"></script>
-    <script src="{% static 'bootstrap/js/chart2.js' %}"></script>
-    <script src="{% static 'bootstrap/js/chart3.js' %}"></script>
+    <script src="{% static 'bootstrap/js/auxiliar.js' %}"></script>
+    <script src="{% static 'bootstrap/js/curso_especial.js' %}"></script>
+    <script src="{% static 'bootstrap/js/evento.js' %}"></script>
+    <script src="{% static 'bootstrap/js/operario.js' %}"></script>
+    <script src="{% static 'bootstrap/js/profundizacion_tecnica.js' %}"></script>
+    <script src="{% static 'bootstrap/js/tecnico.js' %}"></script>
+    <script src="{% static 'bootstrap/js/tecnologo.js' %}"></script>
+</div>
+</div>
 </div>
 {% endblock contenido %}

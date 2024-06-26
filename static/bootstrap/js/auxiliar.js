@@ -1,6 +1,6 @@
-const ctx3 = document.getElementById('barchart3').getContext('2d');
+const auxiliar = document.getElementById('auxiliar').getContext('2d');
 
-new Chart(ctx3, {
+new Chart(auxiliar, {
     type: 'bar',
     data: {
         labels: ['Presencial', 'Virtual'],
@@ -37,7 +37,7 @@ new Chart(ctx3, {
             },
             title: {
                 display: true, // Mostrar el título
-                text: 'Tecnologo', // Título de la gráfica
+                text: 'Auxiliar', // Título de la gráfica
                 font: {
                     size: 14 // Tamaño de la fuente del título
                 }

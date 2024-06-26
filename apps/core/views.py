@@ -41,3 +41,6 @@ def recuperar_contraseña(request):
     return render(request, 'recuperar_contraseña.html')
 def grafica(request):
     return render(request, 'Estrategias/grafica.html')
+
+def p04(request):
+    return render(request, 'p04.html')

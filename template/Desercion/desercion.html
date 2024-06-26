@@ -6,79 +6,105 @@
 <div class="main p-3">
     <div class="text-center">
         <div class="container">
-            <div class="mapadiv">
-                <h1 class="h1 mb-4">Desercion</h1>
-                
-                <!-- Filtros usando Bootstrap en dos filas de tres columnas -->
-                <div class="row justify-content-center">
-                    <!-- Primera fila de filtros -->
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group row">
-                            <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
-                            <div class="col-sm-7">
-                                <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group row">
-                            <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
-                            <div class="col-sm-7">
-                                <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group row">
-                            <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
-                                    <option selected>Seleccionar una opción</option>
-                                    <option value="opcion1">Popayán</option>
-                                    <option value="opcion2">Silvia</option>
-                                    <option value="opcion3">Piendamó</option>
-                                </select>
-                            </div>
+            <h1 class="h1 mb-4">Deserción</h1>
+            <!-- Filtros usando Bootstrap en dos filas de cuatro columnas -->
+            <div class="row justify-content-center">
+                <!-- Primera fila de filtros -->
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
                         </div>
                     </div>
                 </div>
-
-                <!-- Segunda fila de filtros -->
-                <div class="row justify-content-center">
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group row">
-                            <label for="filtroMunicipio2" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control form-control-sm custom-select" id="filtroMunicipio2">
-                                    <option selected>Seleccionar una opción</option>
-                                    <option value="opcion1">Popayán</option>
-                                    <option value="opcion2">Silvia</option>
-                                    <option value="opcion3">Piendamó</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group row">
-                            <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control form-control-sm custom-select" id="filtroMunicipio3">
-                                    <option selected>Seleccionar una opción</option>
-                                    <option value="opcion1">Popayán</option>
-                                    <option value="opcion2">Silvia</option>
-                                    <option value="opcion3">Piendamó</option>
-                                </select>
-                            </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="totalDesercion" class="col-sm-5 col-form-label col-form-label-sm">Total deserción:</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" id="totalDesercion" value="100" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="totalActivos" class="col-sm-5 col-form-label col-form-label-sm">Total activos:</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" id="totalActivos" value="300" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Segunda fila de filtros -->
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
+                                <option selected>Seleccionar una opción</option>
+                                <option value="opcion1">Popayán</option>
+                                <option value="opcion2">Silvia</option>
+                                <option value="opcion3">Piendamó</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroMunicipio2" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio2">
+                                <option selected>Seleccionar una opción</option>
+                                <option value="opcion1">Popayán</option>
+                                <option value="opcion2">Silvia</option>
+                                <option value="opcion3">Piendamó</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio3">
+                                <option selected>Seleccionar una opción</option>
+                                <option value="opcion1">Popayán</option>
+                                <option value="opcion2">Silvia</option>
+                                <option value="opcion3">Piendamó</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroMunicipio4" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio4">
+                                <option selected>Seleccionar una opción</option>
+                                <option value="opcion1">Popayán</option>
+                                <option value="opcion2">Silvia</option>
+                                <option value="opcion3">Piendamó</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        
         <div class="container">
-            <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;"> <!-- Añadido para hacer la tabla fija con scroll horizontal y vertical -->
+            <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-striped table-hover">
-                    <thead class="titulo_tabla">
+                    <thead class="table-dark">
                         <tr>
                             <th scope="col" style="min-width: 150px;">Identificador ficha</th>
                             <th scope="col" style="min-width: 200px;">Identificador único ficha</th>
@@ -109,7 +135,6 @@
                             <td>Dato 11</td>
                             <td>Dato 12</td>
                         </tr>
-                        
                         <tr>
                             <td>Dato 13</td>
                             <td>Dato 14</td>

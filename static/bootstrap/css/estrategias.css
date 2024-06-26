@@ -1,12 +1,5 @@
 
-.container_tablas {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1000px; /* Reduce the gap between elements */
-    
 
-}
 
 .chart {
     padding: 2rem; /* Reduce padding */
@@ -14,7 +7,7 @@
     border-radius: 1rem; /* Reduce border radius */
     background: #faf1f139;
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.8); /* Reduce shadow size */
-
+    width: 300px;
 }
 
 
@@ -52,4 +45,12 @@
 
 .top-adjust {
     margin-top: -15px; /* Ajusta este valor según sea necesario */
+}
+
+.estrategias{
+    margin-top: 50px;
+}
+.filtros{
+    margin-left: -30px;
+   
 }

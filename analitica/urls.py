@@ -35,5 +35,6 @@ urlpatterns = [
     path('poblacion_vulnerable/index', views.poblacion_vulnerable, name="poblacion_vulnerable"),
     path('programa/index', views.programa, name="programa"),
     path('recuperar_contraseña', views.recuperar_contraseña, name="recuperar_contraseña"),
-        path('grafica', views.grafica, name="grafica"),
+    path('grafica', views.grafica, name="grafica"),
+    path('P04/', views.p04, name="P04")
 ]

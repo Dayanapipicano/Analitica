@@ -1,6 +1,6 @@
-const ctx = document.getElementById('barchart1').getContext('2d');
+const profundizacion_tecnica = document.getElementById('profundizacion_tecnica').getContext('2d');
 
-new Chart(ctx, {
+new Chart(profundizacion_tecnica, {
     type: 'bar',
     data: {
         labels: ['Presencial', 'Virtual'],
@@ -37,7 +37,7 @@ new Chart(ctx, {
             },
             title: {
                 display: true, // Mostrar el título
-                text: 'Auxiliar', // Título de la gráfica
+                text: 'Tecnologo', // Título de la gráfica
                 font: {
                     size: 14 // Tamaño de la fuente del título
                 }

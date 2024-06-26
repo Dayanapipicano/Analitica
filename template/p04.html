@@ -1,0 +1,38 @@
+{% extends 'home.html'%}
+
+{% block contenido%}
+{%load static%}
+<link rel="stylesheet" href="{% static 'bootstrap/css/p04.css'}">
+<div class="main p-3">
+    <div class="text-center">
+                <div class="container">
+             
+                        <h1 class="h1 mb-4">P04</h1>
+                        
+      
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-white" style="background-color: #274f3b;">
+                            <h4 class="mb-0">Subir Archivo</h4>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="fileUpload" class="form-label">Seleccionar archivo</label>
+                                    <input class="form-control" type="file" id="fileUpload">
+                                </div>
+                              
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-secondary">Subir</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido%}
