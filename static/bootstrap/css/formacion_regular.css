@@ -30,12 +30,14 @@
     align-items: center;
 }
 
+
 .card-body{
     display: flex;
 }
 .card{
     border-radius: 15px;
     width: 600px;
+  
 }
 
 .formacion_complementaria{
