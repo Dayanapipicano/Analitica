@@ -50,6 +50,28 @@ class Poblacion(models.Model):
     pob_id = models.AutoField(primary_key=True)
     pob_fecha_poblacion = models.DateField()
     pob_total_cupos = models.CharField(max_length=150)
+    indicador = models.CharField(max_length=100)
+    desplazamiento_por_violencia = models.CharField(max_length=100)
+    hechos_victimizantes = models.CharField(max_length=100)
+    victimas = models.CharField(max_length=100)
+    otras_poblaciones_vulnerables = models.CharField(max_length=150)
+    total_poblaciones_vulnerables = models.CharField(max_length=150)
+    indigenas = models.CharField(max_length=100)
+    inpec = models.CharField(max_length=100)
+    jovenes_vulnerables = models.CharField(max_length=150)
+    adolescente_en_conflicto_con_la_ley_penal = models.CharField(max_length=100)
+    mujer_casa_de_hogar = models.CharField(max_length=100)
+    persona_con_discapacidad = models.CharField(max_length=100)
+    negritudes = models.CharField(max_length=100)
+    afrocolombianos = models.CharField(max_length=100)
+    raizales = models.CharField(max_length=100)
+    palenqueros = models.CharField(max_length=100)
+    narp = models.CharField(max_length=100)
+    reintegracion_y_adolescentes = models.CharField(max_length=100)
+    tercera_edad = models.CharField(max_length=100)
+    adolescente_trabajador = models.CharField(max_length=100)
+    rroom = models.CharField(max_length=100)
+    
     
     
 
