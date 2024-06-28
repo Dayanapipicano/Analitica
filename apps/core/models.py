@@ -1,28 +1,6 @@
 from django.db import models
-class Estrategia_detalle(models.Model):
-    estd_formacion = models.CharField(max_length=100)
-    estd_meta = models.CharField(max_length=100)
-    
-
-class Estrategia(models.Model):
-    est_nombre = models.CharField(max_length=100)
-    est_modalidad = models.CharField(max_length=100)
-    est_total_meta = models.CharField(max_length=100)
-    estrategia_detalle = models.ForeignKey(Estrategia_detalle, on_delete=models.CASCADE)
-
-
-class Metas_formacion(models.Model):
-    metd_modalidad =  models.CharField(max_length=100)
-    metf_formacion = models.CharField(max_length=100)
-    metf_meta = models.CharField(max_length=100)
-    
-
-class Metas_poblacion_vulnerable(models.Model):
-    metpv_poblacion = models.CharField(max_length=100)
-    metpv_tipo_poblacion = models.CharField(max_length=100)
-    
-    
 class P04(models.Model):
+    p04_id = models.AutoField(primary_key=True)
     fecha_p04 = models.DateField()
     codigo_regional = models.CharField(max_length=150)
     nombre_regional = models.CharField(max_length=150)
@@ -69,10 +47,14 @@ class P04(models.Model):
     
     
 class Poblacion(models.Model):
-    fecha_poblacion = models.DateField()
+    pob_id = models.AutoField(primary_key=True)
+    pob_fecha_poblacion = models.DateField()
+    pob_total_cupos = models.CharField(max_length=150)
+    
     
 
 class   Rol(models.Model):
+    rol_id = models.AutoField(primary_key=True)
     rol_nombre = models.CharField(max_length=100)
     rol_descripcion = models.CharField(max_length=200)
 
@@ -84,12 +66,21 @@ class Persona(models.Model):
     per_nombres = models.CharField(max_length=60)
     per_apellidos = models.CharField(max_length=60)
     per_telefono = models.CharField(max_length=10)
-    rol = models.ManyToManyField(Rol)
+    rol = models.ManyToManyField(Rol, through='Persona_rol')
     p04 = models.ForeignKey(P04, on_delete=models.CASCADE)
     poblacion = models.ForeignKey(Poblacion, on_delete=models.CASCADE)
     
+class Persona_rol(models.Model):
+    rolp_id = models.AutoField(primary_key=True)
+    rolp_fecha_inicio = models.DateField()
+    rolp_fecha_fin = models.DateField()
+    rolp_estado = models.BooleanField(default=True)
+    persona_id = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    rol_id = models.ForeignKey(Rol, on_delete=models.CASCADE)
+    
 
 class Meta(models.Model):
+    met_id = models.AutoField(primary_key=True)
     met_centro_formacion = models.CharField(max_length=150)
     met_codigo = models.CharField(max_length=150)
     met_fecha_inicio = models.DateField()
@@ -102,9 +93,35 @@ class Meta(models.Model):
     met_total_titulada = models.CharField(max_length=100)
     met_total_complementaria = models.CharField(max_length=100)
     met_total_poblacion_vulnerable = models.CharField(max_length=100)
-    estrategia = models.ForeignKey(Estrategia, on_delete=models.CASCADE)
-    metas_formacion = models.ForeignKey(Metas_formacion, on_delete=models.CASCADE)
-    metas_poblacion_vulnerable = models.ForeignKey(Metas_poblacion_vulnerable, on_delete=models.CASCADE)
     persona = models.OneToOneField(Persona, on_delete=models.CASCADE)
     
+
+class Estrategia(models.Model):
+    est_id = models.AutoField(primary_key=True)
+    est_nombre = models.CharField(max_length=100)
+    est_modalidad = models.CharField(max_length=100)
+    est_total_meta = models.CharField(max_length=100)
+    met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
+    
+ 
+
+class Estrategia_detalle(models.Model):
+    estd_id = models.AutoField(primary_key=True)
+    estd_formacion = models.CharField(max_length=100)
+    estd_meta = models.CharField(max_length=100)
+    est_id = models.ForeignKey(Estrategia, on_delete=models.CASCADE)
+
+
+class Metas_formacion(models.Model):
+    metd_id = models.AutoField(primary_key=True)
+    metd_modalidad =  models.CharField(max_length=100)
+    metf_formacion = models.CharField(max_length=100)
+    metf_meta = models.CharField(max_length=100)
+    met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
+
+class Metas_poblacion_vulnerable(models.Model):
+    metpv_id = models.AutoField(primary_key=True)
+    metpv_poblacion = models.CharField(max_length=100)
+    metpv_tipo_poblacion = models.CharField(max_length=100)
+    met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
     

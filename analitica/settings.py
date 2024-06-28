@@ -69,6 +69,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'analitica.wsgi.application'
+# settings.py
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Database
