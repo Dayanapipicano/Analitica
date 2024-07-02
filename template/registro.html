@@ -22,13 +22,17 @@
         <section class="sesion">
                         <div class="form-boxs">
                             <h2 class="registro_titulo">Registro</h2>
-                            <form action="">
+                            <form action="{% url 'personas:registro'%}" method="post">
+                                {%csrf_token%}
+                                <div class="form-outline mb-4">
+                                    <td>{{formPersona}}</td>
+                                  </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="inputbox">
                                             <ion-icon name="person-outline"></ion-icon>
                                             <input type="text" required>
-                                            <label for="">Nombre</label>
+                                            <label id="per_nombres" for="">Nombre</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -68,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div class="container">
-                                    <button class="boton_registro">enviar</button>
+                                    <button type="submit" class="boton_registro">enviar</button>
                                     
                                 </div>
                             </form>

@@ -26,6 +26,7 @@ body {
 
 }
 
+
 .wrapper {
  
     display: flex;
@@ -35,17 +36,13 @@ body {
 }
 
 .main {
-    min-height: 100vh;
+  
     width: 100%;
-    overflow: hidden;
-    transition: all 0.35s ease-in-out;
-    background-color: #0f41d6;
-    margin-top: 67px;
-    height: calc(100vh - 67px); 
-    margin-left: 70px; /* Ajusta el margen izquierdo para dejar espacio al menú lateral */
-   overflow-x: none;
-   overflow-y: none;
-    
+    background-color: #b90d0d;
+    margin-top: 50px;
+    height: calc(100vh - 50px); 
+    margin-left: 70px; 
+    position: fixed;
 }
 
 
