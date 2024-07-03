@@ -2,85 +2,135 @@
 <html lang="en">
 
 <head>
-    {%load static%}
-    
-    <link rel="stylesheet" href="{% static 'bootstrap/css/registro.css'%}">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/registro.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
     <title>Registro</title>
 </head>
 
 <body>
-    
-
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-        <a class="navbar-brand" href="{% url 'inicio_sesion'%}">Analitica</a>
-    
-        
+        <a class="navbar-brand" href="{% url 'personas:inicio_sesion' %}">Analitica</a>
     </nav>
-        <section class="sesion">
-                        <div class="form-boxs">
-                            <h2 class="registro_titulo">Registro</h2>
-                            <form action="{% url 'personas:registro'%}" method="post">
-                                {%csrf_token%}
-                                <div class="form-outline mb-4">
-                                    <td>{{formPersona}}</td>
-                                  </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="inputbox">
-                                            <ion-icon name="person-outline"></ion-icon>
-                                            <input type="text" required>
-                                            <label id="per_nombres" for="">Nombre</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="inputbox">
-                                            <ion-icon name="person-outline"></ion-icon>
-                                            <input type="text" required>
-                                            <label for="">Apellido</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="inputbox">
-                                            <ion-icon name="mail-outline"></ion-icon>
-                                            <input type="text" required>
-                                            <label for="">Correo</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="inputbox">
-                                            <ion-icon name="call-outline"></ion-icon>
-                                            <input type="text" required>
-                                            <label for="">Teléfono</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="inputbox">
-                                            <ion-icon name="lock-closed-outline"></ion-icon>
-                                            <input type="password" required>
-                                            <label for="">Contraseña</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="inputbox">
-                                            <ion-icon name="lock-closed-outline"></ion-icon>
-                                            <input type="password" required>
-                                            <label for="">Confirmar Contraseña</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="container">
-                                    <button type="submit" class="boton_registro">enviar</button>
-                                    
-                                </div>
-                            </form>
+
+    <section class="sesion">
+        <div class="form-boxs">
+            <h2 class="registro_titulo">Registro</h2>
+
+            {% if formPersona.errors %}
+            <div class="alert alert-danger">Hay errores en el formulario. Por favor, corrígelos e inténtalo de nuevo.</div>
+            {% endif %}
+
+            <form action="{% url 'personas:registro' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="per_documento"  required>
+                            <label for="">Documento</label>
+                            {% if formPersona.per_documento.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.per_documento.errors.as_text }}
+                            </div>
+                            {% endif %}
                         </div>
-        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="per_tipo_documento"  required>
+                            <label for="">Tipo documento</label>
+                            {% if formPersona.per_tipo_documento.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.per_tipo_documento.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="per_nombres"  required>
+                            <label for="">Nombre</label>
+                            {% if formPersona.per_nombres.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.per_nombres.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="per_apellidos"  required>
+                            <label for="">Apellido</label>
+                            {% if formPersona.per_apellidos.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.per_apellidos.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <input type="text" name="per_correo"  required>
+                            <label for="">Correo</label>
+                            {% if formPersona.per_correo.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.per_correo.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <input type="text" name="per_telefono"  required>
+                            <label for="">Teléfono</label>
+                            {% if formPersona.per_telefono.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.per_telefono.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input type="password" name="password1" required>
+                            <label for="">Contraseña</label>
+                            {% if formPersona.password1.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.password1.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="inputbox">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input type="password" name="password2" required>
+                            <label for="">Confirmar Contraseña</label>
+                            {% if formPersona.password2.errors %}
+                            <div class="alert alert-danger">
+                                {{ formPersona.password2.errors.as_text }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <button type="submit" class="boton_registro">enviar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>
-

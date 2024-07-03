@@ -82,7 +82,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'datos',
+        'NAME': 'analisis',
         'USER': 'root',
         'PASSWORD': '',
         'HOST':'localhost',

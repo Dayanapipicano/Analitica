@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from apps.personas.manages import UsuarioManage
 class Estd_formacion(models.TextChoices):
     OPERARIO = 'operario', 'Operario'
@@ -49,8 +49,8 @@ class   Rol(models.Model):
     rol_descripcion = models.CharField(max_length=200)
 
 
-class Persona(AbstractBaseUser):
-    per_documento = models.AutoField(primary_key=True)
+class Persona(AbstractBaseUser, PermissionsMixin):
+    per_documento = models.IntegerField(primary_key=True)
     per_tipo_documento = models.CharField(max_length=100)
     per_correo = models.EmailField(unique=True)
     per_nombres = models.CharField(max_length=60)
@@ -62,6 +62,7 @@ class Persona(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'per_correo'
+    REQUIRED_FIELDS = ['per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'per_telefono']
     objects = UsuarioManage()
 class P04(models.Model):
     p04_id = models.AutoField(primary_key=True)

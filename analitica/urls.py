@@ -21,7 +21,7 @@ from apps.core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('apps.personas.urls')),
-    path('inicio_sesion/', views.inicio_sesion, name='inicio_sesion'),
+
     #COBERTURA
     
     path('cobertura/index', views.cobertura, name="cobertura"),
