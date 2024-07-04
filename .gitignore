@@ -1,1 +1,7 @@
 credentials.json
+
+
+#Instalaciones
+#pip install djangorestframework
+#pip3 install certifi   
+#pip3 install djangorestframework-simplejwt

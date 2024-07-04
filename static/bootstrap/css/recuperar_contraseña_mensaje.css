@@ -20,7 +20,7 @@
 .form-recuperar {
     position: relative;
     width: 500px;
-    height: 350px;
+    height: 170px;
     background-color: rgba(0, 0, 0, 0.367);
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
@@ -29,17 +29,15 @@
 }
 
 .login_titulo{
-    font-size: 2em;
+    font-size: 20px;
     color: #fff;
     text-align: center;
     margin-bottom: 55px;
   
 }
-p{
-    color: #fff;
-}
-.inicio_sesion{
-    color: rgb(0, 0, 0);
+
+span{
+    color: rgb(4, 8, 10);
 }
 .inputbox {
     position: relative;
@@ -151,14 +149,5 @@ p{
 .navbar-nav{
     margin-left: 8%;
     font-size: 105%;
-}
-
-.error {
-    border-color:  #ffb9b9; /* Cambia el borde a rojo */
-}
-.error-message {
-    color: #ffc9c9;
-    font-size: 14px;
-    margin-top: 5px;
 }
 
