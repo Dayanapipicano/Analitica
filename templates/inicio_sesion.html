@@ -26,7 +26,7 @@
                     <h2 class="login_titulo">Inicio de sesion</h2>
                     <div class="inputbox">
                         <ion-icon name="mail-outline"></ion-icon>
-                        <input type="text" name="per_correo" required>
+                        <input type="text" name="email" required>
                         <label for="">Correo</label>
                     </div>
                     <div class="inputbox">
@@ -40,7 +40,7 @@
                 </div>
                     <div class="bottom-links">
                      
-                        <a class="contra" href="{% url 'recuperar_contraseña'%}">Olvidé mi contraseña</a>
+                        <a class="contra" href="{% url 'password_reset'%}">Olvidé mi contraseña</a>
                             <a href="{% url 'personas:registro'%}">Registrarse</a>
                        
                          

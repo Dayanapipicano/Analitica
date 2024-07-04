@@ -52,7 +52,7 @@ class   Rol(models.Model):
 class Persona(AbstractBaseUser, PermissionsMixin):
     per_documento = models.IntegerField(primary_key=True)
     per_tipo_documento = models.CharField(max_length=100)
-    per_correo = models.EmailField(unique=True)
+    email = models.EmailField(unique=True)
     per_nombres = models.CharField(max_length=60)
     per_apellidos = models.CharField(max_length=60)
     per_telefono = models.CharField(max_length=10)
@@ -61,7 +61,7 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     
-    USERNAME_FIELD = 'per_correo'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'per_telefono']
     objects = UsuarioManage()
 class P04(models.Model):

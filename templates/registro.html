@@ -76,11 +76,11 @@
                     <div class="col-md-6">
                         <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
-                            <input type="text" name="per_correo"  required>
+                            <input type="text" name="email"  required>
                             <label for="">Correo</label>
-                            {% if formPersona.per_correo.errors %}
+                            {% if formPersona.email.errors %}
                             <div class="alert alert-danger">
-                                {{ formPersona.per_correo.errors.as_text }}
+                                {{ formPersona.email.errors.as_text }}
                             </div>
                             {% endif %}
                         </div>
