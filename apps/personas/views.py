@@ -53,23 +53,3 @@ def inicio_sesion(request):
     
     
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib import messages
-
-def password_reset(request):
-    if request.method == 'POST':
-        email = request.POST.get('email', '')
-        try:
-            # Verificar si el correo electrónico existe en la base de datos
-            user = User.objects.get(email=email)
-            # Aquí puedes continuar con el proceso de enviar el correo de recuperación
-            # o redireccionar a la página adecuada
-            return redirect('password_reset_done')
-        except ObjectDoesNotExist:
-            # Si el correo electrónico no existe en la base de datos
-            messages.error(request, 'El correo electrónico ingresado no existe.')
-            return render(request, 'recuperar_contraseña.html')
-    
-    return render(request, 'registration/password_reset_form.html.html')
