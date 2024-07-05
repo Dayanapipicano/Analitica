@@ -31,19 +31,17 @@
                     </div>
                     <div class="col-md-6">
                         <div class="inputbox">
-    
-                            <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 15px; right: 10px;">
-
-                                <select name="per_tipo_documento" class="select " required>
-                                    {% for choice in formPersona.per_tipo_documento.field.choices %}
-                                        <option value="{{ choice.0 }}" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
-                                            {{ choice.1 }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                           
-                       
+                            <select name="per_tipo_documento" class="select" required>
+                                <option value="" {% if not form.instance.per_tipo_documento %} selected {% endif %}>Selecciona un tipo de documento</option>
+                                {% for choice in formPersona.per_tipo_documento.field.choices %}
+                                    <option value="" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
                         </div>
+                        
                     </div>
                     <div class="col-md-6">
                         <div class="inputbox">
