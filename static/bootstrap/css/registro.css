@@ -58,19 +58,35 @@
     padding: 0 35px 0 5px;
     color: #fff;
 }
-.custom-select select {
+.select{
     width: 100%;
     height: 40px;
-    background: transparent;
+    background-color: transparent; /* Fondo transparente */
     border: none;
     outline: none;
-    font-size: 1em;
-    padding: 0 35px 0 5px;
-    color: #fff;
-    -webkit-appearance: none; /* Elimina los estilos de apariencia predeterminados de WebKit */
-    -moz-appearance: none; /* Elimina los estilos de apariencia predeterminados de Firefox */
-    appearance: none; /* Elimina los estilos de apariencia predeterminados de otros navegadores */
+    color: #fff; /* Color del texto blanco */
+    padding: 0 5px; /* Espaciado interno */
+    font-size: 1em; /* Tamaño de fuente */
+    appearance: none; /* Eliminar estilos de apariencia predeterminados */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Posición del icono a la derecha con un padding */
 }
+
+.select::after {
+    content: '\25BC'; /* Flecha desplegable */
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: #fff; /* Color de la flecha */
+    pointer-events: none; /* Evita eventos de puntero en la flecha */
+}
+
+.select {
+    position: relative;
+}
+
 .inputbox label {
     position: absolute;
     top: 50%;

@@ -32,8 +32,9 @@
                     <div class="col-md-6">
                         <div class="inputbox">
     
-                           
-                                <select name="per_tipo_documento" class="custom-select " required>
+                            <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 15px; right: 10px;">
+
+                                <select name="per_tipo_documento" class="select " required>
                                     {% for choice in formPersona.per_tipo_documento.field.choices %}
                                         <option value="{{ choice.0 }}" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
                                             {{ choice.1 }}
