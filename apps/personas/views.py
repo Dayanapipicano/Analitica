@@ -32,7 +32,6 @@ def Registro(request):
 def inicio_sesion(request):
     if request.method == 'POST':
         formPersona = LoginForm(request.POST)
-        print(formPersona)
         if formPersona.is_valid():
             email = formPersona.cleaned_data['email']
             password = formPersona.cleaned_data['password1']
@@ -40,16 +39,13 @@ def inicio_sesion(request):
           
             if user is not None:
                 login(request, user)
-                
-                return redirect('personas:Home')
+                return redirect('personas:Home')  # Redirige al 'Home' después de iniciar sesión
             else:
-                
-               
                 formPersona.add_error(None, 'Usuario o contraseña incorrectos')
     else:
         formPersona = LoginForm()
     
     return render(request, 'inicio_sesion.html', {'formPersona': formPersona})
-    
-    
 
+def Perfil(request):
+    return render(request, 'perfil.html')

@@ -7,7 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 
 class PersonaForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Correo electrónico", max_length=50, help_text="Coloca tu correo electrónico", error_messages={'invalid': 'Solo puedes colocar caracteres válidos para el email'})
-
+ 
+    
     class Meta:
         model = Persona
         fields = ['per_documento', 'per_tipo_documento', 'email', 'per_nombres', 'per_apellidos', 'per_telefono', 'password1', 'password2']
