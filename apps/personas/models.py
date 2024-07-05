@@ -42,7 +42,11 @@ class Tipo_poblaciones(models.TextChoices):
     RROOM = 'rroom','Rroom'
     
     
-
+class Tipo_documento(models.TextChoices):
+    CEDULA_DE_CIUDADANIA = 'CC', 'Cedula de ciudadania'
+    TARJETA_DE_IDENTIDAD = 'TI', 'Tarjeta de identidad'
+    CEDULA_EXTRANJERA = 'CE',' Cedula extranjera'
+    PASAPORTE = 'PA', 'Pasaporte'
 class   Rol(models.Model):
     rol_id = models.AutoField(primary_key=True)
     rol_nombre = models.CharField(max_length=100)
@@ -51,7 +55,7 @@ class   Rol(models.Model):
 
 class Persona(AbstractBaseUser, PermissionsMixin):
     per_documento = models.IntegerField(primary_key=True)
-    per_tipo_documento = models.CharField(max_length=100)
+    per_tipo_documento = models.CharField(max_length=100, choices=Tipo_documento.choices)
     email = models.EmailField(unique=True)
     per_nombres = models.CharField(max_length=60)
     per_apellidos = models.CharField(max_length=60)
@@ -61,8 +65,8 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'per_telefono']
+    USERNAME_FIELD = 'per_documento'
+    REQUIRED_FIELDS = ['email','per_tipo_documento', 'per_nombres', 'per_apellidos', 'per_telefono']
     objects = UsuarioManage()
 class P04(models.Model):
     p04_id = models.AutoField(primary_key=True)

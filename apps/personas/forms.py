@@ -12,7 +12,9 @@ class PersonaForm(UserCreationForm):
     class Meta:
         model = Persona
         fields = ['per_documento', 'per_tipo_documento', 'email', 'per_nombres', 'per_apellidos', 'per_telefono', 'password1', 'password2']
-    
+        Widget = {
+            'per_tipo_documento': forms.Select(attrs={'class':'form-control'})
+        }
     def clean_per_correo(self):
         email = self.cleaned_data.get('email').lower()
         if Persona.objects.filter(email=email).exists():
@@ -30,7 +32,11 @@ class PersonaForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label='Correo electrónico')
+    per_documento = forms.IntegerField(label='Documento de identidad')
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
 
 
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = Persona
+        fields = ('per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'email', 'per_telefono')

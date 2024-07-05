@@ -143,7 +143,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 
-
+    
 os.environ['SSL_CERT_FILE'] = certifi.where()
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

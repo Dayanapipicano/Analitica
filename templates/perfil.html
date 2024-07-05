@@ -16,7 +16,7 @@
                         <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
                         <h4 class="titulo_perfil">Editar Perfil</h4>
                     </div>
-                    <form action="{% url 'personas:registro' %}" method="post">
+                    <form action="{% url 'personas:editar_perfil' user.per_documento%} " method="post">
                         {% csrf_token %}
                         {% if request.user.is_authenticated %}
                         <div class="row">
@@ -62,27 +62,14 @@
                                 
                                 </div>
                             </div>
-                            {% endif %}
+                            
                             <div class="container">
                                 <button type="submit" class="boton_registro">Enviar</button>
                             </div>
-                          </form>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="inputbox">
-                                    <ion-icon name="lock-closed-outline"></ion-icon>
-                                    <input type="password" name="password1"  required>
-                                    <label for="">Contraseña</label>
-                           
-                                </div>
-                                <div class="inputbox">
-                                    <ion-icon name="lock-closed-outline"></ion-icon>
-                                    <input type="password" name="password2" required>
-                                    <label for="">Confirmar Contraseña</label>
-                                </div>
-                            </div>
+        
                         </div>
-                      
-                       
+                        {% endif %}
+                    </form>
                     </div>
                 </div>
             </section>

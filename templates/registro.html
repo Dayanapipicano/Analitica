@@ -17,9 +17,6 @@
         <div class="form-boxs">
             <h2 class="registro_titulo">Registro</h2>
 
-            {% if formPersona.errors %}
-            <div class="alert alert-danger">Hay errores en el formulario. Por favor, corrígelos e inténtalo de nuevo.</div>
-            {% endif %}
 
             <form action="{% url 'personas:registro' %}" method="post">
                 {% csrf_token %}
@@ -29,23 +26,22 @@
                             <ion-icon name="person-outline"></ion-icon>
                             <input type="text" name="per_documento"  required>
                             <label for="">Documento</label>
-                            {% if formPersona.per_documento.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.per_documento.errors.as_text }}
-                            </div>
-                            {% endif %}
+                           
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="inputbox">
-                            <ion-icon name="person-outline"></ion-icon>
-                            <input type="text" name="per_tipo_documento"  required>
-                            <label for="">Tipo documento</label>
-                            {% if formPersona.per_tipo_documento.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.per_tipo_documento.errors.as_text }}
-                            </div>
-                            {% endif %}
+    
+                           
+                                <select name="per_tipo_documento" class="custom-select " required>
+                                    {% for choice in formPersona.per_tipo_documento.field.choices %}
+                                        <option value="{{ choice.0 }}" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                           
+                       
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -53,11 +49,7 @@
                             <ion-icon name="person-outline"></ion-icon>
                             <input type="text" name="per_nombres"  required>
                             <label for="">Nombre</label>
-                            {% if formPersona.per_nombres.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.per_nombres.errors.as_text }}
-                            </div>
-                            {% endif %}
+                           
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -65,11 +57,7 @@
                             <ion-icon name="person-outline"></ion-icon>
                             <input type="text" name="per_apellidos"  required>
                             <label for="">Apellido</label>
-                            {% if formPersona.per_apellidos.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.per_apellidos.errors.as_text }}
-                            </div>
-                            {% endif %}
+                        
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -77,11 +65,7 @@
                             <ion-icon name="mail-outline"></ion-icon>
                             <input type="text" name="email"  required>
                             <label for="">Correo</label>
-                            {% if formPersona.email.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.email.errors.as_text }}
-                            </div>
-                            {% endif %}
+                          
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -89,11 +73,7 @@
                             <ion-icon name="call-outline"></ion-icon>
                             <input type="text" name="per_telefono"  required>
                             <label for="">Teléfono</label>
-                            {% if formPersona.per_telefono.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.per_telefono.errors.as_text }}
-                            </div>
-                            {% endif %}
+                        
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -101,11 +81,7 @@
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input type="password" name="password1" required>
                             <label for="">Contraseña</label>
-                            {% if formPersona.password1.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.password1.errors.as_text }}
-                            </div>
-                            {% endif %}
+                         
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -113,11 +89,7 @@
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input type="password" name="password2" required>
                             <label for="">Confirmar Contraseña</label>
-                            {% if formPersona.password2.errors %}
-                            <div class="alert alert-danger">
-                                {{ formPersona.password2.errors.as_text }}
-                            </div>
-                            {% endif %}
+                       
                         </div>
                     </div>
                 </div>
