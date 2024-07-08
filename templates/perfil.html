@@ -11,69 +11,80 @@
     <div class="text-center">
         <div class="container">
             <section class="sesion">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 <div class="form-boxs">
                     <div class="profile-header">
                         <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
                         <h4 class="titulo_perfil">Editar Perfil</h4>
                     </div>
-                    <form action="{% url 'personas:editar_perfil' user.per_documento%} " method="post">
-                        {% csrf_token %}
-                        {% if request.user.is_authenticated %}
-                        <div class="row">
-                            <!-- Primera columna: 6 columnas en pantallas grandes (col-lg-6) -->
-                            <div class="col-lg-4 col-md-6">
-                                <div class="inputbox">
-                                    <ion-icon name="person-outline"></ion-icon>
-                                    <input type="text" name="per_documento" value="{{ request.user.per_documento }}" required>
-                                    <label for="">Documento</label>
+                    <div class="row">
+                        <div class="col-lg-8 offset-lg-2">
+                            {% if request.user.is_authenticated %}
+                            <form action="{% url 'personas:editar_perfil' user.per_documento %}" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="inputbox">
+                                            <ion-icon name="person-outline"></ion-icon>
+                                            <input type="text" name="per_documento" value="{{ request.user.per_documento }}" required>
+                                            <label for="">Documento</label>
+                                        </div>
+                                        <div class="inputbox">
+                                            <select name="per_tipo_documento" class="select" required>
+                                                <option value="" {% if not form.instance.per_tipo_documento %} selected {% endif %}>{{ request.user.per_tipo_documento }}</option>
+                                                {% for choice in formPersona.per_tipo_documento.field.choices %}
+                                                    <option value="" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
+                                                        {{ choice.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
+                                        </div>
+                                        <div class="inputbox">
+                                            <ion-icon name="person-outline"></ion-icon>
+                                            <input type="text" name="per_nombres" value="{{ request.user.per_nombres }}" required>
+                                            <label for="">Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="inputbox">
+                                            <ion-icon name="person-outline"></ion-icon>
+                                            <input type="text" name="per_apellidos" value="{{ request.user.per_apellidos }}" required>
+                                            <label for="">Apellido</label>
+                                        </div>
+                                        <div class="inputbox">
+                                            <ion-icon name="mail-outline"></ion-icon>
+                                            <input type="text" name="email" value="{{ request.user.email }}" required>
+                                            <label for="">Correo</label>
+                                        </div>
+                                        <div class="inputbox">
+                                            <ion-icon name="call-outline"></ion-icon>
+                                            <input type="text" name="per_telefono" value="{{ request.user.per_telefono }}" required>
+                                            <label for="">Teléfono</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <button type="submit" class="boton_registro">Enviar</button>
+                                </div>
                                 
-                                </div>
-                                <div class="inputbox">
-                                    <ion-icon name="person-outline"></ion-icon>
-                                    <input type="text" name="per_tipo_documento" value="{{ request.user.per_tipo_documento }}" required>
-                                    <label for="">Tipo documento</label>
-                                   
-                                </div>
-                                <div class="inputbox">
-                                    <ion-icon name="person-outline"></ion-icon>
-                                    <input type="text" name="per_nombres" value="{{ request.user.per_nombres }}"required>
-                                    <label for="">Nombre</label>
-        
-                                </div>
-                            </div>
-                            <!-- Segunda columna: 6 columnas en pantallas grandes (col-lg-6) -->
-                            <div class="col-lg-4 col-md-6">
-                                <div class="inputbox">
-                                    <ion-icon name="person-outline"></ion-icon>
-                                    <input type="text" name="per_apellidos" value="{{ request.user.per_apellidos }}"required>
-                                    <label for="">Apellido</label>
-                            
-                                </div>
-                                <div class="inputbox">
-                                    <ion-icon name="mail-outline"></ion-icon>
-                                    <input type="text" name="email" value="{{ request.user.email}}" required>
-                                    <label for="">Correo</label>
-                           
-                                </div>
-                                <div class="inputbox">
-                                    <ion-icon name="call-outline"></ion-icon>
-                                    <input type="text" name="per_telefono" value="{{ request.user.per_telefono }}" required>
-                                    <label for="">Teléfono</label>
-                                
-                                </div>
-                            </div>
-                            
-                            <div class="container">
-                                <button type="submit" class="boton_registro">Enviar</button>
-                            </div>
-        
+                            </form>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </form>
+                      
+                            <div class="container">
+                                <a href="{% url 'personas:password_change' %}" class="btn btn-primary">Cambiar Contraseña</a>
+                            </div>
+                      
                     </div>
                 </div>
             </section>
-            
         </div>
     </div>
 </div>

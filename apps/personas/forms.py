@@ -40,3 +40,6 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ('per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'email', 'per_telefono')
+        Widget = {
+            'per_tipo_documento': forms.Select(attrs={'class':'form-control'})
+        }

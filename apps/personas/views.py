@@ -6,6 +6,26 @@ from apps.personas.models import Persona
 from apps.personas.forms import EditProfileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib import messages
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib import messages
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    success_url = reverse_lazy('personas:perfil')  # Redirige a la URL de perfil después del cambio de contraseña
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, '¡Contraseña cambiada exitosamente!')
+        return response
+
 def Home(request):
     return render(request,'home.html')
 
@@ -50,7 +70,8 @@ def inicio_sesion(request):
     return render(request, 'inicio_sesion.html', {'formPersona': formPersona})
 
 def Perfil(request):
-    return render(request, 'perfil.html')
+    formPersona = EditProfileForm
+    return render(request, 'perfil.html',{'formPersona':formPersona})
 
 
 @login_required
@@ -66,3 +87,6 @@ def Editar_perfil(request,per_documento):
             formPersona.save()
         return redirect(reverse('personas:editar_perfil', kwargs={'per_documento': per_documento}))
     return render(request, 'perfil.html')
+
+#CAMBIAR LA CONTRASEÑA DE LA PERSONA
+
