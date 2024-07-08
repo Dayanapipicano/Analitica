@@ -11,13 +11,7 @@
     <div class="text-center">
         <div class="container">
             <section class="sesion">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-success" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
+               
                 <div class="form-boxs">
                     <div class="profile-header">
                         <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
@@ -90,11 +84,24 @@
                       
                     </div>
                 </div>
+                <div class="mensaje">
+                    {% if messages %}
+                    <div class="fixed-message" id="message-container">
+                        {% for message in messages %}
+                            <div class="alert alert-success text-center" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+        </div>
             </section>
+         
         </div>
     </div>
 </div>
 
+<script src="{% static 'bootstrap/js/mensajes.js'%}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 {% endblock contenido %}

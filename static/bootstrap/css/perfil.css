@@ -34,7 +34,14 @@
 
 
 
-
+.mensaje{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050; /* Mayor que el z-index del contenido */
+    width: auto;
+    max-width: 300px;
+}
 
 *{
     margin: 0;
