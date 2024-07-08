@@ -31,15 +31,17 @@
                                         </div>
                                         <div class="inputbox">
                                             <select name="per_tipo_documento" class="select" required>
-                                                <option value="" {% if not form.instance.per_tipo_documento %} selected {% endif %}>{{ request.user.per_tipo_documento }}</option>
                                                 {% for choice in formPersona.per_tipo_documento.field.choices %}
-                                                    <option value="" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
-                                                        {{ choice.1 }}
-                                                    </option>
+                                                    {% if choice.0 %}
+                                                        <option value="{{ choice.0 }}" {% if choice.0 == request.user.per_tipo_documento %} selected {% endif %}>
+                                                            {{ choice.1 }}
+                                                        </option>
+                                                    {% endif %}
                                                 {% endfor %}
                                             </select>
                                             <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
                                         </div>
+                                        
                                         <div class="inputbox">
                                             <ion-icon name="person-outline"></ion-icon>
                                             <input type="text" name="per_nombres" value="{{ request.user.per_nombres }}" required>
