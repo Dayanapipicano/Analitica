@@ -60,6 +60,7 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     per_nombres = models.CharField(max_length=60)
     per_apellidos = models.CharField(max_length=60)
     per_telefono = models.CharField(max_length=10)
+    per_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     rol = models.ManyToManyField(Rol, through='Persona_rol')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
