@@ -71,7 +71,13 @@
                                     </div>
                                 </div>
                                 <div class="container">
-                                    <button type="submit" class="boton_registro">Enviar</button>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button type="submit"  class="boton_registro">Enviar</button>
+                                        
+                                        <div id="cambiar_contraseña">
+                                            <a href="{% url 'personas:password_change' %}" class="btn btn-link">Cambiar Contraseña</a>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                             </form>
@@ -79,7 +85,7 @@
                         </div>
                       
                             <div class="container">
-                                <a href="{% url 'personas:password_change' %}" class="btn btn-primary">Cambiar Contraseña</a>
+                                <a href="" >Cambiar Contraseña</a>
                             </div>
                       
                     </div>

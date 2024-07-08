@@ -19,6 +19,7 @@ from django.contrib import messages
 
 
 class CustomPasswordChangeView(PasswordChangeView):
+    print('hola desde cambip de contraseña')
     success_url = reverse_lazy('personas:perfil')  # Redirige a la URL de perfil después del cambio de contraseña
 
     def form_valid(self, form):

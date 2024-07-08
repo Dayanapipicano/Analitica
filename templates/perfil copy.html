@@ -19,12 +19,12 @@
                     {% endfor %}
                 {% endif %}
                 <div class="form-boxs">
+                    <div class="profile-header">
+                        <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
+                        <h4 class="titulo_perfil">Editar Perfil</h4>
+                    </div>
                     <div class="row">
                         <div class="col-lg-8 offset-lg-2">
-                            <div class="profile-header text-center">
-                                <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
-                                <h4 class="titulo_perfil">Editar Perfil</h4>
-                            </div>
                             {% if request.user.is_authenticated %}
                             <form action="{% url 'personas:editar_perfil' user.per_documento %}" method="post">
                                 {% csrf_token %}
@@ -36,9 +36,15 @@
                                             <label for="">Documento</label>
                                         </div>
                                         <div class="inputbox">
-                                            <ion-icon name="person-outline"></ion-icon>
-                                            <input type="text" name="per_tipo_documento" value="{{ request.user.per_tipo_documento }}" required>
-                                            <label for="">Tipo documento</label>
+                                            <select name="per_tipo_documento" class="select" required>
+                                                <option value="" {% if not form.instance.per_tipo_documento %} selected {% endif %}>{{ request.user.per_tipo_documento }}</option>
+                                                {% for choice in formPersona.per_tipo_documento.field.choices %}
+                                                    <option value="" {% if choice.0 == form.instance.per_tipo_documento %} selected {% endif %}>
+                                                        {{ choice.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
                                         </div>
                                         <div class="inputbox">
                                             <ion-icon name="person-outline"></ion-icon>
@@ -60,16 +66,21 @@
                                         <div class="inputbox">
                                             <ion-icon name="call-outline"></ion-icon>
                                             <input type="text" name="per_telefono" value="{{ request.user.per_telefono }}" required>
-                                            <label for="">Teléfono</label>
+                                            <label for="">Teléffghfgono</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="container text-center">
-                                    <button type="submit" class="boton_registro">Enviar</button>
-                                </div>
+
+                                    <button type="submit" class="boton_registro">Envisdfsfghfghdfar</button>
+                                    <a href="{% url 'personas:password_change' %}" class="btn btn-primary">Cambiar Contraseña</a>
+                
+                                
                             </form>
                             {% endif %}
                         </div>
+                      
+                  
+                      
                     </div>
                 </div>
             </section>
