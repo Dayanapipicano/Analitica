@@ -19,7 +19,6 @@ from django.contrib import messages
 
 
 class CustomPasswordChangeView(PasswordChangeView):
-    print('hola desde cambip de contraseña')
     success_url = reverse_lazy('personas:perfil')  # Redirige a la URL de perfil después del cambio de contraseña
 
     def form_valid(self, form):
@@ -86,8 +85,8 @@ def Editar_perfil(request,per_documento):
         formPersona = EditProfileForm(request.POST, instance=persona)
         if formPersona.is_valid():
             formPersona.save()
-        return redirect(reverse('personas:editar_perfil', kwargs={'per_documento': per_documento}))
-    return render(request, 'perfil.html')
+        return redirect(reverse('personas:editar_perfil',kwargs={'per_documento': per_documento}))
+    return render(request, 'perfil.html',{'formPersona':formPersona})
 
 #CAMBIAR LA CONTRASEÑA DE LA PERSONA
 
