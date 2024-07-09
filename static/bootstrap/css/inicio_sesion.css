@@ -73,6 +73,13 @@
     top: 10px;
 }
 
+.inputbox .error-container {
+    position: absolute;
+    width: 100%;
+    bottom: -46px; /* Ajusta este valor según sea necesario */
+    left: 0;
+}
+
 .inputbox input:focus ~ label,
 .inputbox input:valid ~ label {
     top: -20px;
