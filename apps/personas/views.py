@@ -60,14 +60,20 @@ def inicio_sesion(request):
           
             if user is not None:
                 login(request, user)
-                return redirect('personas:Home') 
+                return redirect('personas:Home')
             else:
-                formPersona.add_error(None, 'Usuario o contraseña incorrectos')
+                messages.error(request, 'Usuario o contraseña incorrectos')
+        else:
+            # Manejo de errores de formulario si no es válido
+            errors = formPersona.errors.as_data()
+            for field, error_list in errors.items():
+                for error in error_list:
+                    messages.error(request, f'{field}: {error.message}')
+
     else:
         formPersona = LoginForm()
     
     return render(request, 'inicio_sesion.html', {'formPersona': formPersona})
-
 
 #CONFIRMACION DE LA EXISTENCIAS DE UN CORREO ELECTRONICO
 def validacion_email(request):

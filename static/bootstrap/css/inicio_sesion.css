@@ -158,3 +158,14 @@
     margin-top: 5px;
  
 }
+.alert {
+    margin-bottom: 60px; /* Ajusta el margen inferior según sea necesario */
+}
+.mensaje {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050; /* Mayor que el z-index del contenido */
+    width: auto;
+    max-width: 300px; /* Ajusta según sea necesario */
+}
