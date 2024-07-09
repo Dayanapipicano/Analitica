@@ -32,17 +32,18 @@
                     <div class="col-md-6">
                         <div class="inputbox">
                             <select name="per_tipo_documento" class="select" required>
-                                <option value="">Selecciona un tipo de documento</option>
+                                <option value="" disabled selected>Selecciona un tipo de documento</option>
                                 {% for key, value in formPersona.fields.per_tipo_documento.choices %}
-                                    <option value="{{ key }}" {% if key == formPersona.initial.per_tipo_documento %} selected {% endif %}>
-                                        {{ value }}
-                                    </option>
+                                    {% if key %}
+                                        <option value="{{ key }}" {% if key == formPersona.initial.per_tipo_documento %} selected {% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
-                            
-                            
                             <img src="{% static 'bootstrap/img/flec.png' %}" style="width: 10px; height: 10px; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
                         </div>
+                        
                         
                     </div>
                     <div class="col-md-6">
