@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 
 
-
+#FORMS DE REGISTRO
 class PersonaForm(UserCreationForm):
     
     email = forms.EmailField(required=True, label="Correo electrónico", max_length=50, help_text="Coloca tu correo electrónico", error_messages={'invalid': 'Solo puedes colocar caracteres válidos para el email'})
@@ -24,11 +24,7 @@ class PersonaForm(UserCreationForm):
             raise ValidationError("El correo electrónico ya ha sido tomado")
         return email
     
-    def clean_per_documento(self):
-        per_documento = self.cleaned_data.get('per_documento')
-        if Persona.objects.filter(per_documento=per_documento).exists():
-            raise ValidationError("El documento ya existe")
-        return per_documento
+
     
     def save(self, commit=True):
         user = super(PersonaForm, self).save(commit=False)
@@ -39,17 +35,14 @@ class PersonaForm(UserCreationForm):
         return user
     
 
-
+#FORMS DE INICIO DE SESION
 class LoginForm(forms.Form):
     per_documento = forms.IntegerField(label='Documento de identidad')
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     
-    
-    #mensajes de error
     def clean_per_documento(self):
         per_documento = self.cleaned_data['per_documento']
-        if not per_documento.isdigit():
-            raise forms.ValidationError("El documento de identidad debe contener solo números.")
+        # No es necesario validar con isdigit() para un IntegerField
         return per_documento
 
     def clean_password1(self):
@@ -58,6 +51,8 @@ class LoginForm(forms.Form):
             raise forms.ValidationError("La contraseña debe tener al menos 8 caracteres y contener números y letras.")
         return password1
 
+
+#FORMS DE EDITAR PERFIL
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Persona
