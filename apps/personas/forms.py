@@ -16,12 +16,20 @@ class PersonaForm(UserCreationForm):
         Widget = {
             'per_tipo_documento': forms.Select(attrs={'class':'form-control'})
         }
+        
+    #validaciones
     def clean_per_correo(self):
         email = self.cleaned_data.get('email').lower()
         if Persona.objects.filter(email=email).exists():
             raise ValidationError("El correo electrónico ya ha sido tomado")
         return email
-
+    
+    def clean_per_documento(self):
+        per_documento = self.cleaned_data.get('per_documento')
+        if Persona.objects.filter(per_documento=per_documento).exists():
+            raise ValidationError("El documento ya existe")
+        return per_documento
+    
     def save(self, commit=True):
         user = super(PersonaForm, self).save(commit=False)
         user.per_correo = self.cleaned_data['email']

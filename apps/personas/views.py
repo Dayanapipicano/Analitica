@@ -31,7 +31,7 @@ def Home(request):
 def Registro(request):
  
    if request.method == 'POST':
-        print('Datos recibidos en POST:', request.POST)  # Ver datos enviados
+        print('Datos recibidos en POST:', request.POST)  
         formPersona = PersonaForm(request.POST)
         if formPersona.is_valid():
             formPersona.save()
@@ -42,9 +42,9 @@ def Registro(request):
                 login(request, user)
                 return redirect('personas:inicio_sesion')
             else:
-                print('Error en autenticación')  # Si la autenticación falla
+                print('Error en autenticación') 
         else:
-            print('Errores en el formulario:', formPersona.errors)  # Mostrar errores de validación
+            print('Errores en el formulario:', formPersona.errors) 
    else:
         formPersona = PersonaForm()
    return render(request,'registro.html',{'formPersona': formPersona})
@@ -60,7 +60,7 @@ def inicio_sesion(request):
           
             if user is not None:
                 login(request, user)
-                return redirect('personas:Home')  # Redirige al 'Home' después de iniciar sesión
+                return redirect('personas:Home') 
             else:
                 formPersona.add_error(None, 'Usuario o contraseña incorrectos')
     else:
@@ -73,6 +73,11 @@ def inicio_sesion(request):
 def validacion_email(request):
     email = request.GET.get('email')
     exists = Persona.objects.filter(email=email).exists()
+    return JsonResponse({'exists': exists})
+
+def validar_documento(request):
+    documento = request.GET.get('documento')
+    exists = Persona.objects.filter(per_documento=documento).exists()
     return JsonResponse({'exists': exists})
 
 #REDIRIGE AL PERFIL CON LOS DATOS EXISTENTES

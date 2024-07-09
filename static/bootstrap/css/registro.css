@@ -24,7 +24,7 @@
 .form-boxs {
     position: relative;
     width: 700px;
-    height: 600px;
+    height: 560px;
     background-color: rgba(0, 0, 0, 0.367);
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
@@ -57,6 +57,12 @@
     font-size: 1em;
     padding: 0 35px 0 5px;
     color: #fff;
+}
+.inputbox .error-container {
+    position: absolute;
+    width: 100%;
+    bottom: -20px; /* Ajusta este valor según sea necesario */
+    left: 0;
 }
 .select {
     width: 100%;
@@ -135,14 +141,15 @@
 .enviar{
     color: #fff;
 }
-.container {
+.container_boton {
     text-align: center; /* Centra horizontalmente */
-    height: 100vh; /* Ajusta la altura según necesites */
-    justify-content: center;
-    align-items: center;
-   
-  
+    margin-bottom: 70px; /* Ajusta el margen según sea necesario */
+    display: flex; /* Añadir display: flex para que justify-content y align-items funcionen */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    pointer-events: auto; /* Asegura que los eventos del puntero estén habilitados */
 }
+
 .bottom-links {
     margin-top: 20px;
     text-align: center;
@@ -178,4 +185,18 @@
     background-size: cover;
     position: fixed;
   
+}
+
+.error {
+    border-color:  #ffb9b9; 
+}
+
+
+.error-message {
+    color: #ffc9c9;
+    font-size: 14px;
+    margin-top: 0.25em;
+    position: absolute;
+    left: 0;
+    bottom: -25px; 
 }
