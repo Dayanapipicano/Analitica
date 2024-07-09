@@ -35,7 +35,20 @@ class PersonaForm(UserCreationForm):
 class LoginForm(forms.Form):
     per_documento = forms.IntegerField(label='Documento de identidad')
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    
+    
+    #mensajes de error
+    def clean_per_documento(self):
+        per_documento = self.cleaned_data['per_documento']
+        if not per_documento.isdigit():
+            raise forms.ValidationError("El documento de identidad debe contener solo números.")
+        return per_documento
 
+    def clean_password1(self):
+        password1 = self.cleaned_data['password1']
+        if len(password1) < 8 or not any(char.isdigit() for char in password1) or not any(char.isalpha() for char in password1):
+            raise forms.ValidationError("La contraseña debe tener al menos 8 caracteres y contener números y letras.")
+        return password1
 
 class EditProfileForm(forms.ModelForm):
     class Meta:

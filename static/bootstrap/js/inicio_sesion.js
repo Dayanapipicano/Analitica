@@ -1,24 +1,42 @@
-document.querySelector('form').addEventListener('submit', function(event) {
-    var password = document.querySelector('input[name="password"]').value;
+document.getElementById('id_per_documento').addEventListener('input', function(event) {
+    var documento = this.value;
+    var errorMessage = document.getElementById('error_per_documento');
 
-    // Validación de longitud mínima
-    if (password.length < 8) {
-        document.querySelector('input[name="password"]').classList.add('error');
-        document.getElementById('error_password_length').style.display = 'block';
-        event.preventDefault(); // Evita enviar el formulario si hay errores
+    if (!/^\d*$/.test(documento)) {
+        errorMessage.style.display = 'block'; // Muestra el mensaje de error
     } else {
-        document.querySelector('input[name="password"]').classList.remove('error');
-        document.getElementById('error_password_length').style.display = 'none';
+        errorMessage.style.display = 'none'; // Oculta el mensaje de error si es válido
+    }
+});
+
+document.getElementById('id_password1').addEventListener('input', function(event) {
+    var password = this.value;
+    var errorMessage = document.getElementById('error_password1');
+
+    if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+        errorMessage.style.display = 'block'; // Muestra el mensaje de error
+    } else {
+        errorMessage.style.display = 'none'; // Oculta el mensaje de error si es válido
+    }
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    var documento = document.getElementById('id_per_documento').value;
+    var password = document.getElementById('id_password1').value;
+
+    // Validación para el campo documento (solo números)
+    if (!/^\d*$/.test(documento)) {
+        event.preventDefault(); // Evita que se envíe el formulario
+        document.getElementById('error_per_documento').style.display = 'block'; // Muestra el mensaje de error
+    } else {
+        document.getElementById('error_per_documento').style.display = 'none'; // Oculta el mensaje de error si es válido
     }
 
-        // Validación de formato de correo electrónico usando patrón HTML5
-        var emailPattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-        if (!emailPattern.test(email)) {
-            document.querySelector('input[name="email"]').classList.add('error');
-            document.getElementById('error_email_format').style.display = 'block';
-            event.preventDefault(); // Evita enviar el formulario si hay errores
-        } else {
-            document.querySelector('input[name="email"]').classList.remove('error');
-            document.getElementById('error_email_format').style.display = 'none';
-        }
+    // Validación para el campo contraseña (mínimo 8 caracteres y al menos un número y una letra)
+    if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+        event.preventDefault(); // Evita que se envíe el formulario
+        document.getElementById('error_password1').style.display = 'block'; // Muestra el mensaje de error
+    } else {
+        document.getElementById('error_password1').style.display = 'none'; // Oculta el mensaje de error si es válido
+    }
 });
