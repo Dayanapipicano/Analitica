@@ -9,26 +9,25 @@ from django.urls import reverse
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import PasswordChangeView
-from django.urls import reverse_lazy
-from django.contrib import messages
 
-
+#MENSAJE DE CAMBIO DE CONTRASEÑA
 class CustomPasswordChangeView(PasswordChangeView):
-    success_url = reverse_lazy('personas:perfil')  # Redirige a la URL de perfil después del cambio de contraseña
+    success_url = reverse_lazy('personas:perfil') 
 
     def form_valid(self, form):
         response = super().form_valid(form)
         messages.success(self.request, '¡Contraseña cambiada exitosamente!')
         return response
 
+#REFIRECCION DE EL HOME
 def Home(request):
     return render(request,'home.html')
 
+#REGISTRO DE PERSONA
 def Registro(request):
  
    if request.method == 'POST':
@@ -50,7 +49,7 @@ def Registro(request):
         formPersona = PersonaForm()
    return render(request,'registro.html',{'formPersona': formPersona})
 
-
+#INICIO DE SESION DE PERSONA
 def inicio_sesion(request):
     if request.method == 'POST':
         formPersona = LoginForm(request.POST)
@@ -69,11 +68,21 @@ def inicio_sesion(request):
     
     return render(request, 'inicio_sesion.html', {'formPersona': formPersona})
 
+
+#CONFIRMACION DE LA EXISTENCIAS DE UN CORREO ELECTRONICO
+def validacion_email(request):
+    email = request.GET.get('email')
+    exists = Persona.objects.filter(email=email).exists()
+    return JsonResponse({'exists': exists})
+
+#REDIRIGE AL PERFIL CON LOS DATOS EXISTENTES
 def Perfil(request):
     formPersona = EditProfileForm
     return render(request, 'perfil.html',{'formPersona':formPersona})
 
 
+
+#EDITAR PERFIL DE LA PERSONA
 @login_required
 def Editar_perfil(request,per_documento):
     persona = Persona.objects.get(per_documento=per_documento)
@@ -87,6 +96,4 @@ def Editar_perfil(request,per_documento):
             formPersona.save()
         return redirect(reverse('personas:editar_perfil',kwargs={'per_documento': per_documento}))
     return render(request, 'perfil.html',{'formPersona':formPersona})
-
-#CAMBIAR LA CONTRASEÑA DE LA PERSONA
 

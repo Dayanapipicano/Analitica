@@ -161,3 +161,12 @@ p{
     font-size: 105%;
 }
 
+.error {
+    border-color:  #ffb9b9; /* Cambia el borde a rojo */
+}
+.error-message {
+    color: #ffc9c9;
+    font-size: 14px;
+    margin-top: 5px;
+ 
+}
