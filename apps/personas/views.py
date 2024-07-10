@@ -10,7 +10,9 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import JsonResponse
-
+from django.contrib.auth.views import PasswordResetView
+from django.http import HttpResponseRedirect
+from django.contrib.auth.views import PasswordResetDoneView
 
 
 
@@ -108,3 +110,18 @@ def Editar_perfil(request,per_documento):
         return redirect(reverse('personas:editar_perfil',kwargs={'per_documento': per_documento}))
     return render(request, 'perfil.html',{'formPersona':formPersona})
 
+
+#captura el correo que se ingreso en el formulario
+class CustomPasswordResetView(PasswordResetView):
+    def form_valid(self, form):
+        email = form.cleaned_data.get('email')
+        response = super().form_valid(form)
+        return HttpResponseRedirect(f"{reverse_lazy('password_reset_done')}?email={email}")
+
+
+#recibe el correo ingresado para visualizarlo
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email'] = self.request.GET.get('email')
+        return context
