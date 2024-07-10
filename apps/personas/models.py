@@ -81,6 +81,8 @@ class P04(models.Model):
     estado_curso = models.CharField(max_length=150)
     codigo_nivel_formacion = models.CharField(max_length=150)
     nivel_formacion = models.CharField(max_length=150)
+    fecha_inicio_ficha = models.DateField()
+    fecha_terminacion_ficha = models.DateField()
     codigo_jornada = models.CharField(max_length=150)
     nombre_jornada = models.CharField(max_length=150)
     tipo_de_formacion = models.CharField(max_length=150)
@@ -113,7 +115,7 @@ class P04(models.Model):
     total_aprendices_activos = models.CharField(max_length=150)
     duracion_programa = models.CharField(max_length=150)
     nombre_nuevo_sector = models.CharField(max_length=150)
-    
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
 
 
     

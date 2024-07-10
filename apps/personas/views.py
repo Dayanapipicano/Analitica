@@ -14,6 +14,11 @@ from django.contrib.auth.views import PasswordResetView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.views import PasswordResetDoneView
 from django.utils import timezone
+import pandas as pd
+from django.shortcuts import render
+from apps.personas.models import P04
+from django.utils import timezone
+import numpy as np
 
 
 #MENSAJE DE CAMBIO DE CONTRASEÑA
@@ -120,48 +125,34 @@ class CustomPasswordResetDoneView(PasswordResetDoneView):
         context['email'] = self.request.GET.get('email')
         return context
 
-#subir el P04
-# views.py
 
-# views.py
 
-# views.py
 
-import pandas as pd
-from django.shortcuts import render
-from apps.personas.models import P04
-import pandas as pd
-from django.utils import timezone
+def p04(request):
+    per_documento = Persona.objects.all()
+    
+    return render(request,'p04.html',  {'per_documento':per_documento})
 
-import pandas as pd
-import numpy as np
-from django.utils import timezone
-from .models import P04
 
 def subir_archivo(request):
     if request.method == 'POST':
         archivo = request.FILES.get('fileUpload')
-
-        if archivo and archivo.name.endswith('.xlsx'):  # Verifica si es un archivo Excel
+        per_documento = request.POST.get('per_documento')
+      
+    
+        if archivo and archivo.name.endswith('.xlsx'):
             try:
-                # Carga el archivo Excel, empezando desde la fila 5 para los nombres de las columnas (header=4)
+                selected_persona = Persona.objects.get(per_documento=per_documento)
                 df = pd.read_excel(archivo, header=4)
-
-                # Reemplaza los valores vacíos por NaN
+                df['FECHA_INICIO_FICHA'] = pd.to_datetime(df['FECHA_INICIO_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
+                df['FECHA_TERMINACION_FICHA'] = pd.to_datetime(df['FECHA_TERMINACION_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
+               
                 df = df.replace(r'^\s*$', np.nan, regex=True)
 
-                # Imprime las columnas disponibles en el DataFrame para verificar
-                print("Columnas disponibles en df:")
-                print(df.columns)
+           
 
                 # Itera sobre las filas del DataFrame
                 for index, row in df.iterrows():
-                    # Verifica si hay datos incompletos en la fila actual y omítela si es necesario
-                    if row.isnull().any():
-                        print(f"Datos incompletos en la fila {index}. Se omitirá.")
-                        continue
-
-                    # Crea una instancia de P04 y asigna los valores de las columnas por nombre
                     p = P04(
                         fecha_p04=timezone.now(),
                         codigo_regional=row['CODIGO_REGIONAL'],
@@ -176,13 +167,10 @@ def subir_archivo(request):
                         codigo_jornada=row['CODIGO_JORNADA'],
                         nombre_jornada=row['NOMBRE_JORNADA'],
                         tipo_de_formacion=row['TIPO_DE_FORMACION'],
-
+                        fecha_inicio_ficha = row['FECHA_INICIO_FICHA'],
+                        fecha_terminacion_ficha = row['FECHA_TERMINACION_FICHA'],
                         etapa_ficha=row['ETAPA_FICHA'],
                         modalidad_formacion=row['MODALIDAD_FORMACION'],
-                      
-                       
-                       
-                       
                         codigo_sector_programa=row['CODIGO_SECTOR_PROGRAMA'],
                         nombre_sector_programa=row['NOMBRE_SECTOR_PROGRAMA'],
                         codigo_ocupacion=row['CODIGO_OCUPACION'],
@@ -207,19 +195,20 @@ def subir_archivo(request):
                         total_aprendices_femeninos=row['TOTAL_APRENDICES_FEMENINOS'],
                         total_aprendices_nobinario=row['TOTAL_APRENDICES_NOBINARIO'],
                         total_aprendices=row['TOTAL_APRENDICES'],
-    
+
                         total_aprendices_activos=row['TOTAL_APRENDICES_ACTIVOS'],
                         duracion_programa=row['DURACION_PROGRAMA'],
                         nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
-                       
+                        per_documento=selected_persona
                     )
-                    # Guarda la instancia P04 en la base de datos
+                    
+                    p.per_documento = selected_persona
                     p.save()
 
-                # Éxito: archivo procesado correctamente
+            
                 print("Datos guardados exitosamente.")
 
             except Exception as e:
                 print(f"Error al procesar el archivo: {str(e)}")
         
-    return render(request, 'p04.html')
+    return redirect('personas:P04')

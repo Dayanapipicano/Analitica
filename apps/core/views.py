@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from apps.personas.models import Persona
 def menu(request):
     return render(request,'home.html')
 
@@ -42,8 +42,8 @@ def recuperar_contraseña(request):
 def grafica(request):
     return render(request, 'Estrategias/grafica.html')
 
-def p04(request):
-    return render(request, 'p04.html')
+
+
 
 def administrador(request):
     return render(request, 'administrador.html')

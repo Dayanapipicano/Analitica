@@ -62,6 +62,4 @@ class EditProfileForm(forms.ModelForm):
             'per_tipo_documento': forms.Select(attrs={'class':'form-control'})
         }
         
-        
-""" 
-        """
+
