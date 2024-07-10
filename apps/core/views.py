@@ -47,3 +47,6 @@ def grafica(request):
 
 def administrador(request):
     return render(request, 'administrador.html')
+
+def Crear_metas_formacion(request):
+    return render(request, 'Estrategias_institucionales/crear_meta_formacion.html')

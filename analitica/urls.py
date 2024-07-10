@@ -19,10 +19,12 @@ from django.urls import path, include
 from apps.core import views
 from django.contrib.auth import views as auth_views
 from apps.personas import views as persona_views
+
 from apps.personas.views import CustomPasswordResetView, CustomPasswordResetDoneView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('apps.personas.urls')),
+    path('',include('apps.core.urls')),
 
     #COBERTURA
     
@@ -45,5 +47,6 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
     path('validacion_email/', persona_views.validacion_email, name='validacion_email'),
     path('validar_documento/', persona_views.validar_documento, name='validar_documento'),
+    
 
 ]

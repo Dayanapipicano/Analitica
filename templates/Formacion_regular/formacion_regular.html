@@ -2,138 +2,140 @@
 
 {% block contenido %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'bootstrap/css/formacion_regular.css' %}">
-
+<link rel="stylesheet" href="{% static 'bootstrap/css/desercion.css' %}">
 <div class="main p-3">
     <div class="text-center">
         <div class="container">
-            <div class="container mt-3">
-                <h1 class="h1 mb-4">Formacion regular</h1>
-            </div>
-        <div class="row">
-            <div class="col-md-7">
-                <div class="card">
-                    <div class="card-header">
-                        Formacion titulada
-                    </div>
-                    <div class="card-body">
-                        <div class="container">
-                            <div class="row result-row">
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Auxiliar</div>
-                                    <div class="result-value mx-auto">100</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title mx-auto">Evento</div>
-                                    <div class="result-value mx-auto">200</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Técnico</div>
-                                    <div class="result-value mx-auto">300</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Tecnólogo</div>
-                                    <div class="result-value d-flex justify-content-center align-items-center mx-auto">400</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Operario</div>
-                                    <div class="result-value mx-auto">500</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Curso especial</div>
-                                    <div class="result-value mx-auto">600</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Profundización técnica</div>
-                                    <div class="result-value mx-auto">700</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Otro título</div>
-                                    <div class="result-value mx-auto">800</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Otro título más</div>
-                                    <div class="result-value mx-auto">900</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Último título</div>
-                                    <div class="result-value mx-auto">1000</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Título adicional</div>
-                                    <div class="result-value mx-auto">1100</div>
-                                </div>
-                                <div class="col-md-4 result-col">
-                                    <div class="result-title">Título extra</div>
-                                    <div class="result-value mx-auto">1200</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="abajo">
-                        <div class="gran-total">
-                            Gran total: <span>100</span>
+            <h1 class="h1 mb-4">Gestionar formacion</h1>
+        
+            <div class="row justify-content-center">
+              
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="totalDesercion" class="col-sm-5 col-form-label col-form-label-sm">Año:</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" id="totalDesercion" value="100" readonly>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card formacion_complementaria">
-                    <div class="card-header">
-                        Formación Complementaria
-                    </div>
-                    <div class="card-body">
-                        <div class="container">
-                            <div class="row result-row">
-                                <div class="col-md-12 result-col">
-                                    <div class="result-title">Auxiliar</div>
-                                    <div class="result-value mx-auto">100</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-12 result-col">
-                                    <div class="result-title">Evento</div>
-                                    <div class="result-value mx-auto">200</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-12 result-col">
-                                    <div class="result-title">Técnico</div>
-                                    <div class="result-value mx-auto">300</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-12 result-col">
-                                    <div class="result-title">Tecnólogo</div>
-                                    <div class="result-value mx-auto">400</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-12 result-col">
-                                    <div class="result-title">Operario</div>
-                                    <div class="result-value mx-auto">500</div>
-                                </div>
-                            </div>
-                            <div class="row result-row">
-                                <div class="col-md-12 result-col">
-                                    <div class="result-title">Curso especial</div>
-                                    <div class="result-value mx-auto">600</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="abajo">
-                        <div class="gran-total">
-                            Gran total: <span>100</span>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                        </div>
+                    </div>
+                </div>
+            
+             
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
+                                <option selected>Seleccionar una opción</option>
+                                <option value="opcion1">Popayán</option>
+                                <option value="opcion2">Silvia</option>
+                                <option value="opcion3">Piendamó</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
+                                <option selected>Seleccionar una opción</option>
+                                <option value="opcion1">Popayán</option>
+                                <option value="opcion2">Silvia</option>
+                                <option value="opcion3">Piendamó</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'cores:Crear_metas_formacion'%}">Crear meta formacion</a>
+             
+          
+         
+            </div>
+        </div>
+        
+        <div class="container">
+            <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" style="min-width: 150px;">Identificador ficha</th>
+                            <th scope="col" style="min-width: 200px;">Identificador único ficha</th>
+                            <th scope="col" style="min-width: 100px;">Estado</th>
+                            <th scope="col" style="min-width: 150px;">Código nivel de formación</th>
+                            <th scope="col" style="min-width: 150px;">Nivel de formación</th>
+                            <th scope="col" style="min-width: 100px;">Código jornada</th>
+                            <th scope="col" style="min-width: 100px;">Jornada</th>
+                            <th scope="col" style="min-width: 150px;">Tipo de formación</th>
+                            <th scope="col" style="min-width: 150px;">Etapa de formación</th>
+                            <th scope="col" style="min-width: 150px;">Sector programa</th>
+                            <th scope="col" style="min-width: 150px;">Número de programa de formación</th>
+                            <th scope="col" style="min-width: 100px;">Red</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dato 1</td>
+                            <td>Dato 2</td>
+                            <td>Dato 3</td>
+                            <td>Dato 4</td>
+                            <td>Dato 5</td>
+                            <td>Dato 6</td>
+                            <td>Dato 7</td>
+                            <td>Dato 8</td>
+                            <td>Dato 9</td>
+                            <td>Dato 10</td>
+                            <td>Dato 11</td>
+                            <td>Dato 12</td>
+                        </tr>
+                        <tr>
+                            <td>Dato 13</td>
+                            <td>Dato 14</td>
+                            <td>Dato 15</td>
+                            <td>Dato 16</td>
+                            <td>Dato 17</td>
+                            <td>Dato 18</td>
+                            <td>Dato 19</td>
+                            <td>Dato 20</td>
+                            <td>Dato 21</td>
+                            <td>Dato 22</td>
+                            <td>Dato 23</td>
+                            <td>Dato 24</td>
+                        </tr>
+                        <tr>
+                            <td>Dato 25</td>
+                            <td>Dato 26</td>
+                            <td>Dato 27</td>
+                            <td>Dato 28</td>
+                            <td>Dato 29</td>
+                            <td>Dato 30</td>
+                            <td>Dato 31</td>
+                            <td>Dato 32</td>
+                            <td>Dato 33</td>
+                            <td>Dato 34</td>
+                            <td>Dato 35</td>
+                            <td>Dato 36</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
