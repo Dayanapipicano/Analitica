@@ -1,3 +1,13 @@
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const messageContainer = document.getElementById('message-container');
+    if (messageContainer) {
+        setTimeout(() => {
+            messageContainer.style.display = 'none';
+        }, 5000); // Ocultar el mensaje después de 5 segundos
+    }
+});
+
 document.getElementById('id_per_documento').addEventListener('input', function(event) {
     var documento = this.value;
     var errorMessage = document.getElementById('error_per_documento');

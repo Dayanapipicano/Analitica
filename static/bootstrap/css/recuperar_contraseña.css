@@ -60,7 +60,7 @@ p{
 .inputbox .error-container {
     position: absolute;
     width: 100%;
-    bottom: -28px; /* Ajusta este valor según sea necesario */
+    bottom: -25px; /* Ajusta este valor según sea necesario */
     left: 0;
 }
 .inputbox input {

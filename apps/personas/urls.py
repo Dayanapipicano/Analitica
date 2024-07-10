@@ -12,5 +12,5 @@ urlpatterns = [
     path('perfil/', views.Perfil, name="perfil"),
     path('editar_perfil/<int:per_documento>/', views.Editar_perfil, name="editar_perfil"),
     path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
-
+     path('subir_archivo/', views.subir_archivo, name='subir_archivo'),
 ]

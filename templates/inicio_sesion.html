@@ -17,7 +17,6 @@
                 <form action="{% url 'personas:inicio_sesion' %}" method="post" id="loginForm">
                     {% csrf_token %}
                     <h2 class="login_titulo">Inicio de sesión</h2>
-           
                     <div class="inputbox">
                         <ion-icon name="mail-outline"></ion-icon>
                         <input type="text" name="per_documento" id="id_per_documento" required>
@@ -28,12 +27,10 @@
                         <ion-icon name="lock-closed-outline"></ion-icon>
                         <input type="password" name="password1" id="id_password1" required>
                         <label for="id_password1">Contraseña</label>
-                       
                         <div class="error-container">
                             <span class="error-message" id="error_password1" style="display: none;">La contraseña debe tener al menos 8 caracteres y contener números y letras.</span>
                         </div>
                     </div>
-
                     <div class="container">
                         <button type="submit" class="boton_registro">Iniciar Sesión</button>
                     </div>
@@ -44,17 +41,20 @@
                 </form>
             </div>
         </div>
+    
+        {% if messages %}
         <div class="mensaje">
-            {% if messages %}
-                <div class="fixed-message" id="message-container">
-                    {% for message in messages %}
-                        <div class="alert alert-danger text-center" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+            <div class="fixed-message" id="message-container">
+                {% for message in messages %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ message }}
                 </div>
-            {% endif %}
+                {% endfor %}
+            </div>
         </div>
+        {% endif %}
+        
+ 
     </section>
 
   

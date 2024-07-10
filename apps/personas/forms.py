@@ -1,5 +1,6 @@
 from django import forms
 from .models import Persona
+from .models import P04
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 
@@ -60,3 +61,7 @@ class EditProfileForm(forms.ModelForm):
         Widget = {
             'per_tipo_documento': forms.Select(attrs={'class':'form-control'})
         }
+        
+        
+""" 
+        """

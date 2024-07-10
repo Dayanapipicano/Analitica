@@ -5,3 +5,4 @@ credentials.json
 #pip install djangorestframework
 #pip3 install certifi   
 #pip3 install djangorestframework-simplejwt
+#pip install pandas openpyxl  
