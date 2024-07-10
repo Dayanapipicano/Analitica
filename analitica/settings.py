@@ -141,7 +141,9 @@ EMAIL_HOST_USER =  'pipicanodayana2005@gmail.com'
 EMAIL_HOST_PASSWORD = 'cyfd vhnx jlhm laab'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
+#carpeta para las imagenes de perfil
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
     
 os.environ['SSL_CERT_FILE'] = certifi.where()

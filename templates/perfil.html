@@ -14,14 +14,25 @@
                
                 <div class="form-boxs">
                     <div class="profile-header">
-                        <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
+                        {% if request.user.is_authenticated %}
+                            <form action="{% url 'personas:editar_perfil' user.per_documento %}" method="post" enctype="multipart/form-data" >
+                                {% csrf_token %}
+                                <div class="form-group text-center">
+                                    <input type="file" class="d-none" id="fileUpload" name="per_image">
+                                    {% if formPersona.instance.per_image %}
+                                        <img id="profileImage" src="{{ formPersona.instance.per_image.url }}" alt="Imagen de perfil" class="profile-picture" style="cursor: pointer;">
+                                    {% else %}
+                                        <img id="profileImage" src="{% static 'bootstrap/img/perfil.png' %}" alt="Imagen de perfil" class="profile-picture" style="cursor: pointer;">
+                                        <p>No hay imagen de perfil disponible.</p>
+                                    {% endif %}
+                                </div>
+                        
                         <h4 class="titulo_perfil">Editar Perfil</h4>
                     </div>
                     <div class="row">
                         <div class="col-lg-8 offset-lg-2">
-                            {% if request.user.is_authenticated %}
-                            <form action="{% url 'personas:editar_perfil' user.per_documento %}" method="post">
-                                {% csrf_token %}
+                           
+                              
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="inputbox">
@@ -67,7 +78,7 @@
                                 </div>
                                 <div class="container">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <button type="submit"  class="boton_registro">Enviar</button>
+                                        <button type="submit"  class="boton_registro">Guardar</button>
                                         
                                         <div id="cambiar_contraseña">
                                             <a href="{% url 'personas:password_change' %}" class="btn btn-link">Cambiar Contraseña</a>
@@ -102,7 +113,7 @@
     </div>
 </div>
 
-<script src="{% static 'bootstrap/js/mensajes.js'%}"></script>
+<script src="{% static 'bootstrap/js/mensajes.js' %}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 {% endblock contenido %}

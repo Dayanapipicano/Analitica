@@ -29,8 +29,7 @@
     background-color: red;
 }
 
-
-.prueba{
-  margin-top: -15px;
-  
+.prueba {
+    display: flex;
+    justify-content: space-between; /* Espacio uniforme entre los elementos */
 }

@@ -19,8 +19,8 @@ from django.shortcuts import render
 from apps.personas.models import P04
 from django.utils import timezone
 import numpy as np
-
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
 #MENSAJE DE CAMBIO DE CONTRASEÑA
 class CustomPasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('personas:perfil') 
@@ -38,7 +38,7 @@ def Home(request):
 def Registro(request):
  
    if request.method == 'POST':
-        print('Datos recibidos en POST:', request.POST)  
+   
         formPersona = PersonaForm(request.POST)
         if formPersona.is_valid():
             formPersona.save()
@@ -96,18 +96,20 @@ def Perfil(request):
 
 #EDITAR PERFIL DE LA PERSONA
 @login_required
-def Editar_perfil(request,per_documento):
+def Editar_perfil(request, per_documento):
     persona = Persona.objects.get(per_documento=per_documento)
     
-    if request.method == 'GET':
-        formPersona = EditProfileForm(instance=persona)
-        
-    else:
-        formPersona = EditProfileForm(request.POST, instance=persona)
+    if request.method == 'POST':
+        formPersona = EditProfileForm(request.POST, request.FILES, instance=persona)
+       
         if formPersona.is_valid():
             formPersona.save()
-        return redirect(reverse('personas:editar_perfil',kwargs={'per_documento': per_documento}))
-    return render(request, 'perfil.html',{'formPersona':formPersona})
+            return redirect(reverse('personas:editar_perfil', kwargs={'per_documento': per_documento}))
+        
+    else:
+        formPersona = EditProfileForm(instance=persona)
+        
+    return render(request, 'perfil.html', {'formPersona': formPersona})
 
 
 #captura el correo que se ingreso en el formulario
@@ -212,3 +214,7 @@ def subir_archivo(request):
                 print(f"Error al procesar el archivo: {str(e)}")
         
     return redirect('personas:P04')
+
+
+    
+    

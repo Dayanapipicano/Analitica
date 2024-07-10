@@ -30,8 +30,9 @@ body {
 .wrapper {
  
     display: flex;
-    flex-direction: column; /* Cambio para soportar el navbar y el contenido principal */
-    height: 100vh;
+    flex-direction: column;
+    min-height: 100vh; /* Al menos el 100% de la altura de la ventana */
+    
   
 }
 
@@ -42,7 +43,9 @@ body {
     margin-top: 50px;
     height: calc(100vh - 50px); 
     margin-left: 70px; 
-    position: fixed;
+ 
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    flex: 1;
 }
 
 
@@ -58,6 +61,7 @@ body {
     position: fixed;
     top: 67px; /* Ajusta esto a la altura de tu navbar */
     height: calc(100vh - 67px); /* Ajusta esto a la altura de tu navbar */
+
 }
 
 

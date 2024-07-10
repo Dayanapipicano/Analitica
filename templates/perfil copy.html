@@ -20,7 +20,8 @@
                 {% endif %}
                 <div class="form-boxs">
                     <div class="profile-header">
-                        <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="profile-picture">
+                        <img src="{% if user.persona.per_image %}{{ user.persona.per_image.url }}{% else %}{% static 'bootstrap/img/perfil.png' %}{% endif %}" alt="Foto de perfil" class="profile-picture">
+
                         <h4 class="titulo_perfil">Editar Perfil</h4>
                     </div>
                     <div class="row">

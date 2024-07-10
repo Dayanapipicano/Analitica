@@ -57,7 +57,7 @@ class LoginForm(forms.Form):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Persona
-        fields = ('per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'email', 'per_telefono')
+        fields = ('per_documento', 'per_tipo_documento', 'per_nombres', 'per_apellidos', 'email', 'per_telefono','per_image')
         Widget = {
             'per_tipo_documento': forms.Select(attrs={'class':'form-control'})
         }
