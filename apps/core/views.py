@@ -70,10 +70,13 @@ class Cobertura_mapa(TemplateView):
         municipio = Municipios.nombre.field.choices
 
         if nombre_municipio:
-            programas = P04.objects.filter(nombre_municipio_curso=nombre_municipio).values_list('nombre_programa_formacion', flat=True)
+            programas = P04.objects.filter(nombre_municipio_curso=nombre_municipio).values_list('nombre_programa_formacion', flat=True).distinct()
             programas_lista = list(programas)
         
-        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio)
+        
+        cantidad_de_programas =  len(programas_lista)
+    
+        
+        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,cantidad_de_programas=cantidad_de_programas)
         return self.render_to_response(context)
 
- 

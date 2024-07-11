@@ -285,13 +285,6 @@
                   'nombre_municipio': nombre_municipio  // Nombre del parámetro que espera tu vista
                 },
                 success: function(data) {
-                  // Remover la clase 'hovered' de todos los paths antes de aplicarla al nuevo municipio
-                  $('.mapadiv path').removeClass('hovered');
-            
-                  // Agregar la clase 'hovered' al path del municipio seleccionado
-                  $(`#path_${nombre_municipio}`).addClass('hovered');
-            
-                  // Redirigir a la vista cobertura_mapa con el municipio seleccionado
                   window.location.href = "{% url 'cores:cobertura_mapa' %}?nombre_municipio=" + encodeURIComponent(nombre_municipio);
                 },
                 error: function(xhr, status, error) {
@@ -299,6 +292,9 @@
                 }
               });
             }
+
+            
+
             </script>
             
             
