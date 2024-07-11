@@ -51,9 +51,7 @@
       <div class="row">
           <div class="col-md-6">
               <!-- Contenedor del mapa o cualquier otro contenido -->
-              <div class="map-container mt-4">
-                  {% include 'Cobertura/mapa.html' %}
-              </div>
+        
           </div>
           <div class="col-md-6">
               <!-- Contenedor para la tabla con desplazamiento -->
@@ -66,15 +64,15 @@
                           </tr>
                       </thead>
                       <tbody>
-                        {% for programa in programas_lista %}
-                        <tr>
-                            <td>{{ programa }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td>No hay programas disponibles para este municipio.</td>
-                        </tr>
-                        {% endfor %}
+                          {% for programa in programas_lista %}
+                          <tr>
+                              <td>{{ programa.nombre_programa_formacion }}</td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                              <td>No hay programas disponibles para este municipio.</td>
+                          </tr>
+                          {% endfor %}
                       </tbody>
                   </table>
               </div>
