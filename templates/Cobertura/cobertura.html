@@ -32,12 +32,13 @@
                         <div class="form-group row">
                             <label for="filtroSeleccion" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
                             <div class="col-sm-9">
-                                <select class="form-control form-control-sm custom-select" id="filtroSeleccion">
-                                    <option selected>Seleccionar una opción</option>
-                                    <option value="opcion1">Popayán</option>
-                                    <option value="opcion2">Silvia</option>
-                                    <option value="opcion3">Piendamó</option>
+                                <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="obtenerProgramas(this.value)">
+                                  <option value="" disabled selected>Selecciona Municipio</option>
+                                  {% for choice in municipio %}
+                                  <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                   {% endfor %}
                                 </select>
+
                             </div>
                         </div>
                     </div>

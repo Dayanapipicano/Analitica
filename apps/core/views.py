@@ -2,9 +2,9 @@ from django.shortcuts import render
 from apps.personas.models import Persona, P04
 from django.http import JsonResponse
 from django.views import View
-
+from apps.core.models import Municipios
 from django.views.generic import TemplateView
-
+from apps.core.forms import MunicipiosForm
 def menu(request):
     return render(request,'home.html')
 
@@ -58,9 +58,8 @@ def Crear_metas_formacion(request):
 #COBERTURA
 
 def cobertura(request):
-    return render(request, 'Cobertura/cobertura.html')
-def cober(request):
-    return render(request, 'Cobertura/cober.html')
+    municipio = Municipios.nombre.field.choices
+    return render(request, 'Cobertura/cobertura.html', {'municipio':municipio})
 
 class Cobertura_mapa(TemplateView):
     template_name = 'Cobertura/cobertura.html'
@@ -68,12 +67,13 @@ class Cobertura_mapa(TemplateView):
     def get(self, request, *args, **kwargs):
         nombre_municipio = request.GET.get('nombre_municipio', None)
         programas_lista = []
-        
+        municipio = Municipios.nombre.field.choices
+
         if nombre_municipio:
             programas = P04.objects.filter(nombre_municipio_curso=nombre_municipio).values_list('nombre_programa_formacion', flat=True)
             programas_lista = list(programas)
         
-        context = self.get_context_data(programas_lista=programas_lista)
+        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio)
         return self.render_to_response(context)
 
  
