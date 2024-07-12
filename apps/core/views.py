@@ -105,13 +105,13 @@ class Programa(TemplateView):
         selected_nivel_formacion = request.GET.get('nivel_formacion')
         selected_programa_formacion = request.GET.get('programa_formacion')
         selected_modalidad = request.GET.get('modalidad')
-        
+        selected_identificador_ficha = request.GET.get('identificador_ficha')  # Nuevo filtro
         
         filtros_programa = {}
 
 
 
-        municipios = P04.objects.all()
+       
         fichas = P04.objects.all()
 
         if selected_nivel_formacion:
@@ -132,6 +132,8 @@ class Programa(TemplateView):
 
         municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
+        info_ficha = P04.objects.filter(identificador_ficha=fichas_filtro)
+        print('f{info_ficha}')
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
             programa_formacion=Programas_formacion.Programas_formacion_choices.choices,
@@ -144,6 +146,12 @@ class Programa(TemplateView):
             
             lista_municipios=municipios_filtro,
             lista_fichas = fichas_filtro,
+            informacion_ficha = info_ficha,
+            
         )
+        if selected_identificador_ficha:
+            ficha_seleccionada = P04.objects(P04, identificador_ficha=selected_identificador_ficha)
+            context['info_ficha_seleccionada'] = ficha_seleccionada
+            
         return self.render_to_response(context)
 

@@ -106,7 +106,7 @@
                             {% for fichas in lista_fichas %}
                             <tr>
                                <td>{{ fichas.identificador_ficha }}</td>
-                               <td><button type="button" class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
+                               <td><button type="button" data-identificador="{{ fichas.identificador_ficha }}" class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
                                
                             </tr>
                          {% empty %}
@@ -135,14 +135,42 @@
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group">
-                                      <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                      <label for="recipient-name" class="col-form-label">Programadfsdfdsf:</label>
                                       
+                               
+                                      {%for  informacion_fichas in lista_fichas%} 
+                                          <h1>{{informacion_fichas.P04.red}}</h1>
+                                      {%endfor%}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Modalidad:</label>
+                                        
+                                        <h6 >Modalidad</h6>
+                                      </div>
+                                    <div class="form-group">
+                                      <label for="message-text" class="col-form-label">Centro de formacion:</label>
                                       <h6 >Aprendiz</h6>
                                     </div>
                                     <div class="form-group">
-                                      <label for="message-text" class="col-form-label">Message:</label>
-                                      <h6 >Aprendiz</h6>
-                                    </div>
+                                        <label for="message-text" class="col-form-label">Tipo de formacion:</label>
+                                        <h6 >Aprendiz</h6>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Fecha inicio ficha</label>
+                                        <h6 >Aprendiz</h6>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Fecha fin ficha</label>
+                                        <h6 >Aprendiz</h6>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Red</label>
+                                        <h6 >Aprendiz</h6>
+                                      </div> 
+                                      <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Municipio</label>
+                                        <h6 >Aprendiz</h6>
+                                      </div> 
                                   </form>
                               </div>
                             <div class="modal-footer">
