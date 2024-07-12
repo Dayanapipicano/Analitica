@@ -12,11 +12,17 @@ class Estd_formacion(models.TextChoices):
     BILINGUISMO = 'bilinguismo', 'Bilinguismo'
     SIN_BILINGUISMO = 'sin_bilinguismo','Sin_bilinguismo'
     
-class Modalidad(models.TextChoices):
-    VIRTUAL = 'VIRT','Virtual'
-    PRESENCIAL = 'PRE', 'Presencial'
-    DISTANCIA = 'DIST', 'Distancia'
+    
 
+class Modalidad(models.Model):
+    
+    class Modalidad_choices(models.TextChoices):
+        VIRTUAL = 'VIRTUAL','Virtual'
+        PRESENCIAL = 'PRESENCIAL', 'Presencial'
+        DISTANCIA = 'DISTANCIA', 'Distancia'
+    
+    modalidad = models.CharField(max_length=150, choices=Modalidad_choices.choices)
+    
 class Poblaciones(models.TextChoices):
     DESPLAZADOS_POR_VIOLENCIA = 'desplazados_por_violencia','Desplazados_por_violencia'
     HECHOS_VICTIMIZANTES = 'hechos_victimizantes','Hechos_victimizantes'
@@ -176,7 +182,7 @@ class Meta(models.Model):
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
     est_nombre = models.CharField(max_length=100)
-    est_modalidad = models.CharField(max_length=50, choices=Modalidad.choices)
+    est_modalidad = models.CharField(max_length=50, choices=Modalidad.Modalidad_choices.choices)
     est_total_meta = models.CharField(max_length=100)
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
     
@@ -192,7 +198,7 @@ class Estrategia_detalle(models.Model):
 
 class Metas_formacion(models.Model):
     metd_id = models.AutoField(primary_key=True)
-    metd_modalidad =  models.CharField(max_length=100,choices=Modalidad.choices)
+    metd_modalidad =  models.CharField(max_length=100,choices=Modalidad.Modalidad_choices.choices)
     metf_formacion = models.CharField(max_length=100, choices=Estd_formacion.choices)
     metf_meta = models.CharField(max_length=100)
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)

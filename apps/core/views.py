@@ -4,7 +4,10 @@ from django.http import JsonResponse
 from django.views import View
 from apps.core.models import Municipios
 from django.views.generic import TemplateView
-from apps.core.forms import MunicipiosForm
+from apps.personas.models import Modalidad
+from apps.core.models import Programas_formacion
+from apps.core.models import Nivel_formacion
+from django.db.models import Count
 def menu(request):
     return render(request,'home.html')
 
@@ -33,8 +36,16 @@ def general(request):
 def poblacion_vulnerable(request):
     return render(request, 'Poblacion_vulnerable/poblacion_vulnerable.html')
 
-def programa(request):
-    return render(request, 'Programa/programa.html')
+def Programa_index(request):
+    modalidad = Modalidad.modalidad.field.choices
+    programa_formacion_choices = Programas_formacion.Programas_formacion_choices.choices
+    nivel_formacion = Nivel_formacion.Nivel_formacion_choices.choices
+    context = {
+        'modalidad': modalidad,
+        'programa_formacion': programa_formacion_choices,
+        'nivel_formacion':nivel_formacion
+    }
+    return render(request, 'Programa/programa.html', context)
 
 
 
@@ -78,5 +89,61 @@ class Cobertura_mapa(TemplateView):
     
         
         context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,cantidad_de_programas=cantidad_de_programas)
+        return self.render_to_response(context)
+
+#PROGRAMA
+
+
+    
+from django.views.generic import TemplateView
+from django.db.models import Count
+
+class Programa(TemplateView):
+    template_name = 'Programa/programa.html'
+    
+    def get(self, request, *args, **kwargs):
+        selected_nivel_formacion = request.GET.get('nivel_formacion')
+        selected_programa_formacion = request.GET.get('programa_formacion')
+        selected_modalidad = request.GET.get('modalidad')
+        
+        
+        filtros_programa = {}
+
+
+
+        municipios = P04.objects.all()
+        fichas = P04.objects.all()
+
+        if selected_nivel_formacion:
+            filtros_programa['nivel_formacion'] = selected_nivel_formacion
+        
+        # Filtrar por programa_formacion solo si ya se seleccionó nivel_formacion
+        if selected_programa_formacion and selected_nivel_formacion:
+            filtros_programa['nombre_programa_formacion'] = selected_programa_formacion
+        
+        if selected_modalidad and selected_programa_formacion:
+            filtros_programa['modalidad_formacion'] = selected_modalidad
+            
+        
+        lista_filtros = P04.objects.filter(**filtros_programa)
+        
+        
+        
+
+        municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
+        fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
+        context = self.get_context_data(
+            nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
+            programa_formacion=Programas_formacion.Programas_formacion_choices.choices,
+            modalidad=Modalidad.Modalidad_choices.choices,
+            
+            #Mantiene la opcion en el select
+            selected_nivel_formacion=selected_nivel_formacion,
+            selected_programa_formacion=selected_programa_formacion,
+            selected_modalidad=selected_modalidad,
+            
+            lista_municipios=municipios_filtro,
+            lista_fichas = fichas_filtro,
+        )
         return self.render_to_response(context)
 
