@@ -97,7 +97,7 @@ class Cobertura_mapa(TemplateView):
     
 from django.views.generic import TemplateView
 from django.db.models import Count
-
+import json
 class Programa(TemplateView):
     template_name = 'Programa/programa.html'
     
@@ -132,8 +132,10 @@ class Programa(TemplateView):
 
         municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
-        info_ficha = P04.objects.filter(identificador_ficha=fichas_filtro)
-        print('f{info_ficha}')
+        
+       
+        
+       
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
             programa_formacion=Programas_formacion.Programas_formacion_choices.choices,
@@ -146,12 +148,28 @@ class Programa(TemplateView):
             
             lista_municipios=municipios_filtro,
             lista_fichas = fichas_filtro,
-            informacion_ficha = info_ficha,
+           
+          
             
         )
-        if selected_identificador_ficha:
-            ficha_seleccionada = P04.objects(P04, identificador_ficha=selected_identificador_ficha)
-            context['info_ficha_seleccionada'] = ficha_seleccionada
+      
             
         return self.render_to_response(context)
 
+from django.shortcuts import render, get_object_or_404
+def detalle_ficha(request, identificador_ficha):
+   
+    ficha = get_object_or_404(P04, identificador_ficha=identificador_ficha)
+    data = {
+        'identificador_ficha': ficha.identificador_ficha,
+        'campo1': ficha.modalidad_formacion,
+        'campo2': ficha.nombre_centro,
+        'campo3': ficha.tipo_de_formacion,
+        'campo4': ficha.fecha_inicio_ficha,
+        'campo5': ficha.fecha_terminacion_ficha,
+        'campo6': ficha.red,
+        'campo7': ficha.nombre_municipio_curso,
+        
+    }
+    print(f'sdfgsdgsd{data}')
+    return JsonResponse(data)

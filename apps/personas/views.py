@@ -202,6 +202,7 @@ def subir_archivo(request):
                         duracion_programa=row['DURACION_PROGRAMA'],
                         nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
                         per_documento=selected_persona
+                     
                     )
                     
                     p.per_documento = selected_persona

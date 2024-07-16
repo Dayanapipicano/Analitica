@@ -106,12 +106,12 @@
                             {% for fichas in lista_fichas %}
                             <tr>
                                <td>{{ fichas.identificador_ficha }}</td>
-                               <td><button type="button" data-identificador="{{ fichas.identificador_ficha }}" class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
+                               <td><button type="button" data-identificador="{{ fichas.identificador_ficha }}"  class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
                                
                             </tr>
                          {% empty %}
                              <tr>
-                               <td colspan="2">No hay Municipios disponibles</td>
+                               <td colspan="2">No hay Fichas disponibles</td>
                              </tr>
                             {% endfor %}
                            
@@ -135,42 +135,19 @@
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group">
-                                      <label for="recipient-name" class="col-form-label">Programadfsdfdsf:</label>
+                                
                                       
-                               
-                                      {%for  informacion_fichas in lista_fichas%} 
-                                          <h1>{{informacion_fichas.P04.red}}</h1>
-                                      {%endfor%}
+                            
+                                      <p><strong>Identificador Ficha:</strong> <span id="detalleIdentificador"></span></p>
+                                      <p><strong>Modalidad:</strong> <span id="detalleCampo1"></span></p>
+                                      <p><strong>Centro de formacion:</strong> <span id="detalleCampo2"></span></p>
+                                      <p><strong>Tipo de formacion:</strong> <span id="detalleCampo3"></span></p>
+                                      <p><strong>Fecha inicio ficha:</strong> <span id="detalleCampo4"></span></p>
+                                      <p><strong>Fecha fin ficha:</strong> <span id="detalleCampo5"></span></p>
+                                      <p><strong>Red:</strong> <span id="detalleCampo6"></span></p>
+                                      <p><strong>Municipio:</strong> <span id="detalleCampo7"></span></p>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="recipient-name" class="col-form-label">Modalidad:</label>
-                                        
-                                        <h6 >Modalidad</h6>
-                                      </div>
-                                    <div class="form-group">
-                                      <label for="message-text" class="col-form-label">Centro de formacion:</label>
-                                      <h6 >Aprendiz</h6>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Tipo de formacion:</label>
-                                        <h6 >Aprendiz</h6>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Fecha inicio ficha</label>
-                                        <h6 >Aprendiz</h6>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Fecha fin ficha</label>
-                                        <h6 >Aprendiz</h6>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Red</label>
-                                        <h6 >Aprendiz</h6>
-                                      </div> 
-                                      <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Municipio</label>
-                                        <h6 >Aprendiz</h6>
-                                      </div> 
+                                   
                                   </form>
                               </div>
                             <div class="modal-footer">
@@ -195,7 +172,11 @@
 </div>
   </div>
 </div>
+
+
 <script>
+
+
     function aplicarFiltros() {
         const nivelFormacion = document.getElementById('nivel_formacion').value;
         const programaFormacion = document.getElementById('programa_formacion').value;
@@ -214,8 +195,12 @@
         
         window.location.href = url;
       }
+
+      
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="{% static 'bootstrap/js/programa.js'%}"></script>

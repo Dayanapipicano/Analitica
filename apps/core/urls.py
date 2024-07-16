@@ -10,4 +10,5 @@ urlpatterns = [
     path('modalidad/', core_views.Modalidad, name='modalidad'),
     path('programa/index', core_views.Programa_index, name="programa_index"),
     path('programa/', core_views.Programa.as_view(), name='programa'),
+    path('ficha/<int:identificador_ficha>/', core_views.detalle_ficha, name='detalle_ficha'),
 ]
