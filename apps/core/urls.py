@@ -11,4 +11,6 @@ urlpatterns = [
     path('programa/index', core_views.Programa_index, name="programa_index"),
     path('programa/', core_views.Programa.as_view(), name='programa'),
     path('ficha/<int:identificador_ficha>/', core_views.detalle_ficha, name='detalle_ficha'),
+    path('desercion/index', core_views.Desercion_index, name="desercion_index"),
+    path('desercion', core_views.Desercion.as_view(), name="Desercion"),
 ]

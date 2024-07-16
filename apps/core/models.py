@@ -3,10 +3,10 @@ from django.db import models
 
     
     
-class Municipios(models.Model):
+class Municipio(models.Model):
     
     
-    class Municipio(models.TextChoices):
+    class Municipio_choices(models.TextChoices):
     
         ALMAGUER = 'ALMAGUER','Almaguer',
         ARGELIA = 'ARGELIA','Argelia',
@@ -47,7 +47,7 @@ class Municipios(models.Model):
         VILLA_RICA = 'VILLA RICA','Villa Rica' 
 
     
-    nombre = models.CharField(max_length=150, choices=Municipio.choices)
+    nombre = models.CharField(max_length=150, choices=Municipio_choices.choices)
     
     
     
@@ -207,3 +207,19 @@ class Nivel_formacion(models.Model):
     
     nivel_formacion = models.CharField(max_length=150, choices=Nivel_formacion_choices.choices)
    
+
+class Centro_de_formacion(models.Model):
+    
+    class Centro_de_formacion_choices(models.TextChoices):
+        CENTRO_DE_COMERCIO_Y_SERVICIOS = 'CENTRO DE COMERCIO Y SERVICIOS','Centro de comercio y servicio',
+        
+    centro_de_formacion = models.CharField(max_length=150, choices=Centro_de_formacion_choices.choices)
+    
+
+class Regional(models.Model):
+    
+    class Regional_choices(models.TextChoices):
+        
+        REGIONAL_CAUCA = 'REGIONAL CAUCA','Regional cauca'
+    
+    regional = models.CharField(max_length=150, choices=Regional_choices.choices)

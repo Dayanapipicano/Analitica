@@ -2,12 +2,18 @@ from django.shortcuts import render
 from apps.personas.models import Persona, P04
 from django.http import JsonResponse
 from django.views import View
-from apps.core.models import Municipios
+from apps.core.models import Municipio,Regional,Centro_de_formacion
 from django.views.generic import TemplateView
 from apps.personas.models import Modalidad
 from apps.core.models import Programas_formacion
 from apps.core.models import Nivel_formacion
 from django.db.models import Count
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import TemplateView
+from django.db.models import Count,Sum
+from datetime import datetime
+
+#redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
 
@@ -18,8 +24,19 @@ def registro(request):
     return render(request, 'registro.html')
 
 
-def desercion(request):
-    return render(request, 'Desercion/desercion.html')
+def Desercion_index(request):
+    municipio = Municipio.nombre.field.choices
+    regional = Regional.regional.field.choices
+    centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
+    modalidad = Modalidad.Modalidad_choices.choices
+    
+    context = {
+        'municipio':municipio,
+        'regional': regional,
+        'centro_de_formacion' : centro_de_formacion,
+        'modalidad': modalidad
+    }
+    return render(request, 'Desercion/desercion.html', context)
 
 def estrategias(request):
     return render(request, 'Estrategias/estrategias.html')
@@ -66,10 +83,13 @@ def Crear_metas_formacion(request):
 
 
 
+
+#FUNCIONALIDADES
+
 #COBERTURA
 
 def cobertura(request):
-    municipio = Municipios.nombre.field.choices
+    municipio = Municipio.nombre.field.choices
     return render(request, 'Cobertura/cobertura.html', {'municipio':municipio})
 
 class Cobertura_mapa(TemplateView):
@@ -78,7 +98,7 @@ class Cobertura_mapa(TemplateView):
     def get(self, request, *args, **kwargs):
         nombre_municipio = request.GET.get('nombre_municipio', None)
         programas_lista = []
-        municipio = Municipios.nombre.field.choices
+        municipio = Municipio.nombre.field.choices
 
         if nombre_municipio:
             programas = P04.objects.filter(nombre_municipio_curso=nombre_municipio).values_list('nombre_programa_formacion', flat=True).distinct()
@@ -92,12 +112,6 @@ class Cobertura_mapa(TemplateView):
         return self.render_to_response(context)
 
 #PROGRAMA
-
-
-    
-from django.views.generic import TemplateView
-from django.db.models import Count
-import json
 class Programa(TemplateView):
     template_name = 'Programa/programa.html'
     
@@ -105,13 +119,10 @@ class Programa(TemplateView):
         selected_nivel_formacion = request.GET.get('nivel_formacion')
         selected_programa_formacion = request.GET.get('programa_formacion')
         selected_modalidad = request.GET.get('modalidad')
-        selected_identificador_ficha = request.GET.get('identificador_ficha')  # Nuevo filtro
+       
         
         filtros_programa = {}
 
-
-
-       
         fichas = P04.objects.all()
 
         if selected_nivel_formacion:
@@ -126,15 +137,11 @@ class Programa(TemplateView):
             
         
         lista_filtros = P04.objects.filter(**filtros_programa)
-        
-        
-        
+
 
         municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
-        
-       
-        
+
        
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
@@ -156,7 +163,8 @@ class Programa(TemplateView):
             
         return self.render_to_response(context)
 
-from django.shortcuts import render, get_object_or_404
+
+#detalle de la ficha seleccionada
 def detalle_ficha(request, identificador_ficha):
    
     ficha = get_object_or_404(P04, identificador_ficha=identificador_ficha)
@@ -173,3 +181,69 @@ def detalle_ficha(request, identificador_ficha):
     }
     print(f'sdfgsdgsd{data}')
     return JsonResponse(data)
+
+
+class Desercion(TemplateView):
+    template_name = 'Desercion/desercion.html'
+    
+    
+    def get(self, request, *args, **kwargs):
+        
+        #deserciones
+        resultado_activo = P04.objects.aggregate(total_aprendices=Sum('total_aprendices_activos'))
+        resultado_total = P04.objects.aggregate(total_aprendices=Sum('total_aprendices'))
+        
+        aprendices_activos = int(resultado_activo['total_aprendices'])
+        total_aprendices = int(resultado_total['total_aprendices'])
+        deserciones = total_aprendices - aprendices_activos
+       
+        
+        select_modalidad = request.GET.get('modalidad')
+        select_municipio = request.GET.get('municipio')
+        select_regional = request.GET.get('regional')
+        select_centro_de_formacion = request.GET.get('centro_de_formacion')
+        select_fecha_inicio_ficha = request.GET.get('fecha_inicio_ficha')
+        
+      
+       
+       
+        filtros_desercion = {}
+        
+        if select_fecha_inicio_ficha:
+            fecha_inicio = datetime.strptime(select_fecha_inicio_ficha,'%Y-%m-%d').date()
+            filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
+        if select_modalidad and select_fecha_inicio_ficha:
+            filtros_desercion['modalidad_formacion'] = select_modalidad
+        if select_regional and select_modalidad:
+            filtros_desercion['nombre_regional'] = select_regional
+        if select_centro_de_formacion and select_regional:
+            filtros_desercion['nombre_centro'] =select_centro_de_formacion;
+            
+        if select_municipio and select_centro_de_formacion:
+      
+            filtros_desercion['nombre_municipio_curso'] = select_municipio
+        
+        desercion_datos = P04.objects.filter(**filtros_desercion)
+       
+   
+        context = self.get_context_data(
+            
+            modalidad = Modalidad.Modalidad_choices.choices,
+            municipio = Municipio.Municipio_choices.choices,
+            regional = Regional.Regional_choices.choices,
+            centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices,
+            
+            #mantiene la opcion 
+            select_modalidad= select_modalidad,
+            select_municipio=select_municipio,
+            select_regional=select_regional,
+            select_centro_de_formacion = select_centro_de_formacion,
+            select_fecha_inicio_ficha =select_fecha_inicio_ficha,
+            
+            desercion_datos = desercion_datos,
+            aprendices_activos=aprendices_activos,
+            deserciones=deserciones
+           
+        )
+        
+        return self.render_to_response(context) 

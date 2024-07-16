@@ -14,15 +14,18 @@
                     <div class="form-group row">
                         <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
+                            <input type="date" class="form-control form-control-sm" id="filtroFechaInicio" name="filtroFechaInicio" onchange="filtros_desercion()"
+                            {% if select_fecha_inicio_ficha %} value="{{ select_fecha_inicio_ficha }}"{% endif %}>
+                       
                         </div>
                     </div>
+                    
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                            <input type="date" class="form-control form-control-sm" >
                         </div>
                     </div>
                 </div>
@@ -30,7 +33,7 @@
                     <div class="form-group row">
                         <label for="totalDesercion" class="col-sm-5 col-form-label col-form-label-sm">Total deserción:</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" id="totalDesercion" value="100" readonly>
+                            <input type="text" class="form-control form-control-sm"value="{{ deserciones }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -38,7 +41,7 @@
                     <div class="form-group row">
                         <label for="totalActivos" class="col-sm-5 col-form-label col-form-label-sm">Total activos:</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" id="totalActivos" value="300" readonly>
+                            <input type="text" class="form-control form-control-sm"value="{{ aprendices_activos }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -48,39 +51,42 @@
             <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
+                            <select class="form-control form-control-sm custom-select" id="id_modalidad" onchange="filtros_desercion()">
+
+                                <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                                {% for choice in modalidad%}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == select_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio2" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <label for="filtroMunicipio2" class="col-sm-3 col-form-label col-form-label-sm">Regional:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio2">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
+                            <select class="form-control form-control-sm custom-select" id="id_regional" onchange="filtros_desercion()">
+
+                                <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona modalidad</option>
+                                {% for choice in regional%}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == select_regional %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
+                        <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Centro de formacion:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio3">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
+                            <select class="form-control form-control-sm custom-select" id="id_centro_de_formacion" onchange="filtros_desercion()">
+
+                                <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona modalidad</option>
+                                {% for choice in centro_de_formacion%}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == select_centro_de_formacion %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -89,11 +95,12 @@
                     <div class="form-group row">
                         <label for="filtroMunicipio4" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio4">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
+                            <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="filtros_desercion()">
+
+                                <option value="" disabled {% if not select_municipio %}selected{% endif %}>Selecciona modalidad</option>
+                                {% for choice in municipio%}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == select_municipio %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -103,70 +110,80 @@
         
         <div class="container">
             <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
+          
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col" style="min-width: 150px;">Identificador ficha</th>
                             <th scope="col" style="min-width: 200px;">Identificador único ficha</th>
                             <th scope="col" style="min-width: 100px;">Estado</th>
+                            <th scope="col" style="min-width: 100px;">Fecha de inicio de la ficha</th>
+                            <th scope="col" style="min-width: 100px;">Fecha de fin de la ficha</th>
+                       
                             <th scope="col" style="min-width: 150px;">Código nivel de formación</th>
                             <th scope="col" style="min-width: 150px;">Nivel de formación</th>
                             <th scope="col" style="min-width: 100px;">Código jornada</th>
                             <th scope="col" style="min-width: 100px;">Jornada</th>
                             <th scope="col" style="min-width: 150px;">Tipo de formación</th>
-                            <th scope="col" style="min-width: 150px;">Etapa de formación</th>
+                            <th scope="col" style="min-width: 150px;">Etapa de formación</th>   
                             <th scope="col" style="min-width: 150px;">Sector programa</th>
-                            <th scope="col" style="min-width: 150px;">Número de programa de formación</th>
-                            <th scope="col" style="min-width: 100px;">Red</th>
+                            <th scope="col" style="min-width: 150px;">Codigo ocupacion</th>
+                            <th scope="col" style="min-width: 150px;">Ocupacion</th>
+                            <th scope="col" style="min-width: 150px;">Modalidad</th>
+                            <th scope="col" style="min-width: 150px;">Codigo programa</th>
+                            <th scope="col" style="min-width: 150px;">Programa</th>
+                            <th scope="col" style="min-width: 150px;">Red</th>
+                            <th scope="col" style="min-width: 150px;">Departamento</th>
+                            <th scope="col" style="min-width: 150px;">Municipio</th>
+                            <th scope="col" style="min-width: 150px;">Programa especial</th>
+                            <th scope="col" style="min-width: 150px;">Aprendices masculinos</th>
+                            <th scope="col" style="min-width: 150px;">Aprendices femeninos</th>
+                            <th scope="col" style="min-width: 150px;">Nuevo sector</th>
+
                         </tr>
                     </thead>
                     <tbody>
+                        {% for desercion in  desercion_datos%}
                         <tr>
-                            <td>Dato 1</td>
-                            <td>Dato 2</td>
-                            <td>Dato 3</td>
-                            <td>Dato 4</td>
-                            <td>Dato 5</td>
-                            <td>Dato 6</td>
-                            <td>Dato 7</td>
-                            <td>Dato 8</td>
-                            <td>Dato 9</td>
-                            <td>Dato 10</td>
-                            <td>Dato 11</td>
-                            <td>Dato 12</td>
+                            <td>{{desercion.identificador_ficha}}</td>
+                            <td>{{desercion.identificador_unico_ficha}}</td>
+                            <td>{{desercion.estado_curso}}</td>
+                            <td>{{desercion.fecha_inicio_ficha}}</td>
+                            <td>{{desercion.fecha_fin_ficha}}</td>
+                            <td>{{desercion.codigo_nivel_formacion}}</td>
+                            <td>{{desercion.nivel_formacion}}</td>
+                            <td>{{desercion.codigo_jornada}}</td>
+                            <td>{{desercion.nombre_jornada}}</td>
+                            <td>{{desercion.tipo_de_formacion}}</td>
+                            <td>{{desercion.etapa_ficha}}</td> 
+                            <td>{{desercion.nombre_sector_programa}}</td>
+                            <td>{{desercion.codigo_ocupacion}}</td>
+
+                            <td>{{desercion.nombre_ocupacion}}</td>
+                            <td>{{desercion.modalidad_formacion}}</td>
+                            <td>{{desercion.codigo_programa}}</td>
+                            <td>{{desercion.nombre_programa_formacion}}</td>
+                            <td>{{desercion.red}}</td>
+                            <td>{{desercion.nombre_departamento_curso}}</td>
+                            <td>{{desercion.nombre_municipio_curso}}</td>
+                            <td>{{desercion.nombre_programa_especial}}</td>
+                            <td>{{desercion.total_aprendices_masculinos}}</td>
+                            <td>{{desercion.total_aprendices_femeninos}}</td>
+                            <td>{{desercion.nombre_nuevo_sector}}</td>
+                          
                         </tr>
-                        <tr>
-                            <td>Dato 13</td>
-                            <td>Dato 14</td>
-                            <td>Dato 15</td>
-                            <td>Dato 16</td>
-                            <td>Dato 17</td>
-                            <td>Dato 18</td>
-                            <td>Dato 19</td>
-                            <td>Dato 20</td>
-                            <td>Dato 21</td>
-                            <td>Dato 22</td>
-                            <td>Dato 23</td>
-                            <td>Dato 24</td>
-                        </tr>
-                        <tr>
-                            <td>Dato 25</td>
-                            <td>Dato 26</td>
-                            <td>Dato 27</td>
-                            <td>Dato 28</td>
-                            <td>Dato 29</td>
-                            <td>Dato 30</td>
-                            <td>Dato 31</td>
-                            <td>Dato 32</td>
-                            <td>Dato 33</td>
-                            <td>Dato 34</td>
-                            <td>Dato 35</td>
-                            <td>Dato 36</td>
-                        </tr>
+                        
+                        {%endfor%}
                     </tbody>
                 </table>
+             
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let url_filtro = "{% url 'cores:Desercion'%}?";
+</script>
+<script src="{% static 'bootstrap/js/desercion.js'%}"></script>
 {% endblock contenido %}

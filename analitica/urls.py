@@ -29,7 +29,7 @@ urlpatterns = [
     #COBERTURA
     
 
-    path('desercion/index', views.desercion, name="desercion"),
+
     path('estrategias/index', views.estrategias, name="estrategias"),
     path('estrategias_institucionales/index', views.estrategias_institucionales, name="estrategias_institucionales"),
     path('formacion_regular/index', views.formacion_regular, name="formacion_regular"),
