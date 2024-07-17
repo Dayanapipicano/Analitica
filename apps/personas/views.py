@@ -136,7 +136,7 @@ def p04(request):
     return render(request,'p04.html',  {'per_documento':per_documento})
 
 
-def subir_archivo(request):
+def subir_P04(request):
     if request.method == 'POST':
         archivo = request.FILES.get('fileUpload')
         per_documento = request.POST.get('per_documento')
@@ -217,5 +217,32 @@ def subir_archivo(request):
     return redirect('personas:P04')
 
 
+def Poblacion_vulnerable(request):
     
+    per_documento = Persona.objects.all()
+    return render( request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'per_documento':per_documento})
     
+def  Subir_poblacion_vulnerable(request):
+    
+    if request.method == 'POST':
+        archivo = request.FILES.get('fileUpload')
+        per_documento = request.POST.get('per_documento')
+        
+        if archivo and archivo.name.endswith('.xlsx'):
+            try:
+                select_persona = Persona.objects.get(per_documento=per_documento)
+                df = pd.read_excel(archivo)
+                
+                
+                columnas = ['Indicadores', 'Meta 2024', 'Ejecución','% de Ejecución']
+                indicadores = df['Indicador'].tolist()
+                
+                for index, row in df.iterrows():
+                    inndicador_principal = row['Indicadores']
+                    subgrupo1 = row['Indígenas']
+                    subgrupo2 = row['Cupos']
+                    subgrupo3 = row['Aprendices']
+                
+            except Exception as e:
+                print(f"Error al procesar el archivo: {str(e)}")
+                

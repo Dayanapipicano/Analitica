@@ -13,6 +13,13 @@ class Estd_formacion(models.TextChoices):
     SIN_BILINGUISMO = 'sin_bilinguismo','Sin_bilinguismo'
     
     
+class Formacion(models.Model):
+    
+    class Formacion_choices(models.TextChoices):
+        TITULADA = 'TITULADA','titulada',
+        COMPLEMENTARIA = 'COMPLEMENTARIA','Complementaria',
+        
+    formacion = models.CharField(max_length=150, choices=Formacion_choices.choices)
 
 class Modalidad(models.Model):
     
@@ -150,7 +157,7 @@ class Poblacion(models.Model):
     tercera_edad = models.CharField(max_length=100)
     adolescente_trabajador = models.CharField(max_length=100)
     rroom = models.CharField(max_length=100)
-    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
     
     
 

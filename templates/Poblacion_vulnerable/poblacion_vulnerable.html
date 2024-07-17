@@ -1,13 +1,49 @@
-{% extends 'home.html'%}
-
-{% block contenido%}
-<div class="main p-3">
-    <div class="text-center">
-        <h1>
-           Hola desde poblacion vulnerable
-        </h1>
-      
-       
+{% extends 'home.html' %}
+{% block contenido %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/p04.css' %}">
+    <div class="main p-3">
+        <div class="text-center">
+            <div class="container">
+                <h1 class="h1 mb-4">P04</h1>
+                <div class="container mt-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header text-white" style="background-color: #274f3b;">
+                                    <h4 class="mb-0">Subir Archivo</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" enctype="multipart/form-data" action="{% url 'personas:subir_poblacion_vulnerable' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="fileUpload" class="form-label">Seleccionar archivo</label>
+                                            <input class="form-control" type="file" id="fileUpload" name="fileUpload">
+                                        </div>
+                                        <div class="mb-3">
+                                        
+                                            <div class="form-group">
+                                                <label for="persona">Seleccione una Persona:</label>
+                                                <select id="per_documento" name="per_documento" class="form-control">
+                                                    {% for persona in per_documento %}
+                                                        <option value="{{ persona.per_documento }}">
+                                                            {{ persona.per_documento }} - {{ persona.per_nombres }} {{ persona.per_apellidos }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-secondary">Subir</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock contenido%}
+{% endblock contenido %}

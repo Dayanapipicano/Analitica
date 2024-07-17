@@ -72,7 +72,7 @@
                             <a href="{% url 'estrategias'%}" class="sidebar-link">Estrategias</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'poblacion_vulnerable'%}" class="sidebar-link">Poblacion Vulnerable</a>
+                            <a href="{% url 'personas:poblacion_vulnerable'%}" class="sidebar-link">Poblacion Vulnerable</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'personas:P04'%}" class="sidebar-link">P04</a>
@@ -80,7 +80,7 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'formacion_regular'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    <a href="{% url 'cores:formacion_regular_index'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
                     
                       
@@ -90,7 +90,7 @@
                     </a>
                     <ul id="multi" class="sidebar-dropdown list-unstyled collapse" >
                         <li class="sidebar-item">
-                            <a href="{% url 'formacion_regular'%}" class="sidebar-link">Formacion Regular</a>
+                            <a href="{% url 'cores:formacion_regular_index'%}" class="sidebar-link">Formacion Regular</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'estrategias_institucionales'%}" class="sidebar-link">Estrategias Institucionales</a>

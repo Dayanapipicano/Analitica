@@ -1,18 +1,17 @@
 from django.shortcuts import render
-from apps.personas.models import Persona, P04
+from apps.personas.models import P04, Formacion,Meta,Persona
 from django.http import JsonResponse
-from django.views import View
 from apps.core.models import Municipio,Regional,Centro_de_formacion
-from django.views.generic import TemplateView
+from apps.core.forms import Form_meta
+from django.views.generic import TemplateView, CreateView
 from apps.personas.models import Modalidad
-from apps.core.models import Programas_formacion
-from apps.core.models import Nivel_formacion
+from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.db.models import Count,Sum
 from datetime import datetime
-
+from django.urls import reverse_lazy
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -50,8 +49,7 @@ def formacion_regular(request):
 def general(request):
     return render(request, 'General/general.html')
 
-def poblacion_vulnerable(request):
-    return render(request, 'Poblacion_vulnerable/poblacion_vulnerable.html')
+
 
 def Programa_index(request):
     modalidad = Modalidad.modalidad.field.choices
@@ -265,3 +263,45 @@ class Desercion(TemplateView):
         )
         
         return self.render_to_response(context) 
+    
+def Formacion_regular_index(request):
+    centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
+    formacion = Formacion.Formacion_choices.choices
+    modalidad = Modalidad.Modalidad_choices.choices
+    persona = Persona.objects.all()
+    
+    
+    
+    context = {
+        'centro_de_formacion': centro_de_formacion,
+        'formacion' : formacion,
+        'modalidad' : modalidad,
+        'persona': persona
+    } 
+    
+    print(f'{centro_de_formacion}')
+    return render(request, 'Formacion_regular/formacion_regular.html', context)
+
+
+class Meta_create(CreateView):
+    model = Meta
+    form_class = Form_meta
+    template_name = 'Formacion_regular/formacion_regular.html'
+    success_url = reverse_lazy('formacion_regular_index')
+    
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+    
+def meta_create(request):
+         
+    if request.method == 'POST':
+        form= Form_meta(request.POST)
+        print(f'dgdfgdfgdf{form}') 
+        if form.is_valid():
+            form.save()
+            reversed('cores:Home')
+        else:
+            form = Form_meta()
+    return redirect(request,'cores:formacion_regular_index',{'form':form})
+    

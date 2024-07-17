@@ -13,4 +13,6 @@ urlpatterns = [
     path('ficha/<int:identificador_ficha>/', core_views.detalle_ficha, name='detalle_ficha'),
     path('desercion/index', core_views.Desercion_index, name="desercion_index"),
     path('desercion', core_views.Desercion.as_view(), name="Desercion"),
+    path('formacion_regular/index', core_views.Formacion_regular_index, name='formacion_regular_index'),
+    path('meta/', core_views.meta_create, name="meta_create")
 ]
