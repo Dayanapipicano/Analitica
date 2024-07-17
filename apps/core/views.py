@@ -182,7 +182,7 @@ def detalle_ficha(request, identificador_ficha):
     print(f'sdfgsdgsd{data}')
     return JsonResponse(data)
 
-
+from datetime import datetime, date
 class Desercion(TemplateView):
     template_name = 'Desercion/desercion.html'
     
@@ -203,15 +203,31 @@ class Desercion(TemplateView):
         select_regional = request.GET.get('regional')
         select_centro_de_formacion = request.GET.get('centro_de_formacion')
         select_fecha_inicio_ficha = request.GET.get('fecha_inicio_ficha')
+        select_fecha_terminacion_ficha = request.GET.get('fecha_terminacion_ficha')
         
       
        
        
         filtros_desercion = {}
         
-        if select_fecha_inicio_ficha:
-            fecha_inicio = datetime.strptime(select_fecha_inicio_ficha,'%Y-%m-%d').date()
-            filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
+       
+            
+        if not select_fecha_inicio_ficha:
+            select_fecha_inicio_ficha = date.today().strftime('%Y-%m-%d')
+        
+        # Convertir la fecha de inicio a formato de fecha y aplicar filtro mayor o igual
+        fecha_inicio = datetime.strptime(select_fecha_inicio_ficha, '%Y-%m-%d').date()
+        filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
+
+        # Si se proporciona fecha de terminación, convertirla a formato de fecha y aplicar filtro menor o igual
+        if select_fecha_terminacion_ficha:
+            fecha_fin = datetime.strptime(select_fecha_terminacion_ficha, '%Y-%m-%d').date()
+            filtros_desercion['fecha_inicio_ficha__lte'] = fecha_fin
+        else:
+            # Si no se proporciona fecha de terminación, establecerla como la fecha actual
+            fecha_fin = date.today()
+            filtros_desercion['fecha_inicio_ficha__lte'] = fecha_fin
+
         if select_modalidad and select_fecha_inicio_ficha:
             filtros_desercion['modalidad_formacion'] = select_modalidad
         if select_regional and select_modalidad:
@@ -239,10 +255,12 @@ class Desercion(TemplateView):
             select_regional=select_regional,
             select_centro_de_formacion = select_centro_de_formacion,
             select_fecha_inicio_ficha =select_fecha_inicio_ficha,
+            select_fecha_terminacion_ficha =select_fecha_terminacion_ficha,
             
             desercion_datos = desercion_datos,
             aprendices_activos=aprendices_activos,
-            deserciones=deserciones
+            deserciones=deserciones,
+            fecha_actual = date.today().strftime('%Y-%m-%d')
            
         )
         
