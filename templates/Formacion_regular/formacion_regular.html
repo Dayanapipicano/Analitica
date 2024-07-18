@@ -1,40 +1,39 @@
 {% extends 'home.html' %}
 
 {% block contenido %}
-{% load static %}
+{%load static%}
 <link rel="stylesheet" href="{% static 'bootstrap/css/desercion.css' %}">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <!-- jQuery (asegúrate de incluirlo antes de cualquier script de Bootstrap) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <div class="main p-3">
     <div class="text-center">
         <div class="container">
-            <h1 class="h1 mb-4">Gestionar formacion</h1>
-        
+            <h1 class="h1 mb-4">Gestionar formación</h1>
+
             <div class="row justify-content-center">
-              
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                      
-
                         <label for="selectAnio">Selecciona un año:</label>
-  <select id="selectAnio">
-    <!-- Script en JavaScript para generar opciones de año -->
-    <script>
-        var select = document.getElementById("selectAnio");
-      var currentYear = new Date().getFullYear();
-      var minYear = 1900; // Año mínimo permitido
+                        <select id="selectAnio" class="form-control form-control-sm">
+                            <!-- Script en JavaScript para generar opciones de año -->
+                            <script>
+                                var select = document.getElementById("selectAnio");
+                                var currentYear = new Date().getFullYear();
+                                var minYear = 1900; // Año mínimo permitido
 
-      for (var i = currentYear; i >= minYear; i--) {
-        var option = document.createElement("option");
-        option.value = i;
-        option.text = i;
-        select.appendChild(option);
-      }
-    </script>
-  </select>
+                                for (var i = currentYear; i >= minYear; i--) {
+                                    var option = document.createElement("option");
+                                    option.value = i;
+                                    option.text = i;
+                                    select.appendChild(option);
+                                }
+                            </script>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -53,14 +52,12 @@
                         </div>
                     </div>
                 </div>
-            
-             
             </div>
 
             <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Formacion:</label>
+                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Formación:</label>
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
                                 <option selected>Seleccionar una opción</option>
@@ -73,302 +70,194 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
+                        <label for="filtroModalidad" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
+                            <select class="form-control form-control-sm custom-select" id="filtroModalidad">
                                 <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
+                                <option value="opcion1">Opción 1</option>
+                                <option value="opcion2">Opción 2</option>
+                                <option value="opcion3">Opción 3</option>
                             </select>
                         </div>
                     </div>
-                    
                 </div>
-
-
-                <div class="form-group row">
-                    <span class="icono" data-toggle="modal" data-target="#myModal3">
-                        Meta
-                        <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"class="icono" data-toggle="modal" data-target="#myModal">
-                        
-                      </span>
-
-                      
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <span class="icono" data-toggle="modal" data-target="#Modal1">
+                            Meta
+                            <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;">
+                        </span>
                     </div>
-          
-         
-            </div>
-        </div>
-        
-        <div class="container">
-            <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col" style="min-width: 150px;">Identificador ficha</th>
-                            <th scope="col" style="min-width: 200px;">Identificador único ficha</th>
-                            <th scope="col" style="min-width: 100px;">Estado</th>
-                            <th scope="col" style="min-width: 150px;">Código nivel de formación</th>
-                            <th scope="col" style="min-width: 150px;">Nivel de formación</th>
-                            <th scope="col" style="min-width: 100px;">Código jornada</th>
-                            <th scope="col" style="min-width: 100px;">Jornada</th>
-                            <th scope="col" style="min-width: 150px;">Tipo de formación</th>
-                            <th scope="col" style="min-width: 150px;">Etapa de formación</th>
-                            <th scope="col" style="min-width: 150px;">Sector programa</th>
-                            <th scope="col" style="min-width: 150px;">Número de programa de formación</th>
-                            <th scope="col" style="min-width: 100px;">Red</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Dato 1</td>
-                            <td>Dato 2</td>
-                            <td>Dato 3</td>
-                            <td>Dato 4</td>
-                            <td>Dato 5</td>
-                            <td>Dato 6</td>
-                            <td>Dato 7</td>
-                            <td>Dato 8</td>
-                            <td>Dato 9</td>
-                            <td>Dato 10</td>
-                            <td>Dato 11</td>
-                            <td>Dato 12</td>
-                        </tr>
-                        <tr>
-                            <td>Dato 13</td>
-                            <td>Dato 14</td>
-                            <td>Dato 15</td>
-                            <td>Dato 16</td>
-                            <td>Dato 17</td>
-                            <td>Dato 18</td>
-                            <td>Dato 19</td>
-                            <td>Dato 20</td>
-                            <td>Dato 21</td>
-                            <td>Dato 22</td>
-                            <td>Dato 23</td>
-                            <td>Dato 24</td>
-                        </tr>
-                        <tr>
-                            <td>Dato 25</td>
-                            <td>Dato 26</td>
-                            <td>Dato 27</td>
-                            <td>Dato 28</td>
-                            <td>Dato 29</td>
-                            <td>Dato 30</td>
-                            <td>Dato 31</td>
-                            <td>Dato 32</td>
-                            <td>Dato 33</td>
-                            <td>Dato 34</td>
-                            <td>Dato 35</td>
-                            <td>Dato 36</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modalTitulo">Metas</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                 </div>
-                <div class="modal-body">
-                  <div class="container">
-                    <div class="form-group">
-                        <label for="campo2">Formacion</label>
-                        <select class="form-control form-control-sm custom-select" id="id_modalidad" onchange="filtros_desercion()" required>
-
-                            <option value="">Selecciona Formacion</option>
-                            {% for choice in formacion%}
-                                <option value="{{ choice.0 }}" {% if choice.0 == select_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="campo2">Modalidad</label>
-                        <select class="form-control form-control-sm custom-select" id="id_modalidad" onchange="filtros_desercion()" required>
-
-                            <option value="">Selecciona modalidad</option>
-                            {% for choice in modalidad%}
-                                <option value="{{ choice.0 }}" {% if choice.0 == select_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="campo3">Campo 3</label>
-                        <input type="text" class="form-control" id="campo3">
-                      </div>
-                      <div class="form-group">
-                        <label for="campo4">Campo 4</label>
-                        <input type="text" class="form-control" id="campo4">
-                      </div>
-                      <div class="form-group">
-                        <label for="campo5">Campo 5</label>
-                        <input type="text" class="form-control" id="campo5">
-                      </div>
-                      <div class="form-group">
-                        <label for="campo6">Campo 6</label>
-                        <input type="text" class="form-control" id="campo6">
-                      </div>
-                      <div class="form-group">
-                        <label for="campo7">Campo 7</label>
-                        <input type="text" class="form-control" id="campo7">
-                      </div>
-                      <div class="form-group">
-                        <label for="campo8">Campo 8</label>
-                        <input type="text" class="form-control" id="campo8">
-                      </div>
-                      <div class="form-group">
-                        <label for="campo9">Campo 9</label>
-                        <input type="text" class="form-control" id="campo9">
-                      </div>
-                   Meta
-                  <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"class="icono" data-toggle="modal" data-target="#modalInterior">
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn btn-primary">Guardar Cambios</button>
-                </div>
-              </div>
             </div>
-          </div>
 
-
-          <!-- Modal interior -->
-  <div class="modal fade" id="modalInterior" tabindex="-1" role="dialog" aria-labelledby="modalInteriorLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalInteriorLabel">Modal Interior</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body modal-body-inner">
-            <form action="{% url 'cores:meta_create'%}" method="post" >
-                {% csrf_token %}
             <div class="container">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="campo2">Centro de formacion</label>
-                        <select class="form-control form-control-sm custom-select" id="met_centro_formacion"  name="met_centro_formacion" required>
-
-                            <option value="">Selecciona Centro de formacion</option>
-                            {% for choice in centro_de_formacion%}
-                                <option value="{{ choice.0 }}" {% if choice.0 == select_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                        </select>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo2">Codigo</label>
-                      <input type="text" class="form-control" id="met_codigo" name="met_codigo">
-                    </div>
-                  </div>
+                <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col" style="min-width: 150px;">Identificador ficha</th>
+                                <th scope="col" style="min-width: 200px;">Identificador único ficha</th>
+                                <th scope="col" style="min-width: 100px;">Estado</th>
+                                <th scope="col" style="min-width: 150px;">Código nivel de formación</th>
+                                <th scope="col" style="min-width: 150px;">Nivel de formación</th>
+                                <th scope="col" style="min-width: 100px;">Código jornada</th>
+                                <th scope="col" style="min-width: 100px;">Jornada</th>
+                                <th scope="col" style="min-width: 150px;">Tipo de formación</th>
+                                <th scope="col" style="min-width: 150px;">Etapa de formación</th>
+                                <th scope="col" style="min-width: 150px;">Sector programa</th>
+                                <th scope="col" style="min-width: 150px;">Número de programa de formación</th>
+                                <th scope="col" style="min-width: 100px;">Red</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dato 1</td>
+                                <td>Dato 2</td>
+                                <td>Dato 3</td>
+                                <td>Dato 4</td>
+                                <td>Dato 5</td>
+                                <td>Dato 6</td>
+                                <td>Dato 7</td>
+                                <td>Dato 8</td>
+                                <td>Dato 9</td>
+                                <td>Dato 10</td>
+                                <td>Dato 11</td>
+                                <td>Dato 12</td>
+                            </tr>
+                            <tr>
+                                <td>Dato 13</td>
+                                <td>Dato 14</td>
+                                <td>Dato 15</td>
+                                <td>Dato 16</td>
+                                <td>Dato 17</td>
+                                <td>Dato 18</td>
+                                <td>Dato 19</td>
+                                <td>Dato 20</td>
+                                <td>Dato 21</td>
+                                <td>Dato 22</td>
+                                <td>Dato 23</td>
+                                <td>Dato 24</td>
+                            </tr>
+                            <tr>
+                                <td>Dato 25</td>
+                                <td>Dato 26</td>
+                                <td>Dato 27</td>
+                                <td>Dato 28</td>
+                                <td>Dato 29</td>
+                                <td>Dato 30</td>
+                                <td>Dato 31</td>
+                                <td>Dato 32</td>
+                                <td>Dato 33</td>
+                                <td>Dato 34</td>
+                                <td>Dato 35</td>
+                                <td>Dato 36</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="campo4">Fecha inicio:</label>
-                        <input type="date" class="form-control" id="met_fecha_inicio" name="met_fecha_inicio">
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="campo4">Fecha fin:</label>
-                        <input type="date" class="form-control" id="met_fecha_fin" name="met_fecha_fin">
-                      </div>
-                  </div>
+            </div><!-- Primer Modal -->
+            <div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Título del Modal</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url 'cores:meta_create' %}" method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="campoAno">Año:</label>
-                        <input type="number" class="form-control" id="met_año" name="met_año" min="1900" max="2045" value="2024">
+            </div><!-- Segundo Modal -->
+            <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitulo">Metas</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="second-modal-form" action="{% url 'cores:meta_create' %}" method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                                    <button type="submit" id="submit-second-modal" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo6">Total otras poblaciones</label>
-                      <input type="text" class="form-control" id="met_total_otras_poblaciones" name="met_total_otras_poblaciones">
-                    </div>
-                  </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo7">Total victimas</label>
-                      <input type="text" class="form-control" id="met_total_victimas" name="met_total_victimas">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo8">Total hechos victimizantes</label>
-                      <input type="text" class="form-control" id="met_total_hechos_victimizantes" name="met_total_hechos_victimizantes">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo9">Total desplazados por violencia</label>
-                      <input type="text" class="form-control" id="met_total_desplazados_violencia" name="met_total_desplazados_violencia">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo10">Total Titulada</label>
-                      <input type="text" class="form-control" id="met_total_titulada" name="met_total_titulada">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo11">Total complementaria</label>
-                      <input type="text" class="form-control" id="met_total_complementaria" name="met_total_complementaria">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="campo12">Total poblacion vulnerable </label>
-                      <input type="text" class="form-control" id="met_total_poblacion_vulnerable" name="met_total_poblacion_vulnerable">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="persona">Seleccione una Persona:</label>
-                        <select id="persona" name="persona" class="form-control">
-                            {% for persona in persona %}
-                                <option value="{{ persona.per_documento }}">
-                                    {{ persona.per_documento }} - {{ persona.per_nombres }} {{ persona.per_apellidos }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-         
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-          <!-- Otros botones si es necesario -->
-        </div>
-    </form>
-      </div>
-    </div>
-  </div>
-        
+            </div>
+            
+            
+           
+            
           
+
+  
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+           
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                  document.querySelector('#submit-second-modal').addEventListener('click', function(event) {
+                      event.preventDefault(); // Evita el comportamiento por defecto del botón
+              
+                      // Selecciona el formulario en el segundo modal
+                      var form = document.querySelector('#second-modal-form');
+                      var formData = new FormData(form);
+              
+                      // Envía los datos del formulario usando fetch
+                      fetch(form.action, {
+                          method: 'POST',
+                          body: formData,
+                          headers: {
+                              'X-Requested-With': 'XMLHttpRequest',
+                              'X-CSRFToken': form.querySelector('[name="csrfmiddlewaretoken"]').value
+                          }
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                          if (data.success) {
+                              // Simula el clic en el botón de cerrar para cerrar el segundo modal
+                              document.querySelector('#close-second-modal').click();
+              
+                              // Limpia el formulario después de cerrar el modal
+                              form.reset();
+                          } else {
+                              // Muestra errores si la respuesta es fallida
+                              console.log('Error:', data.errors);
+                          }
+                      })
+                      .catch(error => {
+                          console.error('Error:', error);
+                      });
+                  });
+              });
+              </script>
+              
+          
+              
+          
+          
+           
+            
+        </div>
     </div>
 </div>
 {% endblock contenido %}

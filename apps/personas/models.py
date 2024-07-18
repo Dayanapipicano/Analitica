@@ -1,17 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from apps.personas.manages import UsuarioManage
-class Estd_formacion(models.TextChoices):
-    OPERARIO = 'operario', 'Operario'
-    AUXILIAR = 'auxiliar', 'Auxiliar'
-    TECNICO = 'tecnico', 'Tecnico'
-    PROFUNDIZACION = 'profundizacion', 'Profundizacion'
-    TECNOLOGO = 'tecnologo', 'Tecnologo'
-    EVENTO = 'evento','Evento'
-    CURSO_ESPECIAL = 'curso_especial','Curso_especial'
-    BILINGUISMO = 'bilinguismo', 'Bilinguismo'
-    SIN_BILINGUISMO = 'sin_bilinguismo','Sin_bilinguismo'
-    
+from apps.core.models import Nivel_formacion
     
 class Formacion(models.Model):
     
@@ -81,6 +71,9 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     
     USERNAME_FIELD = 'per_documento'
     REQUIRED_FIELDS = ['email','per_tipo_documento', 'per_nombres', 'per_apellidos', 'per_telefono']
+    
+    def __str__(self):
+        return f'{self.per_nombres} {self.per_apellidos} - {self.per_documento}'
     objects = UsuarioManage()
 class P04(models.Model):
     p04_id = models.AutoField(primary_key=True)
@@ -184,7 +177,7 @@ class Meta(models.Model):
     met_total_titulada = models.CharField(max_length=100)
     met_total_complementaria = models.CharField(max_length=100)
     met_total_poblacion_vulnerable = models.CharField(max_length=100)
-    persona = models.OneToOneField(Persona, on_delete=models.CASCADE)
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
     
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
@@ -198,7 +191,7 @@ class Estrategia(models.Model):
 
 class Estrategia_detalle(models.Model):
     estd_id = models.AutoField(primary_key=True)
-    estd_formacion = models.CharField(max_length=100, choices=Estd_formacion.choices)
+    estd_formacion = models.CharField(max_length=100, choices=Nivel_formacion.Nivel_formacion_choices.choices)
     estd_meta = models.CharField(max_length=100)
     est_id = models.ForeignKey(Estrategia, on_delete=models.CASCADE)
 
@@ -206,9 +199,16 @@ class Estrategia_detalle(models.Model):
 class Metas_formacion(models.Model):
     metd_id = models.AutoField(primary_key=True)
     metd_modalidad =  models.CharField(max_length=100,choices=Modalidad.Modalidad_choices.choices)
-    metf_formacion = models.CharField(max_length=100, choices=Estd_formacion.choices)
-    metf_meta = models.CharField(max_length=100)
-    met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
+    met_formacion_operario = models.CharField(max_length=150)
+    met_formacion_auxiliar = models.CharField(max_length=150)
+    met_formacion_tecnico = models.CharField(max_length=150)
+    met_formacion_profundizacion_tecnica = models.CharField(max_length=150)
+    met_formacion_tecnologo = models.CharField(max_length=150)
+    met_formacion_evento = models.CharField(max_length=150)
+    met_formacion_curso_especial = models.CharField(max_length=150)
+    met_formacion_bilinguismo = models.CharField(max_length=150)
+    met_formacion_sin_bilinguismo = models.CharField(max_length=150)
+    met_id = models.ForeignKey(Meta, on_delete=models.CASCADE, to_field='met_id')
 
 
 class Metas_poblacion_vulnerable(models.Model):

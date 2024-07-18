@@ -203,7 +203,10 @@ class Nivel_formacion(models.Model):
         OPERARIO ='OPERARIO','Operario',
         TECNICO ='TÉCNICO','Técnico',
         TECNOLOGO ='TECNÓLOGO','Tecnólogo'
-        
+        PROFUNDIZACION = 'PROFUNDIZACION', 'Profundizacion'
+        BILINGUISMO = 'BILINGUISMO', 'Bilinguismo'
+        SIN_BILINGUISMO = 'SIN_BILINGUISMO','Sin_bilinguismo'
+       
     
     nivel_formacion = models.CharField(max_length=150, choices=Nivel_formacion_choices.choices)
    
