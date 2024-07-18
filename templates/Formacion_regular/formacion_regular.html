@@ -167,9 +167,9 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{% url 'cores:meta_create' %}" method="post">
+                            <form action="{% url 'cores:meta_formacion_create' %}" method="post">
                                 {% csrf_token %}
-                                {{ form.as_p }}
+                                {{ form_meta_formacion.as_p }}
                                 <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

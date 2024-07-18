@@ -265,7 +265,14 @@ class Desercion(TemplateView):
     
 def Formacion_regular_index(request):
     form = Form_meta
-    return render(request, 'Formacion_regular/formacion_regular.html', {'form': form})
+    form_meta_formacion = Form_meta_formacion
+    
+    context = {
+        'form':form,
+        'form_meta_formacion' : form_meta_formacion
+        
+    }
+    return render(request, 'Formacion_regular/formacion_regular.html', context)
 
 
 class Meta_create(CreateView):
@@ -291,5 +298,5 @@ class Meta_formacion_create(CreateView):
     model = Metas_formacion
     form_class = Form_meta_formacion
     template_name = 'Formacion_regular/formacion_regular.html'
-    
+    success_url = reverse_lazy('cores:formacion_regular_index') 
     
