@@ -192,6 +192,8 @@ class Estrategia(models.Model):
 
 class Estrategia_detalle(models.Model):
     estd_id = models.AutoField(primary_key=True)
+    est_id = models.ForeignKey(Estrategia, on_delete=models.CASCADE, to_field='est_id')
+    estd_modalidad = models.CharField(max_length=150, choices=Modalidad.Modalidad_choices.choices)
     estd_operario_meta = models.CharField(max_length=150)
     estd_auxiliar_meta = models.CharField(max_length=150)
     estd_tecnico_meta = models.CharField(max_length=150)
@@ -201,9 +203,9 @@ class Estrategia_detalle(models.Model):
     estd_curso_especial = models.CharField(max_length=150)
     estd_bilinguismo = models.CharField(max_length=150)
     estd_sin_bilinguismo = models.CharField(max_length=150)
-    est_id = models.ForeignKey(Estrategia, on_delete=models.CASCADE, to_field='est_id')
-    estd_modalidad = models.CharField(max_length=150, choices=Modalidad.Modalidad_choices.choices)
-    met_id = models.CharField(max_length=100 )
+    
+   
+
     
     
 

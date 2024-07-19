@@ -100,7 +100,8 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
     class Meta: 
         model = Estrategia_detalle
         fields = {
-            'estd_id',
+            'est_id',
+            'estd_modalidad',
             'estd_operario_meta',
             'estd_auxiliar_meta',
             'estd_tecnico_meta',
@@ -110,9 +111,7 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
             'estd_curso_especial',
             'estd_bilinguismo',
             'estd_sin_bilinguismo',
-            'est_id',
-            'estd_modalidad',
-            'met_id',
+           
         }
         
     def __init__(self, *args,**kwargs):

@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 from django.db.models import Count,Sum
 from datetime import datetime
 from django.urls import reverse_lazy
+
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -284,12 +285,15 @@ class Meta_create(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': True, 'message': 'Guardado exitosamente'})
+            metas = Meta.objects.all()
+            meta_options = [{'met_id': meta.met_id} for meta in metas]
+            return JsonResponse({'success': True, 'options': meta_options,'message': 'Guardado exitosamente'})
         else:
             return response
 
     def form_invalid(self, form):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+           
             return JsonResponse({'success': False, 'errors': form.errors})
         else:
             return super().form_invalid(form)
@@ -347,6 +351,8 @@ def get_meta_valores(request,met_id):
         return JsonResponse(data)
     except Meta.DoesNotExist:
         return JsonResponse({'error': 'Meta not found'},  status=404)
+
+
 
 class Meta_estrategia_detalle(CreateView):
     model = Estrategia_detalle

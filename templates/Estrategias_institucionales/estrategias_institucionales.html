@@ -224,36 +224,7 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const metaSelect = document.querySelector('select[name="met_id"]');
-        const totalMetaField = document.querySelector('input[name="est_total_meta"]');
     
-        metaSelect.addEventListener('change', function() {
-            const selectedMetaId = metaSelect.value;
-            fetchMetaValues(selectedMetaId);
-        });
-    
-        function fetchMetaValues(metaId) {
-            fetch(`/estrategias/est_total_meta/${metaId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    let total = 0;
-                    // Asumiendo que `data` es un solo objeto y no una lista
-                    if (data) {
-                        let met_total_otras_poblaciones = parseFloat(data.met_total_otras_poblaciones) || 0;
-                        let met_total_victimas = parseFloat(data.met_total_victimas) || 0;
-                        let met_total_hechos_victimizantes = parseFloat(data.met_total_hechos_victimizantes) || 0;
-                        let met_total_desplazados_violencia = parseFloat(data.met_total_desplazados_violencia) || 0;
-                        let met_total_titulada = parseFloat(data.met_total_titulada) || 0;
-                        let met_total_complementaria = parseFloat(data.met_total_complementaria) || 0;
-                        let met_total_poblacion_vulnerable = parseFloat(data.met_total_poblacion_vulnerable) || 0;
-                        total = met_total_otras_poblaciones + met_total_victimas + met_total_hechos_victimizantes+met_total_desplazados_violencia + met_total_titulada+met_total_complementaria+met_total_poblacion_vulnerable;
-                    }
-                    totalMetaField.value = total;
-                })
-                .catch(error => console.error('Error fetching meta values:', error));
-        }
-    });
     </script>
     <script src="{% static 'bootstrap/js/estrategias_institucionales.js'%}"></script>
 

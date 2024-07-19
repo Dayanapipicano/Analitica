@@ -19,5 +19,6 @@ urlpatterns = [
     path('estrategias_institucionales/index/', core_views.Estrategias_institucionales_index, name='estrategias_institucionales_index'),
     path('estrategias/create/', core_views.Estrategias_create.as_view(), name='estrategias_create'),
     path('estrategias/est_total_meta/<int:met_id>/', core_views.get_meta_valores, name='est_total_meta'),
-    path('meta_estrategia_detalle/create', core_views.Meta_estrategia_detalle.as_view(), name="meta_estrategia_detalle")
-]
+    path('meta_estrategia_detalle/create', core_views.Meta_estrategia_detalle.as_view(), name="meta_estrategia_detalle"),
+
+]   
