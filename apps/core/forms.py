@@ -1,6 +1,6 @@
 from apps.personas.models import Meta
 from apps.core.models import Centro_de_formacion
-from apps.personas.models import Metas_formacion,Modalidad
+from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle
 
 from django import forms
 class Form_meta(forms.ModelForm):
@@ -64,3 +64,59 @@ class Form_meta_formacion(forms.ModelForm):
         super().__init__(*args,**kwargs)
         self.fields['metd_modalidad'].choices = Modalidad.Modalidad_choices.choices
 
+
+#ESTRATEGIAS INSTITUCINALES
+
+
+class Form_estrategias(forms.ModelForm):
+    
+    est_modalidad = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class':'form-control'}))
+    class Meta:
+        model = Estrategia
+        fields = [
+         
+            'est_nombre',
+            'est_modalidad',
+            'met_id',
+            'est_total_meta',
+            
+        ]
+        
+    
+   
+    def __init__(self, *args, **kwargs):
+        super(Form_estrategias, self).__init__(*args, **kwargs)
+        self.fields['est_modalidad'].choices = Modalidad.Modalidad_choices.choices
+        #para bloquear el campo y solo visualizar 
+        self.fields['est_total_meta'].widget.attrs['readonly'] = True
+        
+        
+        
+class Form_meta_estrategia_detalle(forms.ModelForm):
+    
+    estd_modalidad = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class':'form-control'}))
+   
+    
+    class Meta: 
+        model = Estrategia_detalle
+        fields = {
+            'estd_id',
+            'estd_operario_meta',
+            'estd_auxiliar_meta',
+            'estd_tecnico_meta',
+            'estd_profundizacion_tecnica_meta',
+            'estd_tecnologo',
+            'estd_evento',
+            'estd_curso_especial',
+            'estd_bilinguismo',
+            'estd_sin_bilinguismo',
+            'est_id',
+            'estd_modalidad',
+            'met_id',
+        }
+        
+    def __init__(self, *args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['estd_modalidad'].choices = Modalidad.Modalidad_choices.choices
+  
+    

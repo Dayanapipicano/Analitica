@@ -84,7 +84,7 @@
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <span class="icono" data-toggle="modal" data-target="#Modal1">
-                            Meta
+                            Meta formacion
                             <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;">
                         </span>
                     </div>
@@ -170,6 +170,7 @@
                             <form action="{% url 'cores:meta_formacion_create' %}" method="post">
                                 {% csrf_token %}
                                 {{ form_meta_formacion.as_p }}
+                                 Meta
                                 <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

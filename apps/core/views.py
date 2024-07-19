@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion
+from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle
 from django.http import JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion
-from apps.core.forms import Form_meta, Form_meta_formacion
+from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle
 from django.views.generic import TemplateView, CreateView
 from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
@@ -64,8 +64,7 @@ def Programa_index(request):
 
 
 
-def recuperar_contraseña(request):
-    return render(request, 'recuperar_contraseña.html')
+
 def grafica(request):
     return render(request, 'Estrategias/grafica.html')
 
@@ -74,9 +73,6 @@ def grafica(request):
 
 def administrador(request):
     return render(request, 'administrador.html')
-
-def Crear_metas_formacion(request):
-    return render(request, 'Estrategias_institucionales/crear_meta_formacion.html')
 
 
 
@@ -263,6 +259,10 @@ class Desercion(TemplateView):
         
         return self.render_to_response(context) 
     
+
+
+#FORMACION REGULAR 
+
 def Formacion_regular_index(request):
     form = Form_meta
     form_meta_formacion = Form_meta_formacion
@@ -300,3 +300,48 @@ class Meta_formacion_create(CreateView):
     template_name = 'Formacion_regular/formacion_regular.html'
     success_url = reverse_lazy('cores:formacion_regular_index') 
     
+    
+#ESTRATEGIAS_INSTITUCIONALES
+def Estrategias_institucionales_index(request):
+    form_estrategias_institucionales  = Form_estrategias
+    form_meta = Form_meta
+    form_meta_estrategia_detalle = Form_meta_estrategia_detalle
+    context = {
+        'form_estrategias_institucionales':form_estrategias_institucionales,
+        'form_meta':form_meta,
+        'form_meta_estrategia_detalle': form_meta_estrategia_detalle,
+    }
+    
+    return render(request, 'Estrategias_institucionales/estrategias_institucionales.html', context)
+
+class Estrategias_create(CreateView):
+    model = Estrategia
+    form_class = Form_estrategias
+    template_name = 'Estrategias_institucionales/estrategias_institucionales'
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
+    
+    
+
+def get_meta_valores(request,met_id):
+    
+    
+    try:
+        meta = get_object_or_404(Meta, met_id=met_id)
+        data = {
+            'met_total_otras_poblaciones': meta.met_total_otras_poblaciones,
+            'met_total_victimas' : meta.met_total_victimas,
+            'met_total_hechos_victimizantes' : meta.met_total_hechos_victimizantes,
+            'met_total_desplazados_violencia' :meta.met_total_desplazados_violencia,
+   
+        
+        }
+    
+        return JsonResponse(data)
+    except Meta.DoesNotExist:
+        return JsonResponse({'error': 'Meta not found'},  status=404)
+
+class Meta_estrategia_detalle(CreateView):
+    model = Estrategia_detalle
+    form_class = Form_meta_estrategia_detalle
+    template_name = 'Estrategias_institucionales/estrategias_institucionales.html'
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')

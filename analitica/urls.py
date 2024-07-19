@@ -30,17 +30,15 @@ urlpatterns = [
     
 
 
-    path('estrategias/index', views.estrategias, name="estrategias"),
-    path('estrategias_institucionales/index', views.estrategias_institucionales, name="estrategias_institucionales"),
 
     path('general/index', views.general, name="general"),
   
 
-    path('recuperar_contraseña', views.recuperar_contraseña, name="recuperar_contraseña"),
+    path('estrategias/index', views.estrategias, name="estrategias"),
+
     path('grafica', views.grafica, name="grafica"),
   
     path('administrador/', views.administrador, name="administrador"),
-    
     path('password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
