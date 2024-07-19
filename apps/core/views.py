@@ -332,9 +332,17 @@ def get_meta_valores(request,met_id):
             'met_total_victimas' : meta.met_total_victimas,
             'met_total_hechos_victimizantes' : meta.met_total_hechos_victimizantes,
             'met_total_desplazados_violencia' :meta.met_total_desplazados_violencia,
+            'met_total_titulada': meta.met_total_titulada,
+            'met_total_complementaria': meta.met_total_complementaria,
+            'met_total_poblacion_vulnerable': meta.met_total_poblacion_vulnerable,
+            
+            
    
         
         }
+        
+        
+
     
         return JsonResponse(data)
     except Meta.DoesNotExist:
@@ -345,3 +353,6 @@ class Meta_estrategia_detalle(CreateView):
     form_class = Form_meta_estrategia_detalle
     template_name = 'Estrategias_institucionales/estrategias_institucionales.html'
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
+    
+    
+  
