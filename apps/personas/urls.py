@@ -16,8 +16,8 @@ urlpatterns = [
     path('subir_P04/', views.subir_P04, name='subir_P04'),
     path('P04/', views.p04, name="P04"),
     path('poblacion_vulnerable/index/', views.Poblacion_vulnerable, name="poblacion_vulnerable"),
-    path('poblacion_vulnerable/', views.Subir_poblacion_vulnerable, name="subir_poblacion_vulnerable")
-    
+    path('poblacion_vulnerable/', views.Subir_poblacion_vulnerable, name="subir_poblacion_vulnerable"),
+   
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -361,4 +361,23 @@ class Meta_estrategia_detalle(CreateView):
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
     
-  
+
+
+def get_modalidad(request, est_id):
+    
+        estrategia = Estrategia.objects.get(est_id=est_id)
+        modalidades = Estrategia.objects.filter(est_nombre=estrategia.est_nombre)
+        
+        estd_modalidad = [{'value': modalidad.est_modalidad, 'text': modalidad.est_modalidad} for modalidad in modalidades]
+        modalidades_data = list({v['value']: v for v in estd_modalidad}.values()) 
+      
+      
+        metas = Meta.objects.filter(estrategia=estrategia)
+        estd_meta = [{'value': meta.met_id, 'text': meta.met_codigo} for meta in metas]
+        response_data = {
+            'estd_modalidad' : modalidades_data,
+            'estd_meta':estd_meta
+        }
+
+        return JsonResponse(response_data)
+ 

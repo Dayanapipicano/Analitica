@@ -1,4 +1,6 @@
- document.addEventListener('DOMContentLoaded', function() {
+// funcion de modales 
+
+document.addEventListener('DOMContentLoaded', function() {
 
         document. metaField =  document.getElements
         document.querySelector('#submit-second-modal_meta').addEventListener('click', function(event) {
@@ -25,6 +27,7 @@
     
                     // Limpia el formulario después de cerrar el modal
                     form.reset();
+                    
                 } else {
                     // Muestra errores si la respuesta es fallida
                     console.log('Error:', data.errors);
@@ -36,7 +39,7 @@
         });
     });
 
-
+// suma de los datos para total meta
 document.addEventListener('DOMContentLoaded', function() {
         const metaSelect = document.querySelector('select[name="met_id"]');
         const totalMetaField = document.querySelector('input[name="est_total_meta"]');
@@ -51,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     let total = 0;
-                    // Asumiendo que `data` es un solo objeto y no una lista
+                   
                     if (data) {
                         let met_total_otras_poblaciones = parseFloat(data.met_total_otras_poblaciones) || 0;
                         let met_total_victimas = parseFloat(data.met_total_victimas) || 0;
@@ -69,49 +72,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    document.addEventListener('DOMContentLoaded', function() {
+//maneja filtros dentro del formulario metas formacion (est_id)
+document.addEventListener('DOMContentLoaded', function() {
+    const estIdField = document.querySelector('select[name="est_id"]');
+    const estdModalidadField = document.querySelector('#id_estd_modalidad');
+    const estdMetaField = document.querySelector('#id_estd_meta');
 
-        document.querySelector('#submit-second-modal_meta').addEventListener('click', function(event) {
-            event.preventDefault(); // Evita el comportamiento por defecto del botón
-    
-            var form = document.querySelector('#second-modal-form_meta');
-            var formData = new FormData(form);
-    
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRFToken': form.querySelector('[name="csrfmiddlewaretoken"]').value
-                }
-            })
+    estIdField.addEventListener('change', function() {
+        const estId = estIdField.value;
+
+        // Hacer una solicitud AJAX para obtener la modalidad y otros datos
+        fetch(`/get_modalidad/${estId}/`)
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    // Cierra el segundo modal
-                    document.querySelector('#close-second-modal').click();
-                    form.reset();
-    
-                    // Encuentra el campo <select> para meta_id
-                    var metaField = document.querySelector('select[name="met_id"]');
-                    if (metaField) {
-                        // Crea una nueva opción y añádela al campo <select>
-                        var newOption = document.createElement('option');
-                        newOption.value = data.met_id; // ID de la nueva meta
-                        // Nombre de la nueva meta
-                        metaField.appendChild(newOption); // Añade la nueva opción
-    
-                        // Selecciona la nueva opción en el campo <select>
-                        metaField.value = data.meta_id;
-                    } else {
-                        console.error('Campo de selección para meta_id no encontrado.');
-                    }
-                } else {
-                    console.log('Error:', data.errors);
-                }
+                // Limpia las opciones actuales
+                estdModalidadField.innerHTML = '';
+                estdMetaField.innerHTML = '';
+
+                // Agrega una opción por defecto para modalidad
+                estdModalidadField.appendChild(new Option('Seleccione una modalidad', ''));
+
+                // Agrega las opciones recibidas para modalidad
+                data.estd_modalidad?.forEach(modalidad => {
+                    const option = new Option(modalidad.text, modalidad.value);
+                    estdModalidadField.add(option);
+                });
+
+                // Agrega una opción por defecto para meta
+                estdMetaField.appendChild(new Option('Seleccione una meta', ''));
+
+                // Agrega las opciones recibidas para meta
+                data.estd_meta?.forEach(meta => {
+                    const option = new Option(meta.text, meta.value);
+                    estdMetaField.add(option);
+                });
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
+            .catch(error => console.error('Error:', error));
     });
+});
+
+

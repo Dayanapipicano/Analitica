@@ -94,13 +94,14 @@ class Form_estrategias(forms.ModelForm):
         
 class Form_meta_estrategia_detalle(forms.ModelForm):
     
-    estd_modalidad = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class':'form-control'}))
-   
+    estd_modalidad = forms.ChoiceField(choices=[], required=False)
+    estd_meta = forms.ChoiceField(choices=[], required=False)
+    
     
     class Meta: 
         model = Estrategia_detalle
         fields = {
-            'est_id',
+            "est_id",
             'estd_modalidad',
             'estd_operario_meta',
             'estd_auxiliar_meta',
@@ -111,11 +112,22 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
             'estd_curso_especial',
             'estd_bilinguismo',
             'estd_sin_bilinguismo',
-           
+            'estd_meta',
         }
+    
+    
+    
+    
         
-    def __init__(self, *args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.fields['estd_modalidad'].choices = Modalidad.Modalidad_choices.choices
-  
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+        
+            estrategia_nombre = [(estrategia.est_id, estrategia.est_nombre) for estrategia in Estrategia.objects.all()]
+            self.fields['est_id'].widget = forms.Select(choices=estrategia_nombre)
+            
+            self.fields['estd_modalidad'].choices = []
+            self.fields['estd_meta'].choices = []
+            
+            
+    
     
