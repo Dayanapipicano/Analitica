@@ -353,7 +353,7 @@ def get_meta_valores(request,met_id):
         return JsonResponse({'error': 'Meta not found'},  status=404)
 
 
-
+from django.urls import reverse
 class Meta_estrategia_detalle(CreateView):
     model = Estrategia_detalle
     form_class = Form_meta_estrategia_detalle
@@ -361,7 +361,6 @@ class Meta_estrategia_detalle(CreateView):
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
     
-
 
 def get_modalidad(request, est_id):
     
