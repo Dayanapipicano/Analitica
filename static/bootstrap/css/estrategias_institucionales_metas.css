@@ -1,0 +1,33 @@
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 16px;
+    max-width: 300px;
+    margin: 16px;
+    background-color: #fff;
+}
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+.card-content {
+    font-size: 14px;
+    color: #555;
+}
+.card-item {
+    margin-bottom: 4px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .btn-icon img {
+    display: block; /* Asegura que la imagen se muestre correctamente */
+  }

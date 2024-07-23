@@ -11,7 +11,7 @@ class Form_meta(forms.ModelForm):
     class Meta:
         model = Meta
         fields = [
-        'met_id',
+        
         'met_centro_formacion',
         'met_codigo',
         'met_fecha_inicio',
@@ -39,7 +39,6 @@ class Form_meta(forms.ModelForm):
     
 class Form_meta_formacion(forms.ModelForm):
     
-    metd_modalidad = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class':'form-control'}))
     
     class Meta:
         model = Metas_formacion
@@ -60,17 +59,14 @@ class Form_meta_formacion(forms.ModelForm):
             
         ]
     
-    def __init__(self, *args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.fields['metd_modalidad'].choices = Modalidad.Modalidad_choices.choices
-
+    
 
 #ESTRATEGIAS INSTITUCINALES
 
 
 class Form_estrategias(forms.ModelForm):
     
-    est_modalidad = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class':'form-control'}))
+    
     class Meta:
         model = Estrategia
         fields = [
@@ -84,20 +80,14 @@ class Form_estrategias(forms.ModelForm):
         
     
    
-    def __init__(self, *args, **kwargs):
-        super(Form_estrategias, self).__init__(*args, **kwargs)
-        self.fields['est_modalidad'].choices = Modalidad.Modalidad_choices.choices
+        def __init__(self, *args, **kwargs):
+       
         #para bloquear el campo y solo visualizar 
-        self.fields['est_total_meta'].widget.attrs['readonly'] = True
+           self.fields['est_total_meta'].widget.attrs['readonly'] = True
         
         
         
 class Form_meta_estrategia_detalle(forms.ModelForm):
-    
-    estd_modalidad = forms.ChoiceField(choices=[], required=False)
-    estd_meta = forms.ChoiceField(choices=[], required=False)
-    
-    
     class Meta: 
         model = Estrategia_detalle
         fields = {
@@ -114,20 +104,14 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
             'estd_sin_bilinguismo',
             'estd_meta',
         }
-    
-    
-    
-    
-        
         def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
+            super().__init__(*args,**kwargs)
+            self.fields['est_id'].queryset = Estrategia.objects.distinct('est_nombre')
+            
         
-            estrategia_nombre = [(estrategia.est_id, estrategia.est_nombre) for estrategia in Estrategia.objects.all()]
-            self.fields['est_id'].widget = forms.Select(choices=estrategia_nombre)
-            
-            self.fields['estd_modalidad'].choices = []
-            self.fields['estd_meta'].choices = []
-            
-            
+        
+    
+    
+        
     
     

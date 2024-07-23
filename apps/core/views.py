@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from django.db.models import Count,Sum
 from datetime import datetime
 from django.urls import reverse_lazy
-
+from .serializers import MetaSerializer
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -27,7 +27,7 @@ def Desercion_index(request):
     municipio = Municipio.nombre.field.choices
     regional = Regional.regional.field.choices
     centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
-    modalidad = Modalidad.Modalidad_choices.choices
+    modalidad = Modalidad.objects.all()
     
     context = {
         'municipio':municipio,
@@ -52,7 +52,7 @@ def general(request):
 
 
 def Programa_index(request):
-    modalidad = Modalidad.modalidad.field.choices
+    modalidad = Modalidad.objects.all()
     programa_formacion_choices = Programas_formacion.Programas_formacion_choices.choices
     nivel_formacion = Nivel_formacion.Nivel_formacion_choices.choices
     context = {
@@ -140,7 +140,7 @@ class Programa(TemplateView):
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
             programa_formacion=Programas_formacion.Programas_formacion_choices.choices,
-            modalidad=Modalidad.Modalidad_choices.choices,
+            modalidad=Modalidad.objects.all(),
             
             #Mantiene la opcion en el select
             selected_nivel_formacion=selected_nivel_formacion,
@@ -238,7 +238,7 @@ class Desercion(TemplateView):
    
         context = self.get_context_data(
             
-            modalidad = Modalidad.Modalidad_choices.choices,
+            modalidad = Modalidad.objects.all(),
             municipio = Municipio.Municipio_choices.choices,
             regional = Regional.Regional_choices.choices,
             centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices,
@@ -310,10 +310,18 @@ def Estrategias_institucionales_index(request):
     form_estrategias_institucionales  = Form_estrategias
     form_meta = Form_meta
     form_meta_estrategia_detalle = Form_meta_estrategia_detalle
+    municipio = Municipio.Municipio_choices.choices
+    modalidad = Modalidad.objects.all()
+    estrategia =    Estrategia.objects.all()
+    meta_estrategia =   Estrategia_detalle.objects.all()
     context = {
         'form_estrategias_institucionales':form_estrategias_institucionales,
         'form_meta':form_meta,
         'form_meta_estrategia_detalle': form_meta_estrategia_detalle,
+        'municipio':municipio,
+        'modalidad':modalidad,
+        'estrategia':estrategia,
+        'meta_estrategia':meta_estrategia,
     }
     
     return render(request, 'Estrategias_institucionales/estrategias_institucionales.html', context)
@@ -353,30 +361,22 @@ def get_meta_valores(request,met_id):
         return JsonResponse({'error': 'Meta not found'},  status=404)
 
 
-from django.urls import reverse
+#funciones de meta estrategia, vista estrategias institucionales
 class Meta_estrategia_detalle(CreateView):
     model = Estrategia_detalle
     form_class = Form_meta_estrategia_detalle
     template_name = 'Estrategias_institucionales/estrategias_institucionales.html'
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
-    
+   
+#filtros de estrategias 
+def get_estrategia_data(request,est_id):
 
-def get_modalidad(request, est_id):
-    
         estrategia = Estrategia.objects.get(est_id=est_id)
-        modalidades = Estrategia.objects.filter(est_nombre=estrategia.est_nombre)
-        
-        estd_modalidad = [{'value': modalidad.est_modalidad, 'text': modalidad.est_modalidad} for modalidad in modalidades]
-        modalidades_data = list({v['value']: v for v in estd_modalidad}.values()) 
-      
-      
-        metas = Meta.objects.filter(estrategia=estrategia)
-        estd_meta = [{'value': meta.met_id, 'text': meta.met_codigo} for meta in metas]
-        response_data = {
-            'estd_modalidad' : modalidades_data,
-            'estd_meta':estd_meta
+        meta_serializer = MetaSerializer(estrategia.met_id)
+        data = {
+            'est_modalidad': estrategia.est_modalidad.modalidad,
+            'met_id': meta_serializer.data,
         }
-
-        return JsonResponse(response_data)
- 
+        
+        return JsonResponse(data)

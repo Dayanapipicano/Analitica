@@ -1,3 +1,16 @@
+//Seleccionar año 
+function Ano(){
+    var n = (new Date()).getFullYear()
+    var select = document.getElementById("ano");
+    for(var i = n; i>=1900; i--)select.options.add(new Option(i,i));
+
+};
+window.onload = Ano;
+
+
+
+
+
 // funcion de modales 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -73,42 +86,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //maneja filtros dentro del formulario metas formacion (est_id)
-document.addEventListener('DOMContentLoaded', function() {
-    const estIdField = document.querySelector('select[name="est_id"]');
-    const estdModalidadField = document.querySelector('#id_estd_modalidad');
-    const estdMetaField = document.querySelector('#id_estd_meta');
+document.addEventListener('DOMContentLoaded', function () {
+    const estrategiaField = document.querySelector('select[name="est_id"]');
+    const modalidadField = document.querySelector('input[name="estd_modalidad"]');
+    const metaField = document.querySelector('input[name="estd_meta"]');
 
-    estIdField.addEventListener('change', function() {
-        const estId = estIdField.value;
-
-        // Hacer una solicitud AJAX para obtener la modalidad y otros datos
-        fetch(`/get_modalidad/${estId}/`)
+    estrategiaField.addEventListener('change', function () {
+       
+        const est_id = estrategiaField.value;
+        fetch(`/get_estrategia_data/${est_id}/`)
             .then(response => response.json())
             .then(data => {
-                // Limpia las opciones actuales
-                estdModalidadField.innerHTML = '';
-                estdMetaField.innerHTML = '';
-
-                // Agrega una opción por defecto para modalidad
-                estdModalidadField.appendChild(new Option('Seleccione una modalidad', ''));
-
-                // Agrega las opciones recibidas para modalidad
-                data.estd_modalidad?.forEach(modalidad => {
-                    const option = new Option(modalidad.text, modalidad.value);
-                    estdModalidadField.add(option);
-                });
-
-                // Agrega una opción por defecto para meta
-                estdMetaField.appendChild(new Option('Seleccione una meta', ''));
-
-                // Agrega las opciones recibidas para meta
-                data.estd_meta?.forEach(meta => {
-                    const option = new Option(meta.text, meta.value);
-                    estdMetaField.add(option);
-                });
-            })
-            .catch(error => console.error('Error:', error));
+                console.log(data)
+                modalidadField.value = data.est_modalidad || '';
+                metaField.value = data.met_id || '';
+            });
     });
 });
-
-

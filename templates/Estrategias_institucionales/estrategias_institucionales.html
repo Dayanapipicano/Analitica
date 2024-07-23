@@ -2,7 +2,7 @@
 
 {% block contenido %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'bootstrap/css/desercion.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/estrategias_institucionales_metas.css' %}">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <!-- jQuery (asegúrate de incluirlo antes de cualquier script de Bootstrap) -->
@@ -14,10 +14,13 @@
     <div class="text-center">
         <div class="container">
             <h1 class="h1 mb-4">Gestionar estrategia institucionales</h1>
-            
-       
+
             <div class="row justify-content-center">
-            
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <select name="" id="ano"></select>
+                    </div>
+                </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
@@ -36,19 +39,26 @@
                 </div>
             </div>
 
-          
             <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio1">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
-                            </select>
-                        </div>
+                        <select class="form-control form-control-sm custom-select" id="modalidad" onchange="aplicarFiltros()">
+                            <option value="" disabled {% if not selected_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                            {% for choice in modalidad %}
+                                <option value="{{ choice.0 }}" {% if choice.0 == selected_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <div class="form-group row">
+                        <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="filtros_desercion()" required>
+                            <option value="" disabled {% if not select_municipio %}selected{% endif %}>Selecciona municipio</option>
+                            {% for choice in municipio %}
+                                <option value="{{ choice.0 }}" {% if choice.0 == select_municipio %}selected{% endif %}>{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -61,90 +71,74 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <span class="icono" data-toggle="modal" data-target="#formModal">
+                        <span class="icono" data-toggle="modal" data-target="#myModal4">
                             Meta estrategia
                             <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         </span>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <div class="form-group row">
-                        <label for="filtroMunicipio4" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="filtroMunicipio4">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Popayán</option>
-                                <option value="opcion2">Silvia</option>
-                                <option value="opcion3">Piendamó</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-
+        {% for estrategias in estrategia%}
+        <div class="card">
+            
+            <div class="card-title">Campesena</div>
+            <div class="card-content">
+                <div class="card-item"><strong>Modalidad:</strong>{{ estrategias.est_modalidad.modalidad}}</div>
+                <div class="card-item"><strong>Meta:</strong><button type="button" data-identificador="{{ estrategias.met_id }}"  class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></div>
+            </div>
+            
+        </div>
+        {% endfor%}
         <div class="container">
+            
             <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col" style="min-width: 150px;">Identificador ficha</th>
-                            <th scope="col" style="min-width: 200px;">Identificador único ficha</th>
-                            <th scope="col" style="min-width: 100px;">Estado</th>
-                            <th scope="col" style="min-width: 150px;">Código nivel de formación</th>
-                            <th scope="col" style="min-width: 150px;">Nivel de formación</th>
-                            <th scope="col" style="min-width: 100px;">Código jornada</th>
-                            <th scope="col" style="min-width: 100px;">Jornada</th>
-                            <th scope="col" style="min-width: 150px;">Tipo de formación</th>
-                            <th scope="col" style="min-width: 150px;">Etapa de formación</th>
-                            <th scope="col" style="min-width: 150px;">Sector programa</th>
-                            <th scope="col" style="min-width: 150px;">Número de programa de formación</th>
-                            <th scope="col" style="min-width: 100px;">Red</th>
+                            <th scope="col" style="min-width: 150px;">Nombre</th>
+                            <th scope="col" style="min-width: 200px;">Modalidad</th>
+                            <th scope="col" style="min-width: 100px;">Total meta</th>
+                            <th scope="col" style="min-width: 100px;">Auxiliar</th>
+                            <th scope="col" style="min-width: 100px;">Bilinguismo</th>
+                       
+                            <th scope="col" style="min-width: 150px;">Sin bilinguismo</th>
+                            <th scope="col" style="min-width: 150px;">Profundizacion tecnica</th>
+                            <th scope="col" style="min-width: 100px;">Curso especial</th>
+                            <th scope="col" style="min-width: 100px;">Operario</th>
+                            <th scope="col" style="min-width: 150px;">Evento</th>
+                            <th scope="col" style="min-width: 150px;">Tecnologo</th>   
+                            <th scope="col" style="min-width: 150px;">  Tecnico</th>   
+                            <th scope="col" style="min-width: 150px;">Meta</th>
+                            
+
                         </tr>
                     </thead>
                     <tbody>
+                        {% for meta_estrategias in  meta_estrategia%}
                         <tr>
-                            <td>Dato 1</td>
-                            <td>Dato 2</td>
-                            <td>Dato 3</td>
-                            <td>Dato 4</td>
-                            <td>Dato 5</td>
-                            <td>Dato 6</td>
-                            <td>Dato 7</td>
-                            <td>Dato 8</td>
-                            <td>Dato 9</td>
-                            <td>Dato 10</td>
-                            <td>Dato 11</td>
-                            <td>Dato 12</td>
+                            <td>{{meta_estrategias.est_id}}</td>
+                            <td>{{meta_estrategias.estd_modalidad}}</td>
+                            <td>{{meta_estrategias.estd_meta}}</td>
+                            
+                            <td>{{meta_estrategias.estd_auxiliar_meta}}</td>
+                            <td>{{meta_estrategias.estd_bilinguismo}}</td>
+                            <td>{{meta_estrategias.estd_sin_bilinguismo}}</td>
+                            <td>{{meta_estrategias.estd_profundizacion_tecnica_meta}}</td>
+                            <td>{{meta_estrategias.estd_curso_especial}}</td>
+                            <td>{{meta_estrategias.estd_operario_meta}}</td>
+                            <td>{{meta_estrategias.estd_evento}}</td>
+                            <td>{{meta_estrategias.estd_tecnologo}}</td> 
+                            <td>{{meta_estrategias.estd_tecnico_meta}}</td> 
+                            <td><button type="button" data-identificador="{{ meta_estrategias.estd_meta }}"  class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
+                           
+
+                            
+                            
+                        
                         </tr>
-                        <tr>
-                            <td>Dato 13</td>
-                            <td>Dato 14</td>
-                            <td>Dato 15</td>
-                            <td>Dato 16</td>
-                            <td>Dato 17</td>
-                            <td>Dato 18</td>
-                            <td>Dato 19</td>
-                            <td>Dato 20</td>
-                            <td>Dato 21</td>
-                            <td>Dato 22</td>
-                            <td>Dato 23</td>
-                            <td>Dato 24</td>
-                        </tr>
-                        <tr>
-                            <td>Dato 25</td>
-                            <td>Dato 26</td>
-                            <td>Dato 27</td>
-                            <td>Dato 28</td>
-                            <td>Dato 29</td>
-                            <td>Dato 30</td>
-                            <td>Dato 31</td>
-                            <td>Dato 32</td>
-                            <td>Dato 33</td>
-                            <td>Dato 34</td>
-                            <td>Dato 35</td>
-                            <td>Dato 36</td>
-                        </tr>
+                        
+                        {%endfor%}
                     </tbody>
                 </table>
             </div>
@@ -152,54 +146,6 @@
 
         <!-- Primer Modal estrategia -->
         <div class="modal fade" id="Modal_estrategia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Título del Modal</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <form action="{% url 'cores:estrategias_create' %}" method="post">
-                          {% csrf_token %}
-                          {{ form_estrategias_institucionales.as_p }}
-                          <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
-       <!-- Segundo Modal meta -->
-            <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title" id="modalTitulo">Metas</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                              <span aria-hidden="true">&times;</span>
-                          </button>
-                      </div>
-                      <div class="modal-body">
-                          <form id="second-modal-form_meta" action="{% url 'cores:meta_create' %}" method="post">
-                              {% csrf_token %}
-                              {{ form_meta.as_p }}
-                              <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
-                                  <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
-                              </div>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-         
-        <!-- Primer Modal estrategia -->
-        <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -209,10 +155,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{% url 'cores:meta_estrategia_detalle' %}" method="post">
+                        <form action="{% url 'cores:estrategias_create' %}" method="post">
                             {% csrf_token %}
-                            {{ form_meta_estrategia_detalle.as_p }}
-                            
+                            {{ form_estrategias_institucionales.as_p }}
+                            <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -222,17 +168,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- Segundo Modal meta -->
+      
+       <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Metas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="second-modal-form_meta" action="{% url 'cores:meta_create' %}" method="post">
+                        {% csrf_token %}
+                        {{ form_meta.as_p }}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                            <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Modal meta estrategia -->
+        <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitulo">Metas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="second-modal-form_meta" action="{% url 'cores:meta_estrategia_detalle' %}" method="post">
+                            {% csrf_token %}
+                            {{ form_meta_estrategia_detalle.as_p }}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                                <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
-<script>
-
-     
-        
-    </script>
-
-
-
-    
-    <script src="{% static 'bootstrap/js/estrategias_institucionales.js'%}"></script>
+<script src="{% static 'bootstrap/js/estrategias_institucionales.js'%}"></script>
 
 {% endblock %}

@@ -12,13 +12,7 @@ class Formacion(models.Model):
     formacion = models.CharField(max_length=150, choices=Formacion_choices.choices)
 
 class Modalidad(models.Model):
-    
-    class Modalidad_choices(models.TextChoices):
-        VIRTUAL = 'VIRTUAL','Virtual'
-        PRESENCIAL = 'PRESENCIAL', 'Presencial'
-        DISTANCIA = 'DISTANCIA', 'Distancia'
-    
-    modalidad = models.CharField(max_length=150, choices=Modalidad_choices.choices)
+    modalidad = models.CharField(max_length=150)
     
 class Poblaciones(models.TextChoices):
     DESPLAZADOS_POR_VIOLENCIA = 'desplazados_por_violencia','Desplazados_por_violencia'
@@ -182,7 +176,7 @@ class Meta(models.Model):
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
     est_nombre = models.CharField(max_length=100)
-    est_modalidad = models.CharField(max_length=50, choices=Modalidad.Modalidad_choices.choices)
+    est_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
     est_total_meta = models.CharField(max_length=100)
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE, to_field='met_id')
     def __str__(self):
@@ -212,7 +206,7 @@ class Estrategia_detalle(models.Model):
 
 class Metas_formacion(models.Model):
     metd_id = models.AutoField(primary_key=True)
-    metd_modalidad =  models.CharField(max_length=100,choices=Modalidad.Modalidad_choices.choices)
+    metd_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
     met_formacion_operario = models.CharField(max_length=150)
     met_formacion_auxiliar = models.CharField(max_length=150)
     met_formacion_tecnico = models.CharField(max_length=150)

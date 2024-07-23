@@ -20,19 +20,7 @@
                     <div class="form-group row">
                         <label for="selectAnio">Selecciona un año:</label>
                         <select id="selectAnio" class="form-control form-control-sm">
-                            <!-- Script en JavaScript para generar opciones de año -->
-                            <script>
-                                var select = document.getElementById("selectAnio");
-                                var currentYear = new Date().getFullYear();
-                                var minYear = 1900; // Año mínimo permitido
-
-                                for (var i = currentYear; i >= minYear; i--) {
-                                    var option = document.createElement("option");
-                                    option.value = i;
-                                    option.text = i;
-                                    select.appendChild(option);
-                                }
-                            </script>
+                           
                         </select>
                     </div>
                 </div>
