@@ -20,5 +20,6 @@ urlpatterns = [
     path('estrategias/create/', core_views.Estrategias_create.as_view(), name='estrategias_create'),
     path('estrategias/est_total_meta/<int:met_id>/', core_views.get_meta_valores, name='est_total_meta'),
     path('meta_estrategia_detalle/create', core_views.Meta_estrategia_detalle.as_view(), name="meta_estrategia_detalle"),
-    path('get_estrategia_data/<int:est_id>/', core_views.get_estrategia_data, name='get_estrategia_data'),
+    path('get_estrategia_data/<int:id_estd_modalidad>/', core_views.get_estrategia_data, name='get_estrategia_data'),
+    path('meta_data/<int:id_estrategia>/', core_views.meta_data, name='meta_data'),
 ]   

@@ -87,19 +87,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //maneja filtros dentro del formulario metas formacion (est_id)
 document.addEventListener('DOMContentLoaded', function () {
-    const estrategiaField = document.querySelector('select[name="est_id"]');
-    const modalidadField = document.querySelector('input[name="estd_modalidad"]');
-    const metaField = document.querySelector('input[name="estd_meta"]');
+    const modalidadField = document.querySelector('#id_estd_modalidad');
+    const estrategiaField = document.querySelector('#id_est_id');
+    const metaField = document.querySelector('#id_estd_meta');
 
-    estrategiaField.addEventListener('change', function () {
-       
-        const est_id = estrategiaField.value;
-        fetch(`/get_estrategia_data/${est_id}/`)
+    modalidadField.addEventListener('change', function () {
+        const id_estd_modalidad = this.value;
+
+        fetch(`/get_estrategia_data/${id_estd_modalidad}/`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
-                modalidadField.value = data.est_modalidad || '';
-                metaField.value = data.met_id || '';
+                console.log(data); 
+                estrategiaField.innerHTML = '<option value"">selecionar</option>'
+
+            
+                data.estrategia.forEach(estrategia => {
+                    const option = document.createElement('option');
+                    option.value = estrategia.estrategia_id;
+                    option.textContent = estrategia.estrategia_nombre;
+                    estrategiaField.appendChild(option);
+
+                    // Selecciona la opción recién añadida
+                    estrategiaField.value = data.estrategia_id;
+                })
+                  
+            
+                
+                
+
             });
     });
+
+    estrategiaField.addEventListener('change', function(){
+        const id_estrategia = this.value;
+
+        fetch(`/meta_data/${id_estrategia}`)
+        .then(response => response.json())
+        .then(data =>{
+            console.log(data);
+            
+
+            
+                if(data.meta){
+                    const meta = data.meta;
+                    const option = document.createElement('option');
+                    option.value = meta.met_id;
+                    option.textContent = meta.met_codigo;
+                    metaField.appendChild(option)
+                    console.log(estrategiaField)
+
+                    
+                }
+        })
+    })
 });

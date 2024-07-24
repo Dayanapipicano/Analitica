@@ -88,6 +88,9 @@ class Form_estrategias(forms.ModelForm):
         
         
 class Form_meta_estrategia_detalle(forms.ModelForm):
+    
+    estd_modalidad =forms.ModelChoiceField(queryset=Modalidad.objects.all())
+    est_id = forms.ModelChoiceField(queryset=Estrategia.objects.none())
     class Meta: 
         model = Estrategia_detalle
         fields = {
@@ -104,11 +107,9 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
             'estd_sin_bilinguismo',
             'estd_meta',
         }
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args,**kwargs)
-            self.fields['est_id'].queryset = Estrategia.objects.distinct('est_nombre')
-            
         
+        def __init__(self, *args, **kwargs) -> None:
+            super().__init__(self, *args, **kwargs);
         
     
     

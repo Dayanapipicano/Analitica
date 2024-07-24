@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from django.db.models import Count,Sum
 from datetime import datetime
 from django.urls import reverse_lazy
-from .serializers import MetaSerializer
+from .serializers import MetaSerializer,EstrateiaSerializer
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -368,15 +368,33 @@ class Meta_estrategia_detalle(CreateView):
     template_name = 'Estrategias_institucionales/estrategias_institucionales.html'
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
+    def post(self,request, *ars, **kwars):
+        form = Form_meta_estrategia_detalle(request.POST)
+        print(f'ff{form}')
    
 #filtros de estrategias 
-def get_estrategia_data(request,est_id):
+def get_estrategia_data(request,id_estd_modalidad):
 
-        estrategia = Estrategia.objects.get(est_id=est_id)
-        meta_serializer = MetaSerializer(estrategia.met_id)
+        estrategia = Estrategia.objects.filter(est_modalidad=id_estd_modalidad)
+        print(f'dsf{estrategia}')
+
         data = {
-            'est_modalidad': estrategia.est_modalidad.modalidad,
-            'met_id': meta_serializer.data,
-        }
+        'estrategia': [
+            {
+                'estrategia_id': e.est_id,
+                'estrategia_nombre': e.est_nombre,
+            } for e in estrategia
+        ]
+       }
         
         return JsonResponse(data)
+    
+def meta_data(request,id_estrategia):
+    metas = Meta.objects.get(met_id=id_estrategia)
+    meta_serializer = MetaSerializer(metas)
+    print(f'sdfsd{metas}')
+    data = {
+        'meta': meta_serializer.data
+    }
+    return JsonResponse(data)
+    
