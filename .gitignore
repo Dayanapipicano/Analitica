@@ -7,3 +7,5 @@ credentials.json
 #pip3 install djangorestframework-simplejwt
 #pip install pandas openpyxl  
 #pip install djangorestframework
+#pip install pyxlsb
+

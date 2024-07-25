@@ -246,3 +246,92 @@ def  Subir_poblacion_vulnerable(request):
             except Exception as e:
                 print(f"Error al procesar el archivo: {str(e)}")
                 
+                
+import pandas as pd
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from .forms import ExcelUploadForm
+from .models import Indicador
+#excel_file
+import pandas as pd
+from pyxlsb import open_workbook
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from .forms import ExcelUploadForm
+from .models import Indicador, Persona
+from django.utils import timezone
+from io import BytesIO
+
+def upload_excel(request):
+    if request.method == 'POST':
+        per_documento = request.POST.get('per_documento')
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES['excel_file']
+
+            if not hasattr(excel_file, 'read'):
+                return render(request, 'upload.html', {'form': form, 'error': "El archivo subido no es válido."})
+
+            try:
+                # Leer el archivo en un flujo de bytes
+                file_stream = BytesIO(excel_file.read())
+
+                # Usar pyxlsb para abrir el archivo .xlsb desde el flujo de bytes
+                with open_workbook(file_stream) as wb:
+                    # Imprimir los nombres de las hojas para verificar el índice
+                    sheet_names = [sheet.name for sheet in wb.sheets]
+                    print("Nombres de las hojas:", sheet_names)
+
+                    # Leer la hoja llamada 'RESUMEN'
+                    sheet = wb.get_sheet(1)  # La segunda hoja (índice 1)
+
+                    # Leer todas las filas de la hoja
+                    data = []
+                    for row in sheet.rows():
+                        data.append([cell.v for cell in row])
+
+                # Convertir los datos a un DataFrame de pandas
+                df = pd.DataFrame(data[1:], columns=data[0])
+                print("DataFrame leído del archivo Excel:")
+                print(df.head())
+                print("Columnas del DataFrame:")
+                print(df.columns)
+
+                # Asegúrate de que per_documento existe en Persona
+                selected_persona = Persona.objects.get(per_documento=per_documento)
+
+                # Procesar las columnas del DataFrame
+                for _, row in df.iterrows():
+                    Indicador.objects.create(
+                        nombre=row.get('Indicador', ''),
+                        pobl_fecha_poblacion=timezone.now(),
+                        indigenas_cupos_meta=row.get(('Indígenas', 'Cupos'), 0),
+                        indigenas_aprendices_meta=row.get(('Indígenas', 'Aprendices'), 0),
+                        inpec_cupos_meta=row.get(('INPEC', 'Cupos'), 0),
+                        inpec_aprendices_meta=row.get(('INPEC', 'Aprendices'), 0),
+                        jovenes_cupos_meta=row.get(('Jóvenes Vulnerables', 'Cupos'), 0),
+                        jovenes_aprendices_meta=row.get(('Jóvenes Vulnerables', 'Aprendices'), 0),
+                        adolescente_cupos_meta=row.get(('Adolescente Conflicto', 'Cupos'), 0),
+                        adolescente_aprendices_meta=row.get(('Adolescente Conflicto', 'Aprendices'), 0),
+                        mujer_cupos_meta=row.get(('Mujer Cabeza de Hogar', 'Cupos'), 0),
+                        mujer_aprendices_meta=row.get(('Mujer Cabeza de Hogar', 'Aprendices'), 0),
+                        indigenas_cupos_ejecucion=row.get(('Indígenas', 'Cupos Ejecución'), 0),
+                        indigenas_aprendices_ejecucion=row.get(('Indígenas', 'Aprendices Ejecución'), 0),
+                        inpec_cupos_ejecucion=row.get(('INPEC', 'Cupos Ejecución'), 0),
+                        inpec_aprendices_ejecucion=row.get(('INPEC', 'Aprendices Ejecución'), 0),
+                        jovenes_cupos_ejecucion=row.get(('Jóvenes Vulnerables', 'Cupos Ejecución'), 0),
+                        jovenes_aprendices_ejecucion=row.get(('Jóvenes Vulnerables', 'Aprendices Ejecución'), 0),
+                        adolescente_cupos_ejecucion=row.get(('Adolescente Conflicto', 'Cupos Ejecución'), 0),
+                        adolescente_aprendices_ejecucion=row.get(('Adolescente Conflicto', 'Aprendices Ejecución'), 0),
+                        mujer_cupos_ejecucion=row.get(('Mujer Cabeza de Hogar', 'Cupos Ejecución'), 0),
+                        mujer_aprendices_ejecucion=row.get(('Mujer Cabeza de Hogar', 'Aprendices Ejecución'), 0),
+                        per_documento=selected_persona
+                    )
+
+                return HttpResponseRedirect('/success/')
+            except Exception as e:
+                print(f"Error al leer el archivo Excel: {e}")
+                return render(request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'form': form, 'error': str(e)})
+    else:
+        form = ExcelUploadForm()
+    return render(request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'form': form})

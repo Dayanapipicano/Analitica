@@ -146,7 +146,35 @@ class Poblacion(models.Model):
     rroom = models.CharField(max_length=100)
     per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
     
+
+
+class Indicador(models.Model):
+    pobl_id = models.AutoField(primary_key=True)
+    pobl_fecha_poblacion = models.DateField()
+    nombre = models.CharField(max_length=100)
+    indigenas_cupos_meta = models.IntegerField()
+    indigenas_aprendices_meta = models.IntegerField()
+    inpec_cupos_meta = models.IntegerField()
+    inpec_aprendices_meta = models.IntegerField()
+    jovenes_cupos_meta = models.IntegerField()
+    jovenes_aprendices_meta = models.IntegerField()
+    adolescente_cupos_meta = models.IntegerField()
+    adolescente_aprendices_meta = models.IntegerField()
+    mujer_cupos_meta = models.IntegerField()
+    mujer_aprendices_meta = models.IntegerField()
+    indigenas_cupos_ejecucion = models.IntegerField()
+    indigenas_aprendices_ejecucion = models.IntegerField()
+    inpec_cupos_ejecucion = models.IntegerField()
+    inpec_aprendices_ejecucion = models.IntegerField()
+    jovenes_cupos_ejecucion = models.IntegerField()
+    jovenes_aprendices_ejecucion = models.IntegerField()
+    adolescente_cupos_ejecucion = models.IntegerField()
+    adolescente_aprendices_ejecucion = models.IntegerField()
+    mujer_cupos_ejecucion = models.IntegerField()
+    mujer_aprendices_ejecucion = models.IntegerField()
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
     
+
 
 class Persona_rol(models.Model):
     rolp_id = models.AutoField(primary_key=True)

@@ -63,3 +63,7 @@ class EditProfileForm(forms.ModelForm):
         }
         
 
+
+
+class ExcelUploadForm(forms.Form):
+    excel_file = forms.FileField()

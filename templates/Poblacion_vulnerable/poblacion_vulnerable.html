@@ -14,11 +14,11 @@
                                     <h4 class="mb-0">Subir Archivo</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form method="post" enctype="multipart/form-data" action="{% url 'personas:subir_poblacion_vulnerable' %}">
+                                    <form method="post" enctype="multipart/form-data" action="{% url 'personas:upload_excel' %}">
                                         {% csrf_token %}
                                         <div class="mb-3">
                                             <label for="fileUpload" class="form-label">Seleccionar archivo</label>
-                                            <input class="form-control" type="file" id="fileUpload" name="fileUpload">
+                                            <input class="form-control" type="file" id="excel_file" name="excel_file">
                                         </div>
                                         <div class="mb-3">
                                         
