@@ -91,6 +91,7 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
     
     estd_modalidad =forms.ModelChoiceField(queryset=Modalidad.objects.all())
     est_id = forms.ModelChoiceField(queryset=Estrategia.objects.none())
+    estd_meta = forms.ModelChoiceField(queryset=Meta.objects.none())
     class Meta: 
         model = Estrategia_detalle
         fields = {
@@ -108,10 +109,6 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
             'estd_meta',
         }
         
-        def __init__(self, *args, **kwargs) -> None:
-            super().__init__(self, *args, **kwargs);
-        
-    
     
         
     

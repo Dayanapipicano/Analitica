@@ -13,6 +13,8 @@ class Formacion(models.Model):
 
 class Modalidad(models.Model):
     modalidad = models.CharField(max_length=150)
+    def __str__(self):
+        return self.modalidad
     
 class Poblaciones(models.TextChoices):
     DESPLAZADOS_POR_VIOLENCIA = 'desplazados_por_violencia','Desplazados_por_violencia'

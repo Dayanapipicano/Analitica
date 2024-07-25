@@ -1,6 +1,7 @@
+from django.forms import BaseModelForm
 from django.shortcuts import render
 from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion
 from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle
 from django.views.generic import TemplateView, CreateView
@@ -362,16 +363,31 @@ def get_meta_valores(request,met_id):
 
 
 #funciones de meta estrategia, vista estrategias institucionales
+
+#crear meta estrategia detalle
 class Meta_estrategia_detalle(CreateView):
     model = Estrategia_detalle
     form_class = Form_meta_estrategia_detalle
     template_name = 'Estrategias_institucionales/estrategias_institucionales.html'
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
-    def post(self,request, *ars, **kwars):
-        form = Form_meta_estrategia_detalle(request.POST)
-        print(f'ff{form}')
-   
+    
+    #recibe los datos seleccionados
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        
+        est_id = request.POST.get('est_id')
+        estd_meta = request.POST.get('estd_meta')
+        
+       
+        form.fields['est_id'].queryset = Estrategia.objects.filter(est_id=est_id)
+        form.fields['estd_meta'].queryset = Meta.objects.filter(met_id=estd_meta)
+        
+        form.data =  request.POST
+       
+        if form.is_valid():
+            return self.form_valid(form)
+
 #filtros de estrategias 
 def get_estrategia_data(request,id_estd_modalidad):
 
@@ -390,11 +406,16 @@ def get_estrategia_data(request,id_estd_modalidad):
         return JsonResponse(data)
     
 def meta_data(request,id_estrategia):
-    metas = Meta.objects.get(met_id=id_estrategia)
+    estrategia = Estrategia.objects.get(est_id=id_estrategia)
+    
+    metas = estrategia.met_id
     meta_serializer = MetaSerializer(metas)
-    print(f'sdfsd{metas}')
     data = {
         'meta': meta_serializer.data
     }
     return JsonResponse(data)
+    
+    
+    
+ 
     

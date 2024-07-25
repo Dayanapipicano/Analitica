@@ -125,19 +125,23 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data =>{
             console.log(data);
+
+            metaField.innerHTML = '<option value="">Seleccionar</option>';
             
 
             
-                if(data.meta){
+            if(data.meta){
                     const meta = data.meta;
                     const option = document.createElement('option');
                     option.value = meta.met_id;
                     option.textContent = meta.met_codigo;
                     metaField.appendChild(option)
-                    console.log(estrategiaField)
+
+                    metaField.value = data.met_id;
+                   
 
                     
-                }
+            }
         })
     })
 });
