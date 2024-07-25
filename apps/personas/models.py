@@ -203,6 +203,8 @@ class Meta(models.Model):
     met_total_poblacion_vulnerable = models.CharField(max_length=100)
     per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
     
+    def __str__(self):
+        return self.met_codigo
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
     est_nombre = models.CharField(max_length=100)

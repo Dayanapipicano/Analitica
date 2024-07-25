@@ -137,11 +137,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     option.textContent = meta.met_codigo;
                     metaField.appendChild(option)
 
-                    metaField.value = data.met_id;
-                   
-
-                    
             }
+            
+      
+            
+
         })
     })
 });

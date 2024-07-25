@@ -130,7 +130,8 @@
                             <td>{{meta_estrategias.estd_evento}}</td>
                             <td>{{meta_estrategias.estd_tecnologo}}</td> 
                             <td>{{meta_estrategias.estd_tecnico_meta}}</td> 
-                            <td><button type="button" data-identificador="{{ meta_estrategias.estd_meta }}"  class="btn-icon mostrarFormulario"><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
+                         
+                            <td><button type="button" data-identificador="{{ meta_estrategias.estd_meta }}" data-toggle="modal"   data-target="#viewModal" class="btn-icon "><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
                            
 
                             
@@ -216,6 +217,59 @@
                 </div>
             </div>
         </div>
+        <!-- Modal de visualizacion de matas -->
+        <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Información</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Campo 1:</strong> <span id="field1">Valor 1</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Campo 2:</strong> <span id="field2">Valor 2</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Campo 3:</strong> <span id="field3">Valor 3</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Campo 4:</strong> <span id="field4">Valor 4</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Campo 5:</strong> <span id="field5">Valor 5</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Campo 6:</strong> <span id="field6">{{meta_estrategias.estd_meta}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Campo 7:</strong> <span id="field7">Valor 7</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Campo 8:</strong> <span id="field8">Valor 8</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+        
     </div>
     </div>
 </div>

@@ -315,6 +315,8 @@ def Estrategias_institucionales_index(request):
     modalidad = Modalidad.objects.all()
     estrategia =    Estrategia.objects.all()
     meta_estrategia =   Estrategia_detalle.objects.all()
+
+  
     context = {
         'form_estrategias_institucionales':form_estrategias_institucionales,
         'form_meta':form_meta,
@@ -323,6 +325,8 @@ def Estrategias_institucionales_index(request):
         'modalidad':modalidad,
         'estrategia':estrategia,
         'meta_estrategia':meta_estrategia,
+
+
     }
     
     return render(request, 'Estrategias_institucionales/estrategias_institucionales.html', context)
@@ -376,12 +380,17 @@ class Meta_estrategia_detalle(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         
-        est_id = request.POST.get('est_id')
-        estd_meta = request.POST.get('estd_meta')
+      
         
-       
+        est_id = request.POST.get('est_id')
+        meta = request.POST.get('estd_meta')
+        
+        
+      
+  
+        
         form.fields['est_id'].queryset = Estrategia.objects.filter(est_id=est_id)
-        form.fields['estd_meta'].queryset = Meta.objects.filter(met_id=estd_meta)
+        form.fields['estd_meta'].queryset = Meta.objects.filter(met_id=meta)
         
         form.data =  request.POST
        
@@ -392,7 +401,7 @@ class Meta_estrategia_detalle(CreateView):
 def get_estrategia_data(request,id_estd_modalidad):
 
         estrategia = Estrategia.objects.filter(est_modalidad=id_estd_modalidad)
-        print(f'dsf{estrategia}')
+
 
         data = {
         'estrategia': [
@@ -417,5 +426,5 @@ def meta_data(request,id_estrategia):
     
     
     
- 
+
     
