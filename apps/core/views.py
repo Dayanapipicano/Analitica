@@ -367,7 +367,7 @@ def get_meta_valores(request,met_id):
 
 
 #funciones de meta estrategia, vista estrategias institucionales
-
+from django.http import HttpResponseRedirect
 #crear meta estrategia detalle
 class Meta_estrategia_detalle(CreateView):
     model = Estrategia_detalle
@@ -379,23 +379,23 @@ class Meta_estrategia_detalle(CreateView):
     #recibe los datos seleccionados
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        
-      
-        
+
         est_id = request.POST.get('est_id')
-        meta = request.POST.get('estd_meta')
-        
-        
-      
-  
-        
+        estd_meta = request.POST.get('estd_meta')
+        meta_id = int(estd_meta)
         form.fields['est_id'].queryset = Estrategia.objects.filter(est_id=est_id)
-        form.fields['estd_meta'].queryset = Meta.objects.filter(met_id=meta)
+        form.fields['estd_meta'].initial = meta_id 
+    
         
         form.data =  request.POST
-       
+
         if form.is_valid():
+  
             return self.form_valid(form)
+     
+     
+
+     
 
 #filtros de estrategias 
 def get_estrategia_data(request,id_estd_modalidad):

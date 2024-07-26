@@ -230,7 +230,7 @@ class Estrategia_detalle(models.Model):
     estd_bilinguismo = models.CharField(max_length=150)
     estd_sin_bilinguismo = models.CharField(max_length=150)
     est_id = models.ForeignKey(Estrategia, on_delete=models.CASCADE, to_field='est_id')
-    estd_meta = models.CharField(max_length=150)
+    estd_meta = models.IntegerField()
 
     
     
