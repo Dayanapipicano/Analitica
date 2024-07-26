@@ -317,6 +317,11 @@ def Estrategias_institucionales_index(request):
     meta_estrategia =   Estrategia_detalle.objects.all()
 
   
+    
+   
+    
+    
+
     context = {
         'form_estrategias_institucionales':form_estrategias_institucionales,
         'form_meta':form_meta,
@@ -324,7 +329,8 @@ def Estrategias_institucionales_index(request):
         'municipio':municipio,
         'modalidad':modalidad,
         'estrategia':estrategia,
-        'meta_estrategia':meta_estrategia,
+        'detalle_estrategia':meta_estrategia,
+
 
 
     }
@@ -414,6 +420,7 @@ def get_estrategia_data(request,id_estd_modalidad):
         
         return JsonResponse(data)
     
+#datos para los filtros de meta_estrategia
 def meta_data(request,id_estrategia):
     estrategia = Estrategia.objects.get(est_id=id_estrategia)
     
@@ -424,7 +431,15 @@ def meta_data(request,id_estrategia):
     }
     return JsonResponse(data)
     
-    
-    
+#detalle meta estrategias institucionales
 
-    
+def meta_detalle(request, estd_meta):
+    try:
+        meta = Meta.objects.get(met_id=estd_meta)
+        data = {
+            'met_codigo': meta.met_codigo,
+            
+        }
+        return JsonResponse(data)
+    except Meta.DoesNotExist:
+        return JsonResponse({'Error':'Meta not found'}, status=404)

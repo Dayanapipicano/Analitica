@@ -146,3 +146,21 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     })
 });
+
+
+//detalle de metas para cada registro de estrategias detalle
+document.addEventListener('DOMContentLoaded', function () {
+    const boton = document.querySelectorAll('[data-toggle="modal"');
+    boton.forEach(boton =>{
+        boton.addEventListener("click", () => {
+            const estd_meta = this.getAttribute('data-id');
+            fetch(`/meta_detalle/${estd_meta}/`)
+            .then(response => response.json())
+            .then(data =>{
+                document.getElementById('fiel_codigo').textContent = data.met_codigo
+            })
+        })
+
+    })
+    
+})
