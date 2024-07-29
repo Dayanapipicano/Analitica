@@ -4,7 +4,7 @@ from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estr
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion
 from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView,ListView
 from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
@@ -268,10 +268,12 @@ class Desercion(TemplateView):
 def Formacion_regular_index(request):
     form = Form_meta
     form_meta_formacion = Form_meta_formacion
+
     
     context = {
         'form':form,
-        'form_meta_formacion' : form_meta_formacion
+        'form_meta_formacion' : form_meta_formacion,
+
         
     }
     return render(request, 'Formacion_regular/formacion_regular.html', context)
@@ -317,8 +319,7 @@ def Estrategias_institucionales_index(request):
     meta_estrategia =   Estrategia_detalle.objects.all()
 
   
-    
-   
+
     
     
 
@@ -438,8 +439,80 @@ def meta_detalle(request, estd_meta):
         meta = Meta.objects.get(met_id=estd_meta)
         data = {
             'met_codigo': meta.met_codigo,
+            'met_centro_formacion' :meta.met_centro_formacion,
+            'met_fecha_inicio' : meta.met_fecha_inicio,
+            'met_fecha_fin': meta.met_fecha_fin,
+            'met_año' : meta.met_año,
             
         }
+      
         return JsonResponse(data)
     except Meta.DoesNotExist:
         return JsonResponse({'Error':'Meta not found'}, status=404)
+    
+
+#filtros para gestion formacion
+
+class metas_formacion_filtros(TemplateView):
+    
+    model = Metas_formacion
+    template_name = 'Formacion_regular/formacion_regular.html'
+
+    
+    def get(self, request, *args, **kwargs):
+ 
+        anio = request.GET.get('selectAnio')
+        fecha_inicio = request.GET.get('fecha_inicio')
+        fecha_fin = request.GET.get('fecha_fin')
+        modalidad = request.GET.get('modalidad')       
+        
+        
+        filtros_formacion = {} 
+        
+
+        if fecha_inicio and fecha_fin:
+            metas_ids = Meta.objects.filter(
+                met_fecha_inicio__gte=fecha_inicio,
+                met_fecha_fin__lte=fecha_fin
+            ).values_list('met_id', flat=True)
+            filtros_formacion['met_id__in'] = metas_ids
+        
+            modalidades = Metas_formacion.objects.filter(**filtros_formacion).values_list('metd_modalidad','metd_modalidad__modalidad').distinct()
+        else:
+            modalidades = []
+        
+        if modalidad:
+            filtros_formacion['metd_modalidad'] = modalidad
+            
+            
+        resultado = Metas_formacion.objects.filter(**filtros_formacion).values(
+        
+     
+            'metd_modalidad__modalidad',
+            'met_formacion_operario',
+            'met_formacion_auxiliar',
+            'met_formacion_tecnico',
+            'met_formacion_profundizacion_tecnica',
+            'met_formacion_tecnologo',
+            'met_formacion_evento',
+            'met_formacion_curso_especial',
+            'met_formacion_bilinguismo',
+            'met_formacion_sin_bilinguismo',
+            'met_id__met_codigo',
+            'met_id__met_centro_formacion',
+            'met_id__met_fecha_inicio',
+            'met_id__met_fecha_fin',
+            'met_id__met_año',
+        )
+
+   
+
+        data = {
+            'modalidades' :list(modalidades),
+            'data' :list(resultado)
+        }
+
+        return JsonResponse(data)
+    
+        
+    

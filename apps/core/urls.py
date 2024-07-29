@@ -23,5 +23,6 @@ urlpatterns = [
     path('get_estrategia_data/<int:id_estd_modalidad>/', core_views.get_estrategia_data, name='get_estrategia_data'),
     path('meta_data/<int:id_estrategia>/', core_views.meta_data, name='meta_data'),
     path('meta_detalle/<int:estd_meta>/', core_views.meta_detalle, name='meta_detalle'),
+    path('filtrar_datos_y_modalidades/',core_views.metas_formacion_filtros.as_view(), name='filtrar_datos_y_modalidades'),
 ]   
 
