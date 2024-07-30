@@ -461,7 +461,7 @@ class metas_formacion_filtros(TemplateView):
     
     def get(self, request, *args, **kwargs):
  
-        anio = request.GET.get('selectAnio')
+
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
         modalidad = request.GET.get('modalidad')       
@@ -477,12 +477,12 @@ class metas_formacion_filtros(TemplateView):
             ).values_list('met_id', flat=True)
             filtros_formacion['met_id__in'] = metas_ids
         
-            modalidades = Metas_formacion.objects.filter(**filtros_formacion).values_list('metd_modalidad','metd_modalidad__modalidad').distinct()
-        else:
-            modalidades = []
+      
         
         if modalidad:
             filtros_formacion['metd_modalidad'] = modalidad
+        
+        modalidades = Metas_formacion.objects.filter(**filtros_formacion).values_list('metd_modalidad', 'metd_modalidad__modalidad').distinct()
             
             
         resultado = Metas_formacion.objects.filter(**filtros_formacion).values(
@@ -504,14 +504,11 @@ class metas_formacion_filtros(TemplateView):
             'met_id__met_fecha_fin',
             'met_id__met_año',
         )
-
-   
-
+        
         data = {
             'modalidades' :list(modalidades),
             'data' :list(resultado)
         }
-
         return JsonResponse(data)
     
         

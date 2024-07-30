@@ -19,9 +19,7 @@
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <label for="selectAnio">Selecciona un año:</label>
-                        <select id="selectAnio" class="form-control form-control-sm">
-                           
-                        </select>
+                        <select name="" id="ano"></select>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -47,29 +45,14 @@
                     <div class="form-group row">
                         <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="modalidad" onchange="aplicarFiltros()">
-
-                                <option value="" disabled {% if not selected_modalidad %}selected{% endif %}>Selecciona modalidad</option>
-                                {% for choice in modalidad %}
-                                    <option value="{{ choice.0 }}" {% if choice.0 == selected_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
-                                {% endfor %}
+                            <select class="form-control form-control-sm custom-select" id="modalidad">
+                                <!-- Opciones se llenarán dinámicamente -->
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <div class="form-group row">
-                        <label for="filtroModalidad" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="modlaidad" name="modalidad">
-                                <option selected>Seleccionar una opción</option>
-                                <option value="opcion1">Opción 1</option>
-                                <option value="opcion2">Opción 2</option>
-                                <option value="opcion3">Opción 3</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                
+                
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <span class="icono" data-toggle="modal" data-target="#Modal1">
@@ -168,7 +151,8 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-           
+          
+
             <script>
               document.addEventListener('DOMContentLoaded', function() {
                   document.querySelector('#submit-second-modal').addEventListener('click', function(event) {
@@ -210,9 +194,10 @@
                 function actualizarModalidades() {
                     const fechaInicio = document.getElementById('fecha_inicio').value;
                     const fechaFin = document.getElementById('fecha_fin').value;
-            
-                    let url = `/filtrar_datos_y_modalidades/?fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
-            
+                    const modalidadSeleccionada = document.getElementById('modalidad').value;
+                
+                    let url = `/filtrar_datos_y_modalidades/?fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}&modalidad=${modalidadSeleccionada}`;
+                
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
@@ -220,12 +205,14 @@
                             const modalidadSelect = document.getElementById('modalidad');
                             modalidadSelect.innerHTML = '<option value="">--Selecciona modalidad--</option>';
                             data.modalidades.forEach(modalidad => {
+                                const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
+                                
                                 const option = document.createElement('option');
-                                option.value = modalidad;
-                                option.textContent = modalidad.metd_modalidad__modalidad;
+                                option.value = id;  // ID de la modalidad
+                                option.textContent = nombre;  // Nombre de la modalidad
                                 modalidadSelect.appendChild(option);
                             });
-            
+                
                             // Actualizar resultados en la tabla
                             const resultadosTableBody = document.getElementById('resultados').querySelector('tbody');
                             resultadosTableBody.innerHTML = ''; // Limpiar resultados anteriores
@@ -251,10 +238,6 @@
                                    
                                     <!-- Agrega más celdas según tus necesidades -->
                                 `;
-                              
-                              
-
-
                                 resultadosTableBody.appendChild(row);
                             });
                         });
@@ -265,9 +248,10 @@
                 document.getElementById('modalidad').addEventListener('change', actualizarModalidades);
             });
             
+            
 
-      
-
+          
+            
               </script>
 
         </div>
