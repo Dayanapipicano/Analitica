@@ -269,6 +269,6 @@ def Subir_poblacion_vulnerable(request):
            )
             datos_vulnerables.save()
            
-        return HttpResponse('Datos cargados exitosamente')
+        return redirect('personas:poblacion_vulnerable')
     
    
