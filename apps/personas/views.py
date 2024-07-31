@@ -19,6 +19,7 @@ from django.shortcuts import render
 from apps.personas.models import P04
 from django.utils import timezone
 import numpy as np
+from django.contrib.auth import logout
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
@@ -64,7 +65,7 @@ def inicio_sesion(request):
         if formPersona.is_valid():
             per_documento = formPersona.cleaned_data['per_documento']
             password = formPersona.cleaned_data['password1']
-            user = authenticate(request, per_documento=per_documento, password=password)
+            user = authenticate(request, username=per_documento, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('personas:Home')  # Redirigir a la página principal u otra página
@@ -76,6 +77,13 @@ def inicio_sesion(request):
 
     # No agregar mensajes de error al contexto si el formulario no se ha enviado (GET request)
     return render(request, 'inicio_sesion.html', {'formPersona': formPersona})
+
+
+#cerrar seion
+def Cierre_sesion(request):
+    logout(request)
+    return redirect('personas:inicio_sesion')
+
 
 #CONFIRMACION DE LA EXISTENCIAS DE UN CORREO ELECTRONICO
 def validacion_email(request):
