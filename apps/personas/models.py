@@ -261,45 +261,8 @@ class Metas_poblacion_vulnerable(models.Model):
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
     
 
-class Indicadores(models.Model):
-    nombre = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.nombre
-
-class Grupo(models.Model):
-    nombre = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nombre
-
-class Datos(models.Model):
-    indicadores = models.ForeignKey(Indicadores, on_delete=models.CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
-    tipo_dato = models.CharField(max_length=50)  # Meta 2024, Ejecución, % de Ejecución
-    cupos = models.IntegerField()
-    aprendices = models.IntegerField()
-    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
-    fecha_subida = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.indicadores} - {self.grupo} - {self.tipo_dato}"
-    
-    
-    
-class Datos_vulnerables(models.Model):
-    indicadores = models.ForeignKey(Indicadores, on_delete=models.CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
-    tipo_dato = models.CharField(max_length=50)  # Meta 2024, Ejecución, % de Ejecución
-    cupos = models.IntegerField()
-    aprendices = models.IntegerField()
-    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
-    fecha_subida = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.indicadores} - {self.grupo} - {self.tipo_dato} - Cupos: {self.cupos}, Aprendices: {self.aprendices}"
-
-class Documento_vulnerables(models.Model):
+class Documento_vulnerables_tipo_poblaciones(models.Model):
     indicadores = models.CharField(max_length=250)
     grupo = models.CharField(max_length=250)
     meta_2024 = models.CharField(max_length=150)  
@@ -307,3 +270,12 @@ class Documento_vulnerables(models.Model):
     porcentaje_ejecucion = models.DecimalField(max_digits=50, decimal_places=2)
     per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
     fecha_subida = models.DateTimeField(auto_now_add=True)
+
+class Documento_vulnerables_poblaciones(models.Model):
+    indicadores_poblaciones = models.CharField(max_length=150)
+    grupos_poblaciones = models.CharField(max_length=150)
+    meta_2024_poblaciones = models.CharField(max_length=150)
+    ejecucion_poblaciones = models.CharField(max_length=150)
+    porcentaje_ejecucion_poblaciones = models.DecimalField(max_digits=50, decimal_places=2)
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
+    fecha_de_carga_poblaciones = models.DateTimeField(auto_now_add=True)

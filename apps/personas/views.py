@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.personas.forms import PersonaForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from apps.personas.models import Persona,Documento_vulnerables
+from apps.personas.models import Persona,Documento_vulnerables_tipo_poblaciones
 from apps.personas.forms import EditProfileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -238,35 +238,52 @@ def Subir_poblacion_vulnerable(request):
     if request.method == 'POST':
         excel_file = request.FILES.get('excel_file')
         per_documento = request.POST.get('per_documento')
-
+        selected_persona = Persona.objects.get(per_documento=per_documento)
         
         df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None)
+        
+        
    
-    
-
+   
+        #TABLA TIPO DE POBLACIONES
         #renombrar cabeceras
         df.iloc[18,1] = 'Grupos'
         df.iloc[21,1] = 'Porcentaje_ejecicion'
+        df.iloc[8,1] = 'Grupos_poblaciones'
+        df.iloc[11,1] ='porcentaje_de_poblacion'
         
+   
+        #rellenar grupos de nan a el valor anterior para poblaciones
+        fila_remplazar_poblaciones = 7
+        df.loc[fila_remplazar_poblaciones] = df.loc[fila_remplazar_poblaciones].fillna(method='ffill')  
         
-        #rellenar grupos de nan a el valor anterior
+        #rellenar grupos de nan a el valor anterior para tipo de poblaciones
         fila_remplazar = 17
         df.loc[fila_remplazar] = df.loc[fila_remplazar].fillna(method='ffill')  
         
         
+        print(df)
+        
+        #datos para poblacion
+        datos_poblaciones_encabezado = df.iloc[7:11,2]
+        encabezado_poblaciones =[header.strip() for header in datos_poblaciones_encabezado]
+        print(encabezado_poblaciones)
+        datos_poblaciones = df.iloc[7:11,2:].values
+        reoranizado_poblaciones =  pd.DataFrame(datos_poblaciones.T, columns=encabezado_poblaciones)
+        
+        print(reoranizado_poblaciones)
+        
+        #datos tipo poblaciones
         datos = df.iloc[17:22,1]
         encabezado  = [header.strip() for header in datos]
      
-        
         datos_documento = df.iloc[17:22,2:].values
-   
         reoranizado = pd.DataFrame(datos_documento.T, columns=encabezado)
     
         
-        selected_persona = Persona.objects.get(per_documento=per_documento)
   
         for _, row in reoranizado.iterrows():
-            datos_vulnerables = Documento_vulnerables(
+            datos_vulnerables = Documento_vulnerables_tipo_poblaciones(
                 
                 indicadores=row['Indicador'],
                 grupo=row['Grupos'],
@@ -279,4 +296,5 @@ def Subir_poblacion_vulnerable(request):
            
         return redirect('personas:poblacion_vulnerable')
     
-   
+
+
