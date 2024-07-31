@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.personas.forms import PersonaForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from apps.personas.models import Persona
+from apps.personas.models import Persona,Documento_vulnerables
 from apps.personas.forms import EditProfileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -19,6 +19,7 @@ from django.shortcuts import render
 from apps.personas.models import P04
 from django.utils import timezone
 import numpy as np
+from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 #MENSAJE DE CAMBIO DE CONTRASEÑA
@@ -224,119 +225,50 @@ def Poblacion_vulnerable(request):
     
 
 
-import pyxlsb
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from datetime import datetime
-from apps.personas.models import Datos_vulnerables
 
-
-
-
-
-
-import pandas as pd
-from django.utils import timezone
-
-import pandas as pd
-from django.utils import timezone
-from django.http import HttpResponse
-from .models import Datos
-
-def cargar_datos_desde_xlsb(request):
+def Subir_poblacion_vulnerable(request):
     if request.method == 'POST':
         excel_file = request.FILES.get('excel_file')
-        usuario_id = request.POST.get('per_documento')
+        per_documento = request.POST.get('per_documento')
 
-        # Leer el archivo Excel
-        try:
-            df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None)
-            print("Hoja 'RESUMEN' leída correctamente.")
-        except ValueError as e:
-            print(f"Error al leer la hoja: {e}")
-            return HttpResponse("Error al leer la hoja 'RESUMEN'.", status=400)
-
-        # Imprimir las primeras filas para verificar la estructura
-        print("Primeras filas del DataFrame:")
-        print(df.head(25))
-
-        # Ajustar el DataFrame para usar la fila 18 (índice 17) como encabezado
-        df.columns = df.iloc[17]
-        df = df.drop(index=range(0, 18)).reset_index(drop=True)
-
-        # Imprimir las primeras filas después de configurar encabezados
-        print("Primeras filas del DataFrame después de configurar encabezados:")
-        print(df.head(25))
-
-        # Encontrar columnas que contienen 'Cupos' y 'Aprendices'
-        cupos_cols = [i for i, header in enumerate(df.columns) if pd.notna(header) and 'Cupos' in str(header)]
-        aprendices_cols = [i for i, header in enumerate(df.columns) if pd.notna(header) and 'Aprendices' in str(header)]
-
-        print(f"Columnas 'Cupos': {cupos_cols}")
-        print(f"Columnas 'Aprendices': {aprendices_cols}")
-
-        if not cupos_cols or not aprendices_cols:
-            return HttpResponse("No se encontraron columnas 'Cupos' o 'Aprendices'.", status=400)
-
-        # Extraer información
-        indicadores = ['Meta 2024', 'Ejecución', '% de Ejecución']
-
-        # Asignar nombres de grupos en el orden en que aparecen
-        grupos = []
-        for idx in range(len(cupos_cols)):
-            grupo = df.iloc[0, cupos_cols[idx]]
-            grupos.append(grupo)
         
-        print(f"Grupos asignados: {grupos}")
+        df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None)
+   
+    
 
-        # Extraer datos y guardar en la base de datos
-        for idx, grupo in enumerate(grupos):
-            for indicador in indicadores:
-                try:
-                    # Filtrar las filas correspondientes a cada indicador
-                    indicator_rows = df[df.iloc[:, 1] == indicador]
-                    if indicator_rows.empty:
-                        print(f"No se encontraron filas para el grupo '{grupo}' y el indicador '{indicador}'.")
-                        continue
-
-                    # Extraer los datos para 'Cupos' y 'Aprendices'
-                    cupos_col = cupos_cols[idx]
-                    aprendices_col = aprendices_cols[idx]
-
-                    for _, row in indicator_rows.iterrows():
-                        if pd.notna(row[cupos_col]):
-                            datos_modelo = Datos(
-                                indicador=indicador,
-                                grupo=grupo,
-                                cupos=row[cupos_col],
-                                aprendices=None,
-                                tipo_dato='Cupos',
-                                fecha_subida=timezone.now(),
-                                usuario_id=usuario_id
-                            )
-                            datos_modelo.save()
-                            print(f"Datos guardados para {indicador} - {grupo} - Cupos: {row[cupos_col]}.")
-
-                        if pd.notna(row[aprendices_col]):
-                            datos_modelo = Datos(
-                                indicador=indicador,
-                                grupo=grupo,
-                                cupos=None,
-                                aprendices=row[aprendices_col],
-                                tipo_dato='Aprendices',
-                                fecha_subida=timezone.now(),
-                                usuario_id=usuario_id
-                            )
-                            datos_modelo.save()
-                            print(f"Datos guardados para {indicador} - {grupo} - Aprendices: {row[aprendices_col]}.")
-
-                except KeyError:
-                    print(f"No se encontraron datos para {indicador} - {grupo}.")
-                except Exception as e:
-                    print(f"Error al guardar datos para {indicador} - {grupo}: {e}")
-
-        return HttpResponse("Datos cargados exitosamente.")
-    return HttpResponse("Método no permitido.", status=405)
-
-
-
+        #renombrar cabeceras
+        df.iloc[18,1] = 'Grupos'
+        df.iloc[21,1] = 'Porcentaje_ejecicion'
+        
+        
+        #rellenar grupos de nan a el valor anterior
+        fila_remplazar = 17
+        df.loc[fila_remplazar] = df.loc[fila_remplazar].fillna(method='ffill')  
+        
+        
+        datos = df.iloc[17:22,1]
+        encabezado  = [header.strip() for header in datos]
+     
+        
+        datos_documento = df.iloc[17:22,2:].values
+   
+        reoranizado = pd.DataFrame(datos_documento.T, columns=encabezado)
+    
+        
+        selected_persona = Persona.objects.get(per_documento=per_documento)
+  
+        for _, row in reoranizado.iterrows():
+            datos_vulnerables = Documento_vulnerables(
+                
+                indicadores=row['Indicador'],
+                grupo=row['Grupos'],
+                meta_2024=row['Meta 2024'],
+                ejecucion=row['Ejecución'],
+                porcentaje_ejecucion=row['Porcentaje_ejecicion'],
+                per_documento=selected_persona
+           )
+            datos_vulnerables.save()
+           
+        return HttpResponse('Datos cargados exitosamente')
+    
+   

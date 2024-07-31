@@ -15,7 +15,7 @@ urlpatterns = [
     path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
     path('subir_P04/', views.subir_P04, name='subir_P04'),
     path('P04/', views.p04, name="P04"),
-    path('upload/', views.cargar_datos_desde_xlsb, name='upload_excel'),
+    path('upload/', views.Subir_poblacion_vulnerable, name='upload_excel'),
     path('poblacion_vulnerable/index/', views.Poblacion_vulnerable, name="poblacion_vulnerable"),
     
    

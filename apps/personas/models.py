@@ -298,3 +298,12 @@ class Datos_vulnerables(models.Model):
 
     def __str__(self):
         return f"{self.indicadores} - {self.grupo} - {self.tipo_dato} - Cupos: {self.cupos}, Aprendices: {self.aprendices}"
+
+class Documento_vulnerables(models.Model):
+    indicadores = models.CharField(max_length=250)
+    grupo = models.CharField(max_length=250)
+    meta_2024 = models.CharField(max_length=150)  
+    ejecucion = models.CharField(max_length=150)
+    porcentaje_ejecucion = models.DecimalField(max_digits=50, decimal_places=2)
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
+    fecha_subida = models.DateTimeField(auto_now_add=True)
