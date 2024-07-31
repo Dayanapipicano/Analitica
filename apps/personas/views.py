@@ -222,116 +222,121 @@ def Poblacion_vulnerable(request):
     per_documento = Persona.objects.all()
     return render( request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'per_documento':per_documento})
     
-def  Subir_poblacion_vulnerable(request):
-    
-    if request.method == 'POST':
-        archivo = request.FILES.get('fileUpload')
-        per_documento = request.POST.get('per_documento')
-        
-        if archivo and archivo.name.endswith('.xlsx'):
-            try:
-                select_persona = Persona.objects.get(per_documento=per_documento)
-                df = pd.read_excel(archivo)
-                
-                
-                columnas = ['Indicadores', 'Meta 2024', 'Ejecución','% de Ejecución']
-                indicadores = df['Indicador'].tolist()
-                
-                for index, row in df.iterrows():
-                    inndicador_principal = row['Indicadores']
-                    subgrupo1 = row['Indígenas']
-                    subgrupo2 = row['Cupos']
-                    subgrupo3 = row['Aprendices']
-                
-            except Exception as e:
-                print(f"Error al procesar el archivo: {str(e)}")
-                
-                
+
+
+import pyxlsb
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from datetime import datetime
+from apps.personas.models import Datos_vulnerables
+
+
+
+
+
+
 import pandas as pd
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from .forms import ExcelUploadForm
-from .models import Indicador
-#excel_file
-import pandas as pd
-from pyxlsb import open_workbook
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from .forms import ExcelUploadForm
-from .models import Indicador, Persona
 from django.utils import timezone
-from io import BytesIO
 
-def upload_excel(request):
+import pandas as pd
+from django.utils import timezone
+from django.http import HttpResponse
+from .models import Datos
+
+def cargar_datos_desde_xlsb(request):
     if request.method == 'POST':
-        per_documento = request.POST.get('per_documento')
-        form = ExcelUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            excel_file = request.FILES['excel_file']
+        excel_file = request.FILES.get('excel_file')
+        usuario_id = request.POST.get('per_documento')
 
-            if not hasattr(excel_file, 'read'):
-                return render(request, 'upload.html', {'form': form, 'error': "El archivo subido no es válido."})
+        # Leer el archivo Excel
+        try:
+            df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None)
+            print("Hoja 'RESUMEN' leída correctamente.")
+        except ValueError as e:
+            print(f"Error al leer la hoja: {e}")
+            return HttpResponse("Error al leer la hoja 'RESUMEN'.", status=400)
 
-            try:
-                # Leer el archivo en un flujo de bytes
-                file_stream = BytesIO(excel_file.read())
+        # Imprimir las primeras filas para verificar la estructura
+        print("Primeras filas del DataFrame:")
+        print(df.head(25))
 
-                # Usar pyxlsb para abrir el archivo .xlsb desde el flujo de bytes
-                with open_workbook(file_stream) as wb:
-                    # Imprimir los nombres de las hojas para verificar el índice
-                    sheet_names = [sheet.name for sheet in wb.sheets]
-                    print("Nombres de las hojas:", sheet_names)
+        # Ajustar el DataFrame para usar la fila 18 (índice 17) como encabezado
+        df.columns = df.iloc[17]
+        df = df.drop(index=range(0, 18)).reset_index(drop=True)
 
-                    # Leer la hoja llamada 'RESUMEN'
-                    sheet = wb.get_sheet(1)  # La segunda hoja (índice 1)
+        # Imprimir las primeras filas después de configurar encabezados
+        print("Primeras filas del DataFrame después de configurar encabezados:")
+        print(df.head(25))
 
-                    # Leer todas las filas de la hoja
-                    data = []
-                    for row in sheet.rows():
-                        data.append([cell.v for cell in row])
+        # Encontrar columnas que contienen 'Cupos' y 'Aprendices'
+        cupos_cols = [i for i, header in enumerate(df.columns) if pd.notna(header) and 'Cupos' in str(header)]
+        aprendices_cols = [i for i, header in enumerate(df.columns) if pd.notna(header) and 'Aprendices' in str(header)]
 
-                # Convertir los datos a un DataFrame de pandas
-                df = pd.DataFrame(data[1:], columns=data[0])
-                print("DataFrame leído del archivo Excel:")
-                print(df.head())
-                print("Columnas del DataFrame:")
-                print(df.columns)
+        print(f"Columnas 'Cupos': {cupos_cols}")
+        print(f"Columnas 'Aprendices': {aprendices_cols}")
 
-                # Asegúrate de que per_documento existe en Persona
-                selected_persona = Persona.objects.get(per_documento=per_documento)
+        if not cupos_cols or not aprendices_cols:
+            return HttpResponse("No se encontraron columnas 'Cupos' o 'Aprendices'.", status=400)
 
-                # Procesar las columnas del DataFrame
-                for _, row in df.iterrows():
-                    Indicador.objects.create(
-                        nombre=row.get('Indicador', ''),
-                        pobl_fecha_poblacion=timezone.now(),
-                        indigenas_cupos_meta=row.get(('Indígenas', 'Cupos'), 0),
-                        indigenas_aprendices_meta=row.get(('Indígenas', 'Aprendices'), 0),
-                        inpec_cupos_meta=row.get(('INPEC', 'Cupos'), 0),
-                        inpec_aprendices_meta=row.get(('INPEC', 'Aprendices'), 0),
-                        jovenes_cupos_meta=row.get(('Jóvenes Vulnerables', 'Cupos'), 0),
-                        jovenes_aprendices_meta=row.get(('Jóvenes Vulnerables', 'Aprendices'), 0),
-                        adolescente_cupos_meta=row.get(('Adolescente Conflicto', 'Cupos'), 0),
-                        adolescente_aprendices_meta=row.get(('Adolescente Conflicto', 'Aprendices'), 0),
-                        mujer_cupos_meta=row.get(('Mujer Cabeza de Hogar', 'Cupos'), 0),
-                        mujer_aprendices_meta=row.get(('Mujer Cabeza de Hogar', 'Aprendices'), 0),
-                        indigenas_cupos_ejecucion=row.get(('Indígenas', 'Cupos Ejecución'), 0),
-                        indigenas_aprendices_ejecucion=row.get(('Indígenas', 'Aprendices Ejecución'), 0),
-                        inpec_cupos_ejecucion=row.get(('INPEC', 'Cupos Ejecución'), 0),
-                        inpec_aprendices_ejecucion=row.get(('INPEC', 'Aprendices Ejecución'), 0),
-                        jovenes_cupos_ejecucion=row.get(('Jóvenes Vulnerables', 'Cupos Ejecución'), 0),
-                        jovenes_aprendices_ejecucion=row.get(('Jóvenes Vulnerables', 'Aprendices Ejecución'), 0),
-                        adolescente_cupos_ejecucion=row.get(('Adolescente Conflicto', 'Cupos Ejecución'), 0),
-                        adolescente_aprendices_ejecucion=row.get(('Adolescente Conflicto', 'Aprendices Ejecución'), 0),
-                        mujer_cupos_ejecucion=row.get(('Mujer Cabeza de Hogar', 'Cupos Ejecución'), 0),
-                        mujer_aprendices_ejecucion=row.get(('Mujer Cabeza de Hogar', 'Aprendices Ejecución'), 0),
-                        per_documento=selected_persona
-                    )
+        # Extraer información
+        indicadores = ['Meta 2024', 'Ejecución', '% de Ejecución']
 
-                return HttpResponseRedirect('/success/')
-            except Exception as e:
-                print(f"Error al leer el archivo Excel: {e}")
-                return render(request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'form': form, 'error': str(e)})
-    else:
-        form = ExcelUploadForm()
-    return render(request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'form': form})
+        # Asignar nombres de grupos en el orden en que aparecen
+        grupos = []
+        for idx in range(len(cupos_cols)):
+            grupo = df.iloc[0, cupos_cols[idx]]
+            grupos.append(grupo)
+        
+        print(f"Grupos asignados: {grupos}")
+
+        # Extraer datos y guardar en la base de datos
+        for idx, grupo in enumerate(grupos):
+            for indicador in indicadores:
+                try:
+                    # Filtrar las filas correspondientes a cada indicador
+                    indicator_rows = df[df.iloc[:, 1] == indicador]
+                    if indicator_rows.empty:
+                        print(f"No se encontraron filas para el grupo '{grupo}' y el indicador '{indicador}'.")
+                        continue
+
+                    # Extraer los datos para 'Cupos' y 'Aprendices'
+                    cupos_col = cupos_cols[idx]
+                    aprendices_col = aprendices_cols[idx]
+
+                    for _, row in indicator_rows.iterrows():
+                        if pd.notna(row[cupos_col]):
+                            datos_modelo = Datos(
+                                indicador=indicador,
+                                grupo=grupo,
+                                cupos=row[cupos_col],
+                                aprendices=None,
+                                tipo_dato='Cupos',
+                                fecha_subida=timezone.now(),
+                                usuario_id=usuario_id
+                            )
+                            datos_modelo.save()
+                            print(f"Datos guardados para {indicador} - {grupo} - Cupos: {row[cupos_col]}.")
+
+                        if pd.notna(row[aprendices_col]):
+                            datos_modelo = Datos(
+                                indicador=indicador,
+                                grupo=grupo,
+                                cupos=None,
+                                aprendices=row[aprendices_col],
+                                tipo_dato='Aprendices',
+                                fecha_subida=timezone.now(),
+                                usuario_id=usuario_id
+                            )
+                            datos_modelo.save()
+                            print(f"Datos guardados para {indicador} - {grupo} - Aprendices: {row[aprendices_col]}.")
+
+                except KeyError:
+                    print(f"No se encontraron datos para {indicador} - {grupo}.")
+                except Exception as e:
+                    print(f"Error al guardar datos para {indicador} - {grupo}: {e}")
+
+        return HttpResponse("Datos cargados exitosamente.")
+    return HttpResponse("Método no permitido.", status=405)
+
+
+

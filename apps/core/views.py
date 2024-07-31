@@ -452,24 +452,19 @@ def meta_detalle(request, estd_meta):
     
 
 #filtros para gestion formacion
-
 class metas_formacion_filtros(TemplateView):
     
     model = Metas_formacion
     template_name = 'Formacion_regular/formacion_regular.html'
 
-    
     def get(self, request, *args, **kwargs):
- 
-
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
-        modalidad = request.GET.get('modalidad')       
-        
-        
-        filtros_formacion = {} 
-        
+        modalidad = request.GET.get('modalidad')
+        anio = request.GET.get('ano')
 
+        filtros_formacion = {}
+        
         if fecha_inicio and fecha_fin:
             metas_ids = Meta.objects.filter(
                 met_fecha_inicio__gte=fecha_inicio,
@@ -477,17 +472,15 @@ class metas_formacion_filtros(TemplateView):
             ).values_list('met_id', flat=True)
             filtros_formacion['met_id__in'] = metas_ids
         
-      
-        
         if modalidad:
             filtros_formacion['metd_modalidad'] = modalidad
+
+        if anio:
+            filtros_formacion['met_id__met_año'] = anio
         
         modalidades = Metas_formacion.objects.filter(**filtros_formacion).values_list('metd_modalidad', 'metd_modalidad__modalidad').distinct()
             
-            
         resultado = Metas_formacion.objects.filter(**filtros_formacion).values(
-        
-     
             'metd_modalidad__modalidad',
             'met_formacion_operario',
             'met_formacion_auxiliar',
@@ -506,10 +499,8 @@ class metas_formacion_filtros(TemplateView):
         )
         
         data = {
-            'modalidades' :list(modalidades),
-            'data' :list(resultado)
+            'modalidades': list(modalidades),
+            'data': list(resultado)
         }
         return JsonResponse(data)
-    
-        
-    
+

@@ -260,3 +260,41 @@ class Metas_poblacion_vulnerable(models.Model):
     metpv_total = models.CharField(max_length=100)
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE)
     
+
+class Indicadores(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+
+class Grupo(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+
+class Datos(models.Model):
+    indicadores = models.ForeignKey(Indicadores, on_delete=models.CASCADE)
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    tipo_dato = models.CharField(max_length=50)  # Meta 2024, Ejecución, % de Ejecución
+    cupos = models.IntegerField()
+    aprendices = models.IntegerField()
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.indicadores} - {self.grupo} - {self.tipo_dato}"
+    
+    
+    
+class Datos_vulnerables(models.Model):
+    indicadores = models.ForeignKey(Indicadores, on_delete=models.CASCADE)
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    tipo_dato = models.CharField(max_length=50)  # Meta 2024, Ejecución, % de Ejecución
+    cupos = models.IntegerField()
+    aprendices = models.IntegerField()
+    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.indicadores} - {self.grupo} - {self.tipo_dato} - Cupos: {self.cupos}, Aprendices: {self.aprendices}"
