@@ -3,12 +3,12 @@ from django.shortcuts import render
 from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion
-from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle
-from django.views.generic import TemplateView, CreateView,ListView
+from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad
+from django.views.generic import TemplateView, CreateView, UpdateView
 from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,DeleteView
 from django.db.models import Count,Sum
 from datetime import datetime
 from django.urls import reverse_lazy
@@ -504,3 +504,33 @@ class metas_formacion_filtros(TemplateView):
         }
         return JsonResponse(data)
 
+
+
+
+#CRUD MODALIDAD
+
+def Modalidad_index(request):
+    view_modalidades = Modalidad.objects.all()
+    form_modalidad = Form_modalidad
+    
+    context = {
+         'view_modalidades':view_modalidades,
+         'form_modalidad':form_modalidad,
+    }
+    
+    return render(request, 'Modalidad/modalidad_list.html',context)
+class Modalidad_create(CreateView):
+    model =  Modalidad
+    form_class = Form_modalidad
+    template_name = 'Modalidad/modalidad_index.html'
+    success_url = reverse_lazy('cores:modalidad_index')
+
+class Modalidad_delete(DeleteView):
+    model = Modalidad
+    success_url = reverse_lazy('cores:modalidad_index')
+
+class Modalidad_edit(UpdateView):
+    model = Modalidad
+    from_class = Form_modalidad
+    fields = ['modalidad']
+    success_url = reverse_lazy('cores:modalidad_index')

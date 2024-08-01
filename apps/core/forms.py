@@ -114,7 +114,13 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
         }
         
         
-        
+class Form_modalidad(forms.ModelForm):
+    
+    class Meta:
+        model = Modalidad
+        fields = [
+            'modalidad'
+        ]
     
         
     

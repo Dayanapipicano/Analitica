@@ -7,7 +7,6 @@ urlpatterns = [
  
     path('cobertura/index', core_views.cobertura, name="cobertura"),
     path('cobertura_mapa/', core_views.Cobertura_mapa.as_view(), name='cobertura_mapa'),
-    path('modalidad/index/', core_views.Modalidad, name='modalidad'),
     path('programa/index', core_views.Programa_index, name="programa_index"),
     path('programa/', core_views.Programa.as_view(), name='programa'),
     path('ficha/<int:identificador_ficha>/', core_views.detalle_ficha, name='detalle_ficha'),
@@ -24,5 +23,12 @@ urlpatterns = [
     path('meta_data/<int:id_estrategia>/', core_views.meta_data, name='meta_data'),
     path('meta_detalle/<int:estd_meta>/', core_views.meta_detalle, name='meta_detalle'),
     path('filtrar_datos_y_modalidades/',core_views.metas_formacion_filtros.as_view(), name='filtrar_datos_y_modalidades'),
+    
+    #MODALIDAD
+    path('modalidad/index/', core_views.Modalidad_index, name='modalidad_index'),
+    path('modalidad/create/', core_views.Modalidad_create.as_view(), name='modalidad_create'),
+    path('modalidad/delete/<int:pk>', core_views.Modalidad_delete.as_view(), name='modalidad_delete'),
+    path('modalidad/edit/<int:pk>', core_views.Modalidad_edit.as_view(), name='modalidad_edit'),
+    
 ]   
 
