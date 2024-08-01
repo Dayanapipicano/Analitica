@@ -74,7 +74,8 @@ def grafica(request):
 
 
 def administrador(request):
-    return render(request, 'administrador.html')
+    personas = Persona.objects.all()
+    return render(request, 'administrador.html', {'personas':personas})
 
 
 
