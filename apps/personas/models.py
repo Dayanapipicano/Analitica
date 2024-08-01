@@ -276,6 +276,14 @@ class Documento_vulnerables_poblaciones(models.Model):
     grupos_poblaciones = models.CharField(max_length=150)
     meta_2024_poblaciones = models.CharField(max_length=150)
     ejecucion_poblaciones = models.CharField(max_length=150)
-    porcentaje_ejecucion_poblaciones = models.DecimalField(max_digits=50, decimal_places=2)
+    porcentaje_ejecucion_poblaciones = models.DecimalField(max_digits=50, decimal_places=15)
     per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
     fecha_de_carga_poblaciones = models.DateTimeField(auto_now_add=True)
+    
+class Formacion_profesional_integral(models.Model):
+    nivel_ejecucion = models.CharField(max_length=150)
+    buena = models.DecimalField(max_digits=50, decimal_places=15)
+    vulnerable = models.DecimalField(max_digits=50, decimal_places=15)
+    baja = models.DecimalField(max_digits=50, decimal_places=15)
+    sobreejecucion = models.CharField(max_length=150)
+    

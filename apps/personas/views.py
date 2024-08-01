@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.personas.forms import PersonaForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from apps.personas.models import Persona,Documento_vulnerables_tipo_poblaciones
+from apps.personas.models import Persona,Documento_vulnerables_tipo_poblaciones,Documento_vulnerables_poblaciones,Formacion_profesional_integral
 from apps.personas.forms import EditProfileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -240,19 +240,25 @@ def Subir_poblacion_vulnerable(request):
         per_documento = request.POST.get('per_documento')
         selected_persona = Persona.objects.get(per_documento=per_documento)
         
-        df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None)
+        df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None )
         
-        
+       
    
    
-        #TABLA TIPO DE POBLACIONES
+        #TABLA TIPO DE POBLACIONES Y POBLACIONES
         #renombrar cabeceras
         df.iloc[18,1] = 'Grupos'
         df.iloc[21,1] = 'Porcentaje_ejecicion'
+        df.iloc[7,1] = 'Indicadores_poblaciones'
         df.iloc[8,1] = 'Grupos_poblaciones'
-        df.iloc[11,1] ='porcentaje_de_poblacion'
+        df.iloc[9,1] = 'Meta_2024_poblaciones'
+        df.iloc[10,1] = 'Ejecucion_poblaciones'
+        df.iloc[11,1] ='porcentaje_de_poblaciones'
+     
+  
+        # Imprimir la fila para verificar el contenido
         
-   
+
         #rellenar grupos de nan a el valor anterior para poblaciones
         fila_remplazar_poblaciones = 7
         df.loc[fila_remplazar_poblaciones] = df.loc[fila_remplazar_poblaciones].fillna(method='ffill')  
@@ -261,17 +267,33 @@ def Subir_poblacion_vulnerable(request):
         fila_remplazar = 17
         df.loc[fila_remplazar] = df.loc[fila_remplazar].fillna(method='ffill')  
         
+        #rellenar fila con valor anterior para profesion integral 
+        fila_remplazar_profesion_nivel = 26
+        fila_remplazar_profesion_sobreejecucion = 30
         
-        print(df)
+        df.loc[fila_remplazar_profesion_nivel] = df.loc[fila_remplazar_profesion_nivel].fillna(method='ffill')
+        df.loc[fila_remplazar_profesion_sobreejecucion] = df.loc[fila_remplazar_profesion_sobreejecucion].fillna(method='ffill')
         
+        
+        #datos para formacion profesional integral
+        
+        datos_profesion_integral = df.iloc[26:31,2]
+        
+        encabezado_profesion_integral = [header.strip() for header in datos_profesion_integral]
+        
+        datos_profesion_integral = df.iloc[26:31,3:5].values
+        reoranizado_profesion_integral = pd.DataFrame(datos_profesion_integral.T, columns=encabezado_profesion_integral)
+        
+        print(reoranizado_profesion_integral)
         #datos para poblacion
-        datos_poblaciones_encabezado = df.iloc[7:11,2]
+        datos_poblaciones_encabezado = df.iloc[7:12,1]
         encabezado_poblaciones =[header.strip() for header in datos_poblaciones_encabezado]
-        print(encabezado_poblaciones)
-        datos_poblaciones = df.iloc[7:11,2:].values
+        
+        datos_poblaciones = df.iloc[7:12,2:12].values
         reoranizado_poblaciones =  pd.DataFrame(datos_poblaciones.T, columns=encabezado_poblaciones)
         
-        print(reoranizado_poblaciones)
+        
+        
         
         #datos tipo poblaciones
         datos = df.iloc[17:22,1]
@@ -279,7 +301,7 @@ def Subir_poblacion_vulnerable(request):
      
         datos_documento = df.iloc[17:22,2:].values
         reoranizado = pd.DataFrame(datos_documento.T, columns=encabezado)
-    
+        
         
   
         for _, row in reoranizado.iterrows():
@@ -293,8 +315,32 @@ def Subir_poblacion_vulnerable(request):
                 per_documento=selected_persona
            )
             datos_vulnerables.save()
+            
+        for _, row in reoranizado_poblaciones.iterrows():
+            datos_poblaciones = Documento_vulnerables_poblaciones(
+                indicadores_poblaciones=row['Indicadores_poblaciones'],
+                grupos_poblaciones = row['Grupos_poblaciones'],
+                meta_2024_poblaciones = row['Meta_2024_poblaciones'],
+                ejecucion_poblaciones = row['Ejecucion_poblaciones'],
+                porcentaje_ejecucion_poblaciones = row['porcentaje_de_poblaciones'],
+                per_documento = selected_persona
+            )
+            
+            datos_poblaciones.save()
+            
+        for _, row in reoranizado_profesion_integral.iterrows():
+            datos_profesion_integral_save = Formacion_profesional_integral(
+                nivel_ejecucion = row['Nivel de Ejecución'],
+                buena = row['Buena'],
+                vulnerable = row['Vulnerable'],
+                baja = row['Baja'],
+                sobreejecucion = row['Sobreejecución'],
+                
+                
+            )
+            datos_profesion_integral_save.save()
            
+           
+        
         return redirect('personas:poblacion_vulnerable')
     
-
-
