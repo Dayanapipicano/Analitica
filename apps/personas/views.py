@@ -154,7 +154,7 @@ def subir_P04(request):
         if archivo and archivo.name.endswith('.xlsx'):
             try:
                 selected_persona = Persona.objects.get(per_documento=per_documento)
-                df = pd.read_excel(archivo, header=4)
+                df = pd.read_excel(archivo, header=4, sheet_name='Reporte')
                 df['FECHA_INICIO_FICHA'] = pd.to_datetime(df['FECHA_INICIO_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                 df['FECHA_TERMINACION_FICHA'] = pd.to_datetime(df['FECHA_TERMINACION_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                
