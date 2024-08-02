@@ -191,32 +191,40 @@
               });
 
               document.addEventListener('DOMContentLoaded', function() {
+                let modalidadesDisponibles = [];
+            
                 function actualizarModalidades() {
                     const fechaInicio = document.getElementById('fecha_inicio').value;
                     const fechaFin = document.getElementById('fecha_fin').value;
                     const modalidadSeleccionada = document.getElementById('modalidad').value;
-                
-                    let url = `/filtrar_datos_y_modalidades/?fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}&modalidad=${modalidadSeleccionada}`;
-                
+            
+                    if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+                        alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
+                        return;
+                    }
+            
+                    let url = `/filtrar_datos_y_modalidades/?`;
+                    
+                    if (fechaInicio) {
+                        url += `fecha_inicio=${fechaInicio}&`;
+                    }
+                    if (fechaFin) {
+                        url += `fecha_fin=${fechaFin}&`;
+                    }
+                    if (modalidadSeleccionada) {
+                        url += `modalidad=${modalidadSeleccionada}&`;
+                    }
+            
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
-                            // Actualizar modalidades
-                            const modalidadSelect = document.getElementById('modalidad');
-                            modalidadSelect.innerHTML = '<option value="">--Selecciona modalidad--</option>';
-                            data.modalidades.forEach(modalidad => {
-                                const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
-                                
-                                const option = document.createElement('option');
-                                option.value = id;  // ID de la modalidad
-                                option.textContent = nombre;  // Nombre de la modalidad
-                                modalidadSelect.appendChild(option);
-                            });
-                
+                            // Guardar modalidades disponibles
+                            modalidadesDisponibles = data.modalidades;
+            
                             // Actualizar resultados en la tabla
                             const resultadosTableBody = document.getElementById('resultados').querySelector('tbody');
                             resultadosTableBody.innerHTML = ''; // Limpiar resultados anteriores
-                            
+            
                             data.data.forEach(dato => {
                                 const row = document.createElement('tr');
                                 row.innerHTML = `
@@ -235,22 +243,61 @@
                                     <td>${dato.met_id__met_fecha_inicio}</td>
                                     <td>${dato.met_id__met_fecha_fin}</td>
                                     <td>${dato.met_id__met_año}</td>
-                                   
                                     <!-- Agrega más celdas según tus necesidades -->
                                 `;
                                 resultadosTableBody.appendChild(row);
                             });
+            
+                            // Actualizar el select de modalidades solo si no hay filtros de fecha
+                            if (!fechaInicio && !fechaFin) {
+                                actualizarSelectModalidades();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
                         });
                 }
             
-                document.getElementById('fecha_inicio').addEventListener('change', actualizarModalidades);
-                document.getElementById('fecha_fin').addEventListener('change', actualizarModalidades);
+                function actualizarSelectModalidades() {
+                    const modalidadSelect = document.getElementById('modalidad');
+                    const modalidadSeleccionada = modalidadSelect.value;
+                    
+                    modalidadSelect.innerHTML = '<option value="">--Selecciona modalidad--</option>';
+                    modalidadesDisponibles.forEach(modalidad => {
+                        const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
+                        
+                        const option = document.createElement('option');
+                        option.value = id;  // ID de la modalidad
+                        option.textContent = nombre;  // Nombre de la modalidad
+                        if (id === modalidadSeleccionada) {
+                            option.selected = true;
+                        }
+                        modalidadSelect.appendChild(option);
+                    });
+                }
+            
+                // Llamada inicial para mostrar todos los datos y modalidades al cargar la página
+                actualizarModalidades();
+            
+                // Event listeners para actualizar los datos según los filtros
+                document.getElementById('fecha_inicio').addEventListener('change', () => {
+                    actualizarModalidades();
+                });
+                document.getElementById('fecha_fin').addEventListener('change', () => {
+                    actualizarModalidades();
+                });
                 document.getElementById('modalidad').addEventListener('change', actualizarModalidades);
             });
             
             
 
-          
+            function Ano(){
+                var n = (new Date()).getFullYear()
+                var select = document.getElementById("ano");
+                for(var i = n; i>=1900; i--)select.options.add(new Option(i,i));
+            
+            };
+            window.onload = Ano;
             
               </script>
 
