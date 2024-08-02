@@ -453,6 +453,9 @@ def meta_detalle(request, estd_meta):
     
 
 #filtros para gestion formacion
+
+
+
 class metas_formacion_filtros(TemplateView):
     model = Metas_formacion
     template_name = 'Formacion_regular/formacion_regular.html'
@@ -461,27 +464,37 @@ class metas_formacion_filtros(TemplateView):
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
         modalidad = request.GET.get('modalidad')
-        anio = request.GET.get('ano')
+        ano = request.GET.get('ano')
 
         filtros_formacion = {}
-        
+
         if fecha_inicio:
-            filtros_formacion['met_id__met_fecha_inicio__gte'] = fecha_inicio
+            try:
+                fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+                filtros_formacion['met_id__met_fecha_fin__gte'] = fecha_inicio
+            except ValueError:
+                return JsonResponse({'error': 'Fecha de inicio inválida'}, status=400)
+
         if fecha_fin:
-            filtros_formacion['met_id__met_fecha_fin__lte'] = fecha_fin
-        
+            try:
+                fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+                filtros_formacion['met_id__met_fecha_inicio__lte'] = fecha_fin
+            except ValueError:
+                return JsonResponse({'error': 'Fecha de fin inválida'}, status=400)
+
         if modalidad:
             filtros_formacion['metd_modalidad'] = modalidad
 
-        if anio:
-            filtros_formacion['met_id__met_año'] = anio
-        
+        if ano:
+            filtros_formacion['met_id__met_año'] = ano
+
         if fecha_inicio or fecha_fin:
             modalidades = Metas_formacion.objects.filter(**filtros_formacion).values_list('metd_modalidad', 'metd_modalidad__modalidad').distinct()
         else:
-            modalidades = Modalidad.objects.all().values_list('id', 'modalidad')
-        
-        resultado = Metas_formacion.objects.filter(**filtros_formacion).values(
+            modalidades = Modalidad.objects.all().values_list('id', 'modalidad')        
+
+        # Filtrar datos según los filtros aplicados
+        resultados = Metas_formacion.objects.filter(**filtros_formacion).values(
             'metd_modalidad__modalidad',
             'met_formacion_operario',
             'met_formacion_auxiliar',
@@ -498,10 +511,10 @@ class metas_formacion_filtros(TemplateView):
             'met_id__met_fecha_fin',
             'met_id__met_año',
         )
-        
+
         data = {
             'modalidades': list(modalidades),
-            'data': list(resultado)
+            'data': list(resultados)
         }
         return JsonResponse(data)
 

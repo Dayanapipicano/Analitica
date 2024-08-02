@@ -189,22 +189,24 @@
                       });
                   });
               });
-
               document.addEventListener('DOMContentLoaded', function() {
                 let modalidadesDisponibles = [];
+                let modalidadSeleccionada = '';
+                let anoSeleccionado = '';
             
                 function actualizarModalidades() {
                     const fechaInicio = document.getElementById('fecha_inicio').value;
                     const fechaFin = document.getElementById('fecha_fin').value;
-                    const modalidadSeleccionada = document.getElementById('modalidad').value;
+                    modalidadSeleccionada = document.getElementById('modalidad').value;
+                    anoSeleccionado = document.getElementById('ano').value;
             
-                    if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+                    if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
                         alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
                         return;
                     }
             
                     let url = `/filtrar_datos_y_modalidades/?`;
-                    
+            
                     if (fechaInicio) {
                         url += `fecha_inicio=${fechaInicio}&`;
                     }
@@ -214,10 +216,23 @@
                     if (modalidadSeleccionada) {
                         url += `modalidad=${modalidadSeleccionada}&`;
                     }
+                    if (anoSeleccionado) {
+                        url += `ano=${anoSeleccionado}&`;
+                    }
             
                     fetch(url)
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
                         .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                                return;
+                            }
+            
                             // Guardar modalidades disponibles
                             modalidadesDisponibles = data.modalidades;
             
@@ -243,15 +258,12 @@
                                     <td>${dato.met_id__met_fecha_inicio}</td>
                                     <td>${dato.met_id__met_fecha_fin}</td>
                                     <td>${dato.met_id__met_año}</td>
-                                    <!-- Agrega más celdas según tus necesidades -->
                                 `;
                                 resultadosTableBody.appendChild(row);
                             });
             
-                            // Actualizar el select de modalidades solo si no hay filtros de fecha
-                            if (!fechaInicio && !fechaFin) {
-                                actualizarSelectModalidades();
-                            }
+                            // Actualizar el select de modalidades
+                            actualizarSelectModalidades();
                         })
                         .catch(error => {
                             console.error('Error fetching data:', error);
@@ -261,11 +273,12 @@
                 function actualizarSelectModalidades() {
                     const modalidadSelect = document.getElementById('modalidad');
                     const modalidadSeleccionada = modalidadSelect.value;
-                    
+            
                     modalidadSelect.innerHTML = '<option value="">--Selecciona modalidad--</option>';
+            
                     modalidadesDisponibles.forEach(modalidad => {
                         const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
-                        
+            
                         const option = document.createElement('option');
                         option.value = id;  // ID de la modalidad
                         option.textContent = nombre;  // Nombre de la modalidad
@@ -276,8 +289,17 @@
                     });
                 }
             
+                function cargarAnios() {
+                    const anoSelect = document.getElementById('ano');
+                    const currentYear = new Date().getFullYear();
+                    for (let i = currentYear; i >= 1900; i--) {
+                        anoSelect.options.add(new Option(i, i));
+                    }
+                }
+            
                 // Llamada inicial para mostrar todos los datos y modalidades al cargar la página
                 actualizarModalidades();
+                cargarAnios();
             
                 // Event listeners para actualizar los datos según los filtros
                 document.getElementById('fecha_inicio').addEventListener('change', () => {
@@ -286,7 +308,12 @@
                 document.getElementById('fecha_fin').addEventListener('change', () => {
                     actualizarModalidades();
                 });
-                document.getElementById('modalidad').addEventListener('change', actualizarModalidades);
+                document.getElementById('modalidad').addEventListener('change', () => {
+                    actualizarModalidades();
+                });
+                document.getElementById('ano').addEventListener('change', () => {
+                    actualizarModalidades();
+                });
             });
             
             
