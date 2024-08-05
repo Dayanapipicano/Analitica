@@ -18,6 +18,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
+                        <label for="selectAnio">Selecciona un año:</label>
                         <select name="" id="ano"></select>
                     </div>
                 </div>
@@ -25,7 +26,7 @@
                     <div class="form-group row">
                         <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
+                            <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio">
                         </div>
                     </div>
                 </div>
@@ -33,7 +34,7 @@
                     <div class="form-group row">
                         <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                            <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin">
                         </div>
                     </div>
                 </div>
@@ -42,23 +43,12 @@
             <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <select class="form-control form-control-sm custom-select" id="modalidad" onchange="aplicarFiltros()">
-                            <option value="" disabled {% if not selected_modalidad %}selected{% endif %}>Selecciona modalidad</option>
-                            {% for choice in modalidad %}
-                                <option value="{{ choice.0 }}" {% if choice.0 == selected_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col-md-3 mb-3">
-                    <div class="form-group row">
-                        <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="filtros_desercion()" required>
-                            <option value="" disabled {% if not select_municipio %}selected{% endif %}>Selecciona municipio</option>
-                            {% for choice in municipio %}
-                                <option value="{{ choice.0 }}" {% if choice.0 == select_municipio %}selected{% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                        </select>
+                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control form-control-sm custom-select" id="modalidad">
+                                <!-- Opciones se llenarán dinámicamente -->
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -93,7 +83,7 @@
         <div class="container">
             
             <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-striped table-hover">
+                <table id="resultados" class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col" style="min-width: 150px;">Nombre</th>
@@ -114,36 +104,11 @@
 
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for meta_estrategias in  meta_formcion%}
-                        <tr>
-                            <td>{{meta_estrategias.est_id}}</td>
-                            <td>{{meta_estrategias.estd_modalidad}}</td>
-                            <td>{{meta_estrategias.est_id.est_total_meta}}</td>
-                            
-                            <td>{{meta_estrategias.estd_auxiliar_meta}}</td>
-                            <td>{{meta_estrategias.estd_bilinguismo}}</td>
-                            <td>{{meta_estrategias.estd_sin_bilinguismo}}</td>
-                            <td>{{meta_estrategias.estd_profundizacion_tecnica_meta}}</td>
-                            <td>{{meta_estrategias.estd_curso_especial}}</td>
-                            <td>{{meta_estrategias.estd_operario_meta}}</td>
-                            <td>{{meta_estrategias.estd_evento}}</td>
-                            <td>{{meta_estrategias.estd_tecnologo}}</td> 
-                            <td>{{meta_estrategias.estd_tecnico_meta}}</td> 
-                            <td>{{meta_estrategias.estd_meta}}</td> 
-                         
-                    
-                         
-                            <td><button type="button" data-identificador="{{ meta_estrategias.estd_meta}}" data-toggle="modal"   data-target="#viewModal" class="btn-icon "><img src="{% static 'bootstrap/img/visualizar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;"></button></td>
-                           
-
-                            
-                            
+                    <tbody >
                         
-                        </tr>
-                        
-                        {%endfor%}
+            
                     </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -276,6 +241,179 @@
     </div>
     </div>
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      let modalidadesDisponibles = [];
+      let modalidadSeleccionada = '';
+      let anoSeleccionado = '';
+  
+      function actualizarModalidades() {
+          const fechaInicio = document.getElementById('fecha_inicio').value;
+          const fechaFin = document.getElementById('fecha_fin').value;
+          modalidadSeleccionada = document.getElementById('modalidad').value;
+          anoSeleccionado = document.getElementById('ano').value;
+  
+          if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
+              alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
+              return;
+          }
+  
+          let url = `/filtrar_estrategias_institucionales/?`;
+  
+          if (fechaInicio) {
+              url += `fecha_inicio=${fechaInicio}&`;
+          }
+          if (fechaFin) {
+              url += `fecha_fin=${fechaFin}&`;
+          }
+          if (modalidadSeleccionada) {
+              url += `modalidad=${modalidadSeleccionada}&`;
+          }
+          if (anoSeleccionado) {
+              url += `ano=${anoSeleccionado}&`;
+          }
+  
+          fetch(url)
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  if (data.error) {
+                      alert(data.error);
+                      return;
+                  }
+  
+                  // Guardar modalidades disponibles
+                  modalidadesDisponibles = data.modalidades;
+  
+                  // Actualizar resultados en la tabla
+                  const resultadosTableBody = document.getElementById('resultados').querySelector('tbody');
+                  resultadosTableBody.innerHTML = ''; // Limpiar resultados anteriores
+  
+                  data.data.forEach(dato => {
+                    console.log(data.data)
+
+
+                      const row = document.createElement('tr');
+                      row.innerHTML = `
+                          <td>${dato.est_id__est_nombre}</td>
+                          <td>${dato.estd_modalidad}</td>
+                          <td>${dato.est_id__est_total_meta}</td>
+                          <td>${dato.estd_auxiliar_meta}</td>
+                          <td>${dato.estd_bilinguismo}</td>
+                          <td>${dato.estd_sin_bilinguismo}</td>
+                          <td>${dato.estd_profundizacion_tecnica_meta}</td>
+                          <td>${dato.estd_curso_especial}</td>
+                          <td>${dato.estd_operario_meta}</td>
+                          <td>${dato.estd_evento}</td>
+                          <td>${dato.estd_tecnologo}</td>
+                          <td>${dato.estd_tecnico_meta}</td>
+                          <td>
+                            <button type="button" 
+                                    onclick="openModal(${dato.estd_meta})" 
+                                    data-toggle="modal" 
+                                    data-target="#viewModal" 
+                                    class="btn-icon">
+                                <img src="{% static 'bootstrap/img/visualizar.png' %}" 
+                                     alt="Protection Icon" 
+                                     style="width: 20px; height: 20px;">
+                            </button>
+                        </td>                           
+                
+                      `;
+                      resultadosTableBody.appendChild(row);
+                     
+                  });
+                  
+
+                
+                 
+  
+                  // Actualizar el select de modalidades
+                  actualizarSelectModalidades();
+              })
+              .catch(error => {
+                  console.error('Error fetching data:', error);
+              });
+      }
+  
+      function actualizarSelectModalidades() {
+          const modalidadSelect = document.getElementById('modalidad');
+          const modalidadSeleccionada = modalidadSelect.value;
+  
+          modalidadSelect.innerHTML = '<option value="">--Selecciona modalidad--</option>';
+  
+          modalidadesDisponibles.forEach(modalidad => {
+              const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
+  
+              const option = document.createElement('option');
+              option.value = id;  // ID de la modalidad
+              option.textContent = nombre;  // Nombre de la modalidad
+              if (id === modalidadSeleccionada) {
+                  option.selected = true;
+              }
+              modalidadSelect.appendChild(option);
+          });
+      }
+  
+      function cargarAnios() {
+          const anoSelect = document.getElementById('ano');
+          const currentYear = new Date().getFullYear();
+          for (let i = currentYear; i >= 1900; i--) {
+              anoSelect.options.add(new Option(i, i));
+          }
+      }
+  
+      // Llamada inicial para mostrar todos los datos y modalidades al cargar la página
+      actualizarModalidades();
+      cargarAnios();
+  
+      // Event listeners para actualizar los datos según los filtros
+      document.getElementById('fecha_inicio').addEventListener('change', () => {
+          actualizarModalidades();
+      });
+      document.getElementById('fecha_fin').addEventListener('change', () => {
+          actualizarModalidades();
+      });
+      document.getElementById('modalidad').addEventListener('change', () => {
+          actualizarModalidades();
+      });
+      document.getElementById('ano').addEventListener('change', () => {
+          actualizarModalidades();
+      });
+  });
+
+
+  
+  //detalle de metas para cada registro de estrategias detalle
+  function openModal(estd_meta){
+      fetch(`/meta_detalle/${estd_meta}/`)
+      .then(response => response.json())
+  
+      .then(data =>{
+          console.log(data)
+          document.getElementById('field1').textContent = data.met_codigo
+          document.getElementById('field2').textContent = data.met_centro_formacion
+          document.getElementById('field3').textContent = data.met_fecha_inicio
+          document.getElementById('field4').textContent = data.met_fecha_fin
+          document.getElementById('field5').textContent = data.met_año
+  
+      })
+  
+  }
+  
+  
+  
+
+
+
+    
+</script>
 <script src="{% static 'bootstrap/js/estrategias_institucionales.js'%}"></script>
 
 {% endblock %}

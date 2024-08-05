@@ -446,7 +446,7 @@ def meta_detalle(request, estd_meta):
             'met_año' : meta.met_año,
             
         }
-      
+        print(data)
         return JsonResponse(data)
     except Meta.DoesNotExist:
         return JsonResponse({'Error':'Meta not found'}, status=404)
@@ -518,7 +518,80 @@ class metas_formacion_filtros(TemplateView):
         }
         return JsonResponse(data)
 
+class estrategias_institucionales_filtros(TemplateView):
+    model = Estrategia_detalle
+    template_name = 'Estrategias_institucionales/estrategias_institucionales.html'
 
+    def get(self, request, *args, **kwargs):
+        fecha_inicio = request.GET.get('fecha_inicio')
+        fecha_fin = request.GET.get('fecha_fin')
+        modalidad = request.GET.get('modalidad')
+        ano = request.GET.get('ano')
+        
+
+        estrategia_detalle_filtro = {}
+
+      
+
+        if fecha_inicio:
+            try:
+                fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+                id_meta_inicio = Meta.objects.filter(met_fecha_inicio__gte=fecha_inicio).values_list('met_id',flat=True)
+                estrategia_detalle_filtro['estd_meta__in'] = id_meta_inicio
+                
+            except ValueError:
+                return JsonResponse({'error': 'Fecha de inicio inválida'}, status=400)
+
+        if fecha_fin:
+            try:
+                fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+                id_meta_fin = Meta.filter(met_fecha_fin=fecha_fin).values_list('met_id',flat=True)
+                estrategia_detalle_filtro['estd_meta__in'] = id_meta_fin
+               
+            except ValueError:
+                return JsonResponse({'error': 'Fecha de fin inválida'}, status=400)
+
+
+
+
+        if modalidad:
+            estrategia_detalle_filtro['metd_modalidad'] = modalidad
+
+        if ano:
+            estrategia_detalle_filtro['met_id__met_año'] = ano
+
+        if fecha_inicio or fecha_fin:
+            modalidades = Metas_formacion.objects.filter(**estrategia_detalle_filtro).values_list('metd_modalidad', 'metd_modalidad__modalidad').distinct()
+        else:
+            modalidades = Modalidad.objects.all().values_list('id', 'modalidad')        
+
+        # Filtrar datos según los filtros aplicados
+        resultados = Estrategia_detalle.objects.filter(**estrategia_detalle_filtro).values(
+            'estd_id',
+            'estd_modalidad',
+            'est_id__est_nombre',
+            'estd_operario_meta',
+            'estd_auxiliar_meta',
+            'estd_tecnico_meta',
+            'estd_profundizacion_tecnica_meta',
+            'estd_tecnologo',
+            'estd_tecnico_meta',
+            'estd_evento',
+            'estd_curso_especial',
+            'estd_bilinguismo',
+            'estd_sin_bilinguismo',
+            'est_id__est_total_meta',
+            'estd_meta',
+        )
+        
+       
+        
+
+        data = {
+            'modalidades': list(modalidades),
+            'data': list(resultados)
+        }
+        return JsonResponse(data)
 #CRUD MODALIDAD
 
 def Modalidad_index(request):

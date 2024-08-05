@@ -148,28 +148,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-//detalle de metas para cada registro de estrategias detalle
-document.addEventListener('DOMContentLoaded', function () {
-    const boton = document.querySelectorAll('[data-toggle="modal"');
-    boton.forEach(boton =>{
-        boton.addEventListener("click", () => {
-            const estd_meta = boton.getAttribute('data-identificador');
-            console.log('gtondsf', estd_meta)
-            fetch(`/meta_detalle/${estd_meta}/`)
-            .then(response => response.json())
-        
-            .then(data =>{
-                console.log(data)
-                document.getElementById('field1').textContent = data.met_codigo
-                document.getElementById('field2').textContent = data.met_centro_formacion
-                document.getElementById('field3').textContent = data.met_fecha_inicio
-                document.getElementById('field4').textContent = data.met_fecha_fin
-                document.getElementById('field5').textContent = data.met_año
-
-            })
-        })
-
-    })
-    
-})
 
