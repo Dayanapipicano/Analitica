@@ -93,11 +93,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     modalidadField.addEventListener('change', function () {
         const id_estd_modalidad = this.value;
+        console.log(id_estd_modalidad)
+        
+        console.log('asfsd',this.value = id_estd_modalidad)
+     
 
         fetch(`/get_estrategia_data/${id_estd_modalidad}/`)
             .then(response => response.json())
             .then(data => {
-                console.log(data); 
+             
                 estrategiaField.innerHTML = '<option value"">selecionar</option>'
 
             
@@ -139,10 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             }
-            
-      
-            
-
         })
     })
 });

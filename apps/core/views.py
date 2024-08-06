@@ -386,21 +386,45 @@ class Meta_estrategia_detalle(CreateView):
     
     #recibe los datos seleccionados
     def post(self, request, *args, **kwargs):
+        
+        
+        
         form = self.get_form()
+        print('Contenido del POST:', request.POST)
+        
+        
 
         est_id = request.POST.get('est_id')
         estd_meta = request.POST.get('estd_meta')
+        modalidad_id = request.POST.get('estd_modalidad')
+        
         meta_id = int(estd_meta)
+        modalidad_id = int(modalidad_id)
+        
+
+        
+       
         form.fields['est_id'].queryset = Estrategia.objects.filter(est_id=est_id)
         form.fields['estd_meta'].initial = meta_id 
-    
+        form.fields['estd_modalidad'].initial = modalidad_id 
+       
+        if request.method == 'POST':
+            form = self.form_class(request.POST)
+            
+            if form.is_valid():
+               instance = form.save(commit=False)
+       
+               instance.save()
+               print('llego')
+               return self.form_valid(form)
+            else:
+               print('errr', form.errors)
+               return self.form_invalid(form)
         
-        form.data =  request.POST
 
-        if form.is_valid():
-  
-            return self.form_valid(form)
-     
+ 
+
+   
      
 
      
@@ -526,7 +550,8 @@ class estrategias_institucionales_filtros(TemplateView):
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
         modalidad = request.GET.get('modalidad')
-        ano = request.GET.get('ano')
+        print('asfasfasfas',modalidad)
+        año = request.GET.get('ano')
         
 
         estrategia_detalle_filtro = {}
@@ -555,10 +580,11 @@ class estrategias_institucionales_filtros(TemplateView):
 
 
         if modalidad:
-            estrategia_detalle_filtro['metd_modalidad'] = modalidad
+            estrategia_detalle_filtro['estd_modalidad'] = modalidad
 
-        if ano:
-            estrategia_detalle_filtro['met_id__met_año'] = ano
+        if año:
+            id_meta_año = Meta.objects.filter(met_año=año).values_list('met_id',flat=True)
+            estrategia_detalle_filtro['estd_meta__in'] = id_meta_año
 
         if fecha_inicio or fecha_fin:
             modalidades = Metas_formacion.objects.filter(**estrategia_detalle_filtro).values_list('metd_modalidad', 'metd_modalidad__modalidad').distinct()

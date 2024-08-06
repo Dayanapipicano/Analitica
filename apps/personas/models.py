@@ -219,7 +219,7 @@ class Estrategia(models.Model):
 
 class Estrategia_detalle(models.Model):
     estd_id = models.AutoField(primary_key=True)
-    estd_modalidad = models.CharField(max_length=150)
+    estd_modalidad = models.IntegerField()
     estd_operario_meta = models.CharField(max_length=150)
     estd_auxiliar_meta = models.CharField(max_length=150)
     estd_tecnico_meta = models.CharField(max_length=150)
