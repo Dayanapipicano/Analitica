@@ -19,7 +19,7 @@
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <label for="selectAnio">Selecciona un año:</label>
-                        <select name="" id="ano"></select>
+                        <select name="año" id="año"></select>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -43,7 +43,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
+                        <label for="modalidad" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="modalidad">
                                 <!-- Opciones se llenarán dinámicamente -->
@@ -251,9 +251,16 @@
   
       function actualizarModalidades() {
           const fechaInicio = document.getElementById('fecha_inicio').value;
+          if(fechaInicio){
+            limpiarAño();
+          }
+       
           const fechaFin = document.getElementById('fecha_fin').value;
           modalidadSeleccionada = document.getElementById('modalidad').value;
-          anoSeleccionado = document.getElementById('ano').value;
+          anoSeleccionado = document.getElementById('año').value;
+          console.log('año', anoSeleccionado)
+
+        
   
           if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
               alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
@@ -272,7 +279,7 @@
               url += `modalidad=${modalidadSeleccionada}&`;
           }
           if (anoSeleccionado) {
-              url += `ano=${anoSeleccionado}&`;
+              url += `año=${anoSeleccionado}&`;
           }
   
           fetch(url)
@@ -296,7 +303,7 @@
                   resultadosTableBody.innerHTML = ''; // Limpiar resultados anteriores
   
                   data.data.forEach(dato => {
-                    console.log(data.data)
+                
 
 
                       const row = document.createElement('tr');
@@ -352,26 +359,44 @@
               const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
   
               const option = document.createElement('option');
-              option.value = id;  // ID de la modalidad
+              option.value = nombre;  // ID de la modalidad
               option.textContent = nombre;  // Nombre de la modalidad
-              if (id === modalidadSeleccionada) {
+          
+              if (nombre === modalidadSeleccionada) {
                   option.selected = true;
               }
+  
+
+      
               modalidadSelect.appendChild(option);
           });
       }
   
       function cargarAnios() {
-          const anoSelect = document.getElementById('ano');
+          const añoSelect = document.getElementById('año');
           const currentYear = new Date().getFullYear();
+          añoSelect.innerHTML = '',
+
+          añoSelect.options.add(new Option('--Selecciona año--', ''));
+
+
           for (let i = currentYear; i >= 1900; i--) {
-              anoSelect.options.add(new Option(i, i));
+            añoSelect.options.add(new Option(i, i));
           }
+
+          console.log('dsfsdgs',añoSelect.value)
+      }
+
+      function limpiarAño(){
+        const añoSelect = document.getElementById('año');
+        añoSelect.innerHTML = '';
+        añoSelect.options.add(new Option('--Selecciona año--',''));
       }
   
       // Llamada inicial para mostrar todos los datos y modalidades al cargar la página
       actualizarModalidades();
       cargarAnios();
+      
   
       // Event listeners para actualizar los datos según los filtros
       document.getElementById('fecha_inicio').addEventListener('change', () => {
@@ -383,7 +408,7 @@
       document.getElementById('modalidad').addEventListener('change', () => {
           actualizarModalidades();
       });
-      document.getElementById('ano').addEventListener('change', () => {
+      document.getElementById('año').addEventListener('change', () => {
           actualizarModalidades();
       });
   });
