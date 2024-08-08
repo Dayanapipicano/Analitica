@@ -396,30 +396,23 @@ class Meta_estrategia_detalle(CreateView):
 
         est_id = request.POST.get('est_id')
         estd_meta = request.POST.get('estd_meta')
-        modalidad_id = request.POST.get('estd_modalidad')
+   
         
         meta_id = int(estd_meta)
-        modalidad_id = int(modalidad_id)
+       
         
 
         
        
         form.fields['est_id'].queryset = Estrategia.objects.filter(est_id=est_id)
         form.fields['estd_meta'].initial = meta_id 
-        form.fields['estd_modalidad'].initial = modalidad_id 
-       
-        if request.method == 'POST':
-            form = self.form_class(request.POST)
-            
-            if form.is_valid():
-               instance = form.save(commit=False)
-       
-               instance.save()
-               print('llego')
+     
+
+        if form.is_valid():
                return self.form_valid(form)
-            else:
-               print('errr', form.errors)
-               return self.form_invalid(form)
+        else:
+            print('errr', form.errors)
+            return self.form_invalid(form)
         
 
  
@@ -550,47 +543,42 @@ class estrategias_institucionales_filtros(TemplateView):
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
         modalidad = request.GET.get('modalidad')
-        print('asfasfasfas',modalidad)
+
         año = request.GET.get('ano')
         
 
         estrategia_detalle_filtro = {}
-
-      
+        
 
         if fecha_inicio:
-            try:
-                fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
-                id_meta_inicio = Meta.objects.filter(met_fecha_inicio__gte=fecha_inicio).values_list('met_id',flat=True)
-                estrategia_detalle_filtro['estd_meta__in'] = id_meta_inicio
-                
-            except ValueError:
-                return JsonResponse({'error': 'Fecha de inicio inválida'}, status=400)
-
+            fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
         if fecha_fin:
-            try:
-                fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
-                id_meta_fin = Meta.filter(met_fecha_fin=fecha_fin).values_list('met_id',flat=True)
-                estrategia_detalle_filtro['estd_meta__in'] = id_meta_fin
-               
-            except ValueError:
-                return JsonResponse({'error': 'Fecha de fin inválida'}, status=400)
-
-
-
-
-        if modalidad:
-            estrategia_detalle_filtro['estd_modalidad'] = modalidad
-
-        if año:
-            id_meta_año = Meta.objects.filter(met_año=año).values_list('met_id',flat=True)
-            estrategia_detalle_filtro['estd_meta__in'] = id_meta_año
-
+            fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+            
+        if fecha_inicio and fecha_fin:
+            id_meta_filtrados = Meta.objects.filter(met_fecha_inicio__gte=fecha_inicio, met_fecha_fin__lte=fecha_fin).values_list('met_id', flat=True)
+        elif fecha_inicio:
+            id_meta_filtrados = Meta.objects.filter(met_fecha_inicio__gte=fecha_inicio).values_list('met_id',flat=True)
+    
+        elif fecha_fin:
+            id_meta_filtrados = Meta.objects.filter(met_fecha_fin__lte=fecha_fin).values_list('met_id',flat=True)
+        
+        else:
+            id_meta_filtrados = []
+     
+        if id_meta_filtrados:
+               estrategia_detalle_filtro['estd_meta__in'] = id_meta_filtrados
+       
+            
+        
         if fecha_inicio or fecha_fin:
-            modalidades = Metas_formacion.objects.filter(**estrategia_detalle_filtro).values_list('metd_modalidad', 'metd_modalidad__modalidad').distinct()
+            modalidades = Estrategia_detalle.objects.filter(**estrategia_detalle_filtro).values_list('estd_modalidad', 'estd_modalidad').distinct()
+ 
         else:
             modalidades = Modalidad.objects.all().values_list('id', 'modalidad')        
-
+        if modalidad:
+            estrategia_detalle_filtro['estd_modalidad'] = modalidad
+           
         # Filtrar datos según los filtros aplicados
         resultados = Estrategia_detalle.objects.filter(**estrategia_detalle_filtro).values(
             'estd_id',
@@ -609,6 +597,8 @@ class estrategias_institucionales_filtros(TemplateView):
             'est_id__est_total_meta',
             'estd_meta',
         )
+        
+        print('reerergergg',resultados)
         
        
         

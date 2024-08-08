@@ -45,7 +45,7 @@ class Tipo_documento(models.TextChoices):
     TARJETA_DE_IDENTIDAD = 'TI', 'Tarjeta de identidad'
     CEDULA_EXTRANJERA = 'CE',' Cedula extranjera'
     PASAPORTE = 'PA', 'Pasaporte'
-class   Rol(models.Model):
+class Rol(models.Model):
     rol_id = models.AutoField(primary_key=True)
     rol_nombre = models.CharField(max_length=100)
     rol_descripcion = models.CharField(max_length=200)
@@ -227,7 +227,7 @@ class Estrategia(models.Model):
 
 class Estrategia_detalle(models.Model):
     estd_id = models.AutoField(primary_key=True)
-    estd_modalidad = models.IntegerField()
+    estd_modalidad = models.CharField(max_length=150)
     estd_operario_meta = models.CharField(max_length=150)
     estd_auxiliar_meta = models.CharField(max_length=150)
     estd_tecnico_meta = models.CharField(max_length=150)
