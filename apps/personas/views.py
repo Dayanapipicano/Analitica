@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.personas.forms import PersonaForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from apps.personas.models import Persona,Documento_vulnerables_tipo_poblaciones,Documento_vulnerables_poblaciones,Formacion_profesional_integral
+from apps.personas.models import Persona,Documento_vulnerables_tipo_poblaciones,Documento_vulnerables_poblaciones,Formacion_profesional_integral,Rol,Persona_rol
 from apps.personas.forms import EditProfileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -37,13 +37,37 @@ def Home(request):
     return render(request,'home.html')
 
 #REGISTRO DE PERSONA
+
+
+
+from django.utils import timezone
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
 def Registro(request):
- 
-   if request.method == 'POST':
-   
+    if request.method == 'POST':
         formPersona = PersonaForm(request.POST)
         if formPersona.is_valid():
-            formPersona.save()
+            user = formPersona.save(commit=False)
+            user.set_password(formPersona.cleaned_data['password1'])
+            user.save()
+
+            # Asignar el rol 'Usuario' al nuevo usuario
+            usuario_role, created = Rol.objects.get_or_create(rol_nombre='Usuario')
+            Persona_rol.objects.create(
+                persona_id=user,
+                rol_id=usuario_role,
+                rolp_fecha_inicio=timezone.now(),
+                rolp_fecha_fin=timezone.now(),  # O usa una fecha futura si es necesario
+                rolp_estado=True
+            )
+
+            # Autenticación y login
             per_documento = formPersona.cleaned_data.get('per_documento')
             raw_password = formPersona.cleaned_data.get('password1')
             user = authenticate(username=per_documento, password=raw_password)
@@ -51,12 +75,20 @@ def Registro(request):
                 login(request, user)
                 return redirect('personas:inicio_sesion')
             else:
-                print('Error en autenticación') 
+                messages.error(request, 'Error en autenticación')
         else:
-            print('Errores en el formulario:', formPersona.errors) 
-   else:
+            # Mostrar errores específicos del formulario
+            for field in formPersona:
+                for error in field.errors:
+                    messages.error(request, f"Error en {field.label}: {error}")
+            # También puedes mostrar errores generales
+            for error in formPersona.non_field_errors():
+                messages.error(request, error)
+    else:
         formPersona = PersonaForm()
-   return render(request,'registro.html',{'formPersona': formPersona})
+    return render(request, 'registro.html', {'formPersona': formPersona})
+
+
 
 #INICIO DE SESION DE PERSONA
 def inicio_sesion(request):
@@ -71,11 +103,8 @@ def inicio_sesion(request):
                 return redirect('personas:Home')  # Redirigir a la página principal u otra página
             else:
                 messages.error(request, 'Usuario o contraseña incorrectos')
-        # Si el formulario no es válido, los errores se agregarán automáticamente al formulario
     else:
         formPersona = LoginForm()
-
-    # No agregar mensajes de error al contexto si el formulario no se ha enviado (GET request)
     return render(request, 'inicio_sesion.html', {'formPersona': formPersona})
 
 

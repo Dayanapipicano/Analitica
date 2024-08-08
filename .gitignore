@@ -8,4 +8,5 @@ credentials.json
 #pip install pandas openpyxl  
 #pip install djangorestframework
 #pip install pyxlsb
+#superusuario = nombre analitica, correo analitica@gmail.com, documento=123456789 contraseña=123456789
 

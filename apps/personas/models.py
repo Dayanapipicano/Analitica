@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from apps.personas.manages import UsuarioManage
-from apps.core.models import Nivel_formacion
-    
+from django.utils import timezone
 class Formacion(models.Model):
     
     class Formacion_choices(models.TextChoices):
@@ -60,13 +59,22 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     per_apellidos = models.CharField(max_length=60)
     per_telefono = models.CharField(max_length=10)
     per_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    rol = models.ManyToManyField(Rol, through='Persona_rol')
+    roles = models.ManyToManyField(Rol, through='Persona_rol')
+    roles = models.CharField(max_length=150)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'per_documento'
-    REQUIRED_FIELDS = ['email','per_tipo_documento', 'per_nombres', 'per_apellidos', 'per_telefono']
+    REQUIRED_FIELDS = ['email', 'per_nombres']
+    
+    def save(self, *args, **kwargs):
+       is_new_user = self.pk is None
+       super().save(*args, **kwargs)
+       if is_new_user:
+        usuario_role = Rol.objects.get(rol_nombre='Usuario')
+        Persona_rol.objects.create(persona=self, rol=usuario_role, rolp_fecha_inicio=timezone.now())
+
     
     def __str__(self):
         return f'{self.per_nombres} {self.per_apellidos} - {self.per_documento}'

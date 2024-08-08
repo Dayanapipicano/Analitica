@@ -11,124 +11,52 @@
                     <h1 class="h1 mb-4">Listado de Usuarios</h1>
                 </div>
                 <div class="mt-4">
-                    
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Email</th>
+                                <th scope="col">Roles</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                {% for persona in personas%}
-                                <th scope="row">{{persona.per_documento}}</th>
-                                <th>{{persona.per_tipo_documento}}</th>
-                                <td>{{persona.per_nombres}}</td>
-                                <td>{{persona.per_apellidos}}</td>
-                                <td>{{persona.email}}</td>
-                                <td>{{persona.per_telefono}}</td>
-                                <td>{{persona.rol}}</td>
-                                <td>{{persona.is_staff}}</td>
-                                <td>{{persona.is_active}}</td>
-                                <td>{{persona.is_superuser}}</td>
-                                {%endfor%}
-
-
-
-                     
-                                <td>
-                                    <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModal">Editar</button>
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModal">Eliminar</button>
-                                </td>
-                            </tr>
-                          
+                            {% for persona in personas %}
+                                <tr>
+                                    <th scope="row">{{ persona.per_documento }}</th>
+                                    <td>{{ persona.per_nombres }} {{ persona.per_apellidos }}</td>
+                                    <td>{{ persona.email }}</td>
+                                    <td>
+                                        {% for rol in persona.rol.all %}
+                                            {{ rol.rol_nombre }}<br>
+                                        {% empty %}
+                                            Sin rol asignado
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <form method="post" >
+                                            {% csrf_token %}
+                                            <input type="hidden" name="persona_id" value="{{ persona.per_documento }}">
+                                            <select name="rol_id">
+                                                {% for rol in roles %}
+                                                    <option value="{{ rol.rol_id }}">{{ rol.rol_nombre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm">Asignar Rol</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Contenedor para los modales -->
-    <div class="modal-container">
-        <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editarModalLabel">Editar Usuario</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Formulario para editar usuario -->
-                        <form>
-                            <div class="form-group">
-                                <label for="editNombre">Nombre</label>
-                                <input type="text" class="form-control" id="editNombre">
-                            </div>
-                            <div class="form-group">
-                                <label for="editEmail">Email</label>
-                                <input type="email" class="form-control" id="editEmail">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Eliminar -->
-        <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="eliminarModalLabel">Eliminar Usuario</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>¿Estás seguro de que quieres eliminar este usuario?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
-<style>
-.modal-container {
-    position: relative;
-    margin: auto;
-    margin-top: 10%;
-    max-width: 600px;
-}
-.modal-container .modal {
-    position: fixed;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    max-width: 600px;
-    z-index: 1050;
-    overflow-x: hidden;
-    overflow-y: auto;
-    outline: 0;
-}
-</style>
-
-
+<!-- Asegúrate de incluir los scripts de Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
