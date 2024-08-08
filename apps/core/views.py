@@ -543,7 +543,6 @@ class estrategias_institucionales_filtros(TemplateView):
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
         modalidad = request.GET.get('modalidad')
-
         año = request.GET.get('ano')
         
 
@@ -568,6 +567,8 @@ class estrategias_institucionales_filtros(TemplateView):
      
         if id_meta_filtrados:
                estrategia_detalle_filtro['estd_meta__in'] = id_meta_filtrados
+               
+              
        
             
         
@@ -578,7 +579,15 @@ class estrategias_institucionales_filtros(TemplateView):
             modalidades = Modalidad.objects.all().values_list('id', 'modalidad')        
         if modalidad:
             estrategia_detalle_filtro['estd_modalidad'] = modalidad
-           
+        
+        if año:
+            id_metas_año = Meta.objects.filter(met_año=año).values_list('met_id', flat=True)
+            estrategia_detalle_filtro['estd_meta__in'] = id_metas_año
+        
+       
+
+ 
+
         # Filtrar datos según los filtros aplicados
         resultados = Estrategia_detalle.objects.filter(**estrategia_detalle_filtro).values(
             'estd_id',
