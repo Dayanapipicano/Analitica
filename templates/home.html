@@ -43,12 +43,15 @@
                 </button>
             </div>
             <ul class="sidebar-nav">
+                {% if perms.app.can_view_admin_dashboard %}
+
                 <li class="sidebar-item">
                     <a href="{% url 'administrador'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Admin</span>
                     </a>
                 </li>
+                {% endif %}
                 <li class="sidebar-item">
                     <a href="{% url 'cores:modalidad_index'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">

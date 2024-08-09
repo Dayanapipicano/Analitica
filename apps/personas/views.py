@@ -23,6 +23,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
+from django.http import HttpResponseForbidden
 #MENSAJE DE CAMBIO DE CONTRASEÑA
 class CustomPasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('personas:perfil') 

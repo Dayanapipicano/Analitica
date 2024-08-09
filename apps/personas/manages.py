@@ -1,4 +1,4 @@
-from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import BaseUserManager,Permission,ContentType
 
 from django.utils import timezone
 class UsuarioManage(BaseUserManager):
@@ -34,5 +34,15 @@ class UsuarioManage(BaseUserManager):
         
     
         admin_role, created = Rol.objects.get_or_create(rol_nombre='Admin', defaults={'rol_descripcion': 'Administrador del sistema'})
+        
+        content_type = ContentType.objects.get_for_model(superuser.__class__)
+        admin_permission, created = Permission.objects.get_or_create(
+            codename='can_view_admin_dashboard',
+            content_type=content_type,
+            defaults={'name': 'Can view admin dashboard'}
+        )
+        admin_role.permissions.add(admin_permission)
+        
         Persona_rol.objects.create(persona_id=superuser, rol_id=admin_role, rolp_fecha_inicio=timezone.now(),rolp_fecha_fin=timezone.now())
-    
+
+        return superuser

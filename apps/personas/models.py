@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from apps.personas.manages import UsuarioManage
 from django.utils import timezone
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 class Formacion(models.Model):
     
     class Formacion_choices(models.TextChoices):
@@ -49,6 +51,7 @@ class Rol(models.Model):
     rol_id = models.AutoField(primary_key=True)
     rol_nombre = models.CharField(max_length=100)
     rol_descripcion = models.CharField(max_length=200)
+    permissions = models.ManyToManyField(Permission, blank=True)
 
 
 class Persona(AbstractBaseUser, PermissionsMixin):
@@ -68,16 +71,45 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email', 'per_nombres']
     
     def save(self, *args, **kwargs):
-       is_new_user = self.pk is None
-       super().save(*args, **kwargs)
-       if is_new_user:
-        usuario_role = Rol.objects.get(rol_nombre='Usuario')
-        Persona_rol.objects.create(persona=self, rol=usuario_role, rolp_fecha_inicio=timezone.now())
+       # Verificar el estado del pk después de guardar
+       print(f'After save: per_documento = {self.per_documento}, pk = {self.pk}')
+    
+    # Verificar si es un nuevo usuario
+       if not self.pk:
+           print(f'New user detected: per_documento = {self.per_documento}')
+           usuario_role = Rol.objects.get(rol_nombre='Usuario')
+           Persona_rol.objects.create(persona_id=self, rol_id=usuario_role, rolp_fecha_inicio=timezone.now(),rolp_fecha_fin=timezone.now())
+
+            
+           content_type = ContentType.objects.get_for_model(self.__class__)
+           permission_codename = 'can_view_usuario_dashboard'
+           permission_name = 'Can view user dashboard'
+        
+           permission, created = Permission.objects.get_or_create(
+              codename=permission_codename,
+              content_type=content_type,
+              defaults={'name': permission_name}
+           )
+        
+           if created:
+              print(f'Permiso creado: {permission_name}')
+           else:
+              print(f'Permiso ya existente: {permission_name}')
+        
+           usuario_role.permissions.add(permission)
+           usuario_role.save()
+           print(f'Permiso {permission_codename} añadido al rol {usuario_role.rol_nombre}')
+     
+                         
+            
+            
 
     
     def __str__(self):
         return f'{self.per_nombres} {self.per_apellidos} - {self.per_documento}'
     objects = UsuarioManage()
+    
+    
 class P04(models.Model):
     p04_id = models.AutoField(primary_key=True)
     fecha_p04 = models.DateField()

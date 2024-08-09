@@ -15,6 +15,7 @@ from django.urls import reverse_lazy
 from .serializers import MetaSerializer,EstrateiaSerializer
 from django.utils import timezone
 from apps.personas.models import Rol,Persona_rol
+from apps.personas.decorators import permission_required
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -74,7 +75,7 @@ def grafica(request):
 
 
 
-
+@permission_required('can_view_admin_dashboard')
 def administrador(request):
     personas = Persona.objects.all()
     roles = Rol.objects.all()
@@ -670,6 +671,6 @@ def Asignacion_roles(request):
         # Asigna el nuevo rol a la persona
         Persona_rol.objects.create(persona_id=persona, rol_id=nuevo_rol, rolp_fecha_inicio=timezone.now(),rolp_fecha_fin=timezone.now())
 
-        return redirect('administrador')  # Redirige a la vista de administración después de actualizar
+        return redirect('administrador')
     else:
-        return redirect('administrador')  # Redirige a la vista de administración si no es POST
+        return redirect('administrador') 

@@ -38,6 +38,7 @@ urlpatterns = [
 
     path('grafica', views.grafica, name="grafica"),
   
+    
     path('administrador/', views.administrador, name="administrador"),
     path('password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
