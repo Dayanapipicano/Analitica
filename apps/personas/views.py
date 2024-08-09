@@ -1,9 +1,10 @@
+from django.forms import BaseModelForm
 from django.shortcuts import render
 from apps.personas.forms import PersonaForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from apps.personas.models import Persona,Documento_vulnerables_tipo_poblaciones,Documento_vulnerables_poblaciones,Formacion_profesional_integral,Rol,Persona_rol
-from apps.personas.forms import EditProfileForm
+from apps.personas.forms import EditProfileForm,Form_permissions
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth.views import PasswordChangeView
@@ -24,6 +25,11 @@ from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.http import HttpResponseForbidden
+from django.views.generic import CreateView,DeleteView,UpdateView
+
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+from apps.personas.forms import Form_rol
 #MENSAJE DE CAMBIO DE CONTRASEÑA
 class CustomPasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('personas:perfil') 
@@ -59,7 +65,16 @@ def Registro(request):
             user.save()
 
             # Asignar el rol 'Usuario' al nuevo usuario
-            usuario_role, created = Rol.objects.get_or_create(rol_nombre='Usuario')
+            usuario_role, created = Rol.objects.get_or_create(rol_nombre='Usuario', defaults={'rol_descripcion': 'Rol de ususario'})
+            
+            content_type = ContentType.objects.get_for_model(user.__class__)
+            user_permission, created = Permission.objects.get_or_create(
+                codename='can_view_usuario_dashboard',
+                content_type=content_type,
+                defaults={'name': 'Can view usuario dashboard'}
+            )
+            usuario_role.permissions.add(user_permission)
+            
             Persona_rol.objects.create(
                 persona_id=user,
                 rol_id=usuario_role,
@@ -67,6 +82,7 @@ def Registro(request):
                 rolp_fecha_fin=timezone.now(),  # O usa una fecha futura si es necesario
                 rolp_estado=True
             )
+            
 
             # Autenticación y login
             per_documento = formPersona.cleaned_data.get('per_documento')
@@ -373,4 +389,95 @@ def Subir_poblacion_vulnerable(request):
            
         
         return redirect('personas:poblacion_vulnerable')
+    
+#CRUD DE ROL
+def Roles_index(request):
+    
+    roles  = Rol.objects.all()
+    form_roles = Form_rol
+    
+    context = {
+        'roles':roles,
+        'form_roles':form_roles
+    }
+    return render(request,'Roles/roles.html',context)
+
+class Roles_create(CreateView):
+    model = Rol
+    form_class = Form_rol
+    template_name = 'Roles/roles.html'
+    success_url= reverse_lazy('personas:roles_index')
+    
+    
+    def get(self, request, *args, **kwargs):
+        permiso = request.GET.get('permissions')
+        
+        
+    
+    def form_valid(self, form):
+        print('entro al formulario')
+        if form.is_valid():
+            
+             response = super().form_valid(form)
+        else:
+            
+             print('jshdgfjhdsgf', form.errors)
+        permissions = form.cleaned_data.get('permissions').id
+        print('permiso', permissions)
+        
+        if permissions:
+            self.object.permissions.add(permissions)
+            
+          
+        return response
+
+    def form_invalid(self, form):
+        print('errororororororor', form.errors)
+        return super().form_invalid(form)
+class Roles_delete(DeleteView):
+    model = Rol
+    success_url = reverse_lazy('personas:roles_index')
+    
+class Roles_edit(UpdateView):
+    model = Rol
+    form_class = Form_rol
+    success_url = reverse_lazy('personas:roles_index')
+    
+    
+#CRUD DE PERMISOS
+
+def Permisos_index(request):
+    permisos = Permission.objects.all().order_by('-id')
+    forms_permisos = Form_permissions
+    
+    context = {
+        'permisos':permisos,
+        'forms_permisos':forms_permisos
+    }
+    
+    return render(request, 'Permisos/permisos.html', context)
+    
+class Permisos_create(CreateView):
+    model = Permission
+    form_class = Form_permissions
+    template_name = 'Permisos/permisos.html'
+    success_url = reverse_lazy('personas:permisos_index')
+    
+    
+    def form_valid(self, form):
+        permission = form.save(commit=False)
+        
+        permission.content_type = ContentType.objects.get_for_model(Persona)
+        permission.save()
+        
+        return super().form_valid(form)
+
+class Permisos_delete(DeleteView):
+    model = Permission
+    success_url = reverse_lazy('personas:permisos_index')
+    
+class Permisos_edit(UpdateView):
+    model = Permission
+    form_class = Form_permissions
+    success_url = reverse_lazy('personas:permisos_index')
     

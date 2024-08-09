@@ -3,7 +3,8 @@ from .models import Persona
 from .models import P04
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-
+from apps.personas.models import Rol
+from django.contrib.auth.models import Permission
 
 #FORMS DE REGISTRO
 class PersonaForm(UserCreationForm):
@@ -67,3 +68,20 @@ class EditProfileForm(forms.ModelForm):
 
 class ExcelUploadForm(forms.Form):
     excel_file = forms.FileField()
+
+
+class Form_rol(forms.ModelForm):
+    permissions = forms.ModelMultipleChoiceField(queryset=Permission.objects.all().order_by('-id'), required=True, widget=forms.Select)
+    class Meta:
+        model = Rol
+        fields = [
+            'rol_nombre', 'rol_descripcion','permissions'
+        ]
+      
+class Form_permissions(forms.ModelForm):
+    class Meta:
+        model = Permission
+        fields = [
+            'name','codename'
+        ]
+        # estableces el campo directamente a la hora de crearlo ene lepost 

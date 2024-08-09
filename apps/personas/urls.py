@@ -18,8 +18,16 @@ urlpatterns = [
     path('P04/', views.p04, name="P04"),
     path('upload/', views.Subir_poblacion_vulnerable, name='upload_excel'),
     path('poblacion_vulnerable/index/', views.Poblacion_vulnerable, name="poblacion_vulnerable"),
-    
-   
+    #CRUD DE ROL
+    path('roles/index/',views.Roles_index, name="roles_index"),
+    path('roles/create/',views.Roles_create.as_view(), name="roles_create"),
+    path('roles/delete/<int:pk>',views.Roles_delete.as_view(), name="roles_delete"),
+    path('roles/edit/<int:pk>',views.Roles_edit.as_view(), name="roles_edit"),
+    #CRUD DE PERMISO
+    path('permisos/index/',views.Permisos_index, name="permisos_index"),
+    path('permisos/create/',views.Permisos_create.as_view(), name="permisos_create"),
+    path('permisos/delete/<int:pk>',views.Permisos_delete.as_view(), name="permisos_delete"),
+    path('permisos/edit/<int:pk>',views.Permisos_edit.as_view(), name="permisos_edit"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
