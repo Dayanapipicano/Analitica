@@ -1,5 +1,6 @@
 from django.contrib.auth.models import BaseUserManager
 
+from django.utils import timezone
 class UsuarioManage(BaseUserManager):
     
     def create_user(self, email, password=None, **kwargs):
@@ -20,6 +21,7 @@ class UsuarioManage(BaseUserManager):
         return personas
     
     def create_superuser(self, email, password=None, **kwargs):
+        from apps.personas.models import Rol, Persona_rol
         kwargs.setdefault('is_staff', True)
         kwargs.setdefault('is_superuser', True)
         
@@ -28,5 +30,9 @@ class UsuarioManage(BaseUserManager):
         if kwargs.get('is_superuser') is not True:
             raise ValueError('Is_staff must have is_superuser=true')
         
-        return self.create_user(email,password, **kwargs)
+        superuser = self.create_user(email, password, **kwargs)
+        
+    
+        admin_role, created = Rol.objects.get_or_create(rol_nombre='Admin', defaults={'rol_descripcion': 'Administrador del sistema'})
+        Persona_rol.objects.create(persona_id=superuser, rol_id=admin_role, rolp_fecha_inicio=timezone.now(),rolp_fecha_fin=timezone.now())
     

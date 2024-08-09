@@ -1,6 +1,6 @@
 from django.forms import BaseModelForm
 from django.shortcuts import render
-from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle
+from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion
 from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad
@@ -13,6 +13,8 @@ from django.db.models import Count,Sum
 from datetime import datetime
 from django.urls import reverse_lazy
 from .serializers import MetaSerializer,EstrateiaSerializer
+from django.utils import timezone
+from apps.personas.models import Rol,Persona_rol
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -75,7 +77,9 @@ def grafica(request):
 
 def administrador(request):
     personas = Persona.objects.all()
-    return render(request, 'administrador.html', {'personas':personas})
+    roles = Rol.objects.all()
+
+    return render(request, 'administrador.html', {'personas': personas, 'roles':roles})
 
 
 
@@ -648,3 +652,24 @@ class Modalidad_edit(UpdateView):
     from_class = Form_modalidad
     fields = ['modalidad']
     success_url = reverse_lazy('cores:modalidad_index')
+    
+    
+#ROLES
+
+def Asignacion_roles(request):
+    if request.method == 'POST':
+        persona_id = request.POST.get('persona_id')
+        rol_id = request.POST.get('rol_id')
+
+        persona = get_object_or_404(Persona, per_documento=persona_id)
+        nuevo_rol = get_object_or_404(Rol, rol_id=rol_id)
+
+        # Elimina todos los roles actuales de la persona
+        Persona_rol.objects.filter(persona_id=persona).delete()
+
+        # Asigna el nuevo rol a la persona
+        Persona_rol.objects.create(persona_id=persona, rol_id=nuevo_rol, rolp_fecha_inicio=timezone.now(),rolp_fecha_fin=timezone.now())
+
+        return redirect('administrador')  # Redirige a la vista de administración después de actualizar
+    else:
+        return redirect('administrador')  # Redirige a la vista de administración si no es POST

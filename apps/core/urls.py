@@ -31,5 +31,7 @@ urlpatterns = [
     path('modalidad/delete/<int:pk>', core_views.Modalidad_delete.as_view(), name='modalidad_delete'),
     path('modalidad/edit/<int:pk>', core_views.Modalidad_edit.as_view(), name='modalidad_edit'),
     
+    #ROLES
+    path('asignacion_roles/', core_views.Asignacion_roles, name="asignacion_roles" )
 ]   
 
