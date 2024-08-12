@@ -75,6 +75,7 @@ class Persona(AbstractBaseUser, PermissionsMixin):
         return f'{self.per_nombres} {self.per_apellidos} - {self.per_documento}'
     objects = UsuarioManage()
     
+   
     
 class P04(models.Model):
     p04_id = models.AutoField(primary_key=True)

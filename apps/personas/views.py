@@ -42,7 +42,8 @@ class CustomPasswordChangeView(PasswordChangeView):
 
 #REFIRECCION DE EL HOME
 def Home(request):
-    return render(request,'home.html')
+    
+    return render(request, 'home.html')
 
 #REGISTRO DE PERSONA
 
@@ -118,7 +119,7 @@ def inicio_sesion(request):
             user = authenticate(request, username=per_documento, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('general')  # Redirigir a la página principal u otra página
+                return redirect('personas:Home')  # Redirigir a la página principal u otra página
             else:
                 messages.error(request, 'Usuario o contraseña incorrectos')
     else:
@@ -187,6 +188,7 @@ class CustomPasswordResetDoneView(PasswordResetDoneView):
 
 @permission_required('can_view_reporteador_dashboard')
 def p04(request):
+
     per_documento = Persona.objects.all()
     
     return render(request,'p04.html',  {'per_documento':per_documento})
@@ -272,10 +274,11 @@ def subir_P04(request):
         
     return redirect('personas:P04')
 
-
+@permission_required('can_view_reporteador_dashboard')
 def Poblacion_vulnerable(request):
     
     per_documento = Persona.objects.all()
+
     return render( request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'per_documento':per_documento})
     
 
