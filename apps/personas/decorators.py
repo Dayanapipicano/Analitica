@@ -15,7 +15,7 @@ def permission_required(permission_codename):
             )
 
             if not has_permission:
-                return HttpResponseForbidden("No tienes permiso para acceder a esta vista.")
+                return HttpResponseForbidden("estas auentiado No tienes permiso para acceder a esta vista.")
             
             return view_func(request, *args, **kwargs)
         return _wrapped_view

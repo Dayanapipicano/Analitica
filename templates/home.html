@@ -52,24 +52,30 @@
                     </a>
                 </li>
                 {% endif %}
+                {% if perms.app.can_view_admin_dashboard %}
                 <li class="sidebar-item">
                     <a href="{% url 'cores:modalidad_index'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Modalidad</span>
                     </a>
                 </li>
+                {% endif %}
+                {% if perms.app.can_view_admin_dashboard %}
                 <li class="sidebar-item">
                     <a href="{% url 'personas:roles_index'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Roles</span>
                     </a>
                 </li>
+                {% endif %}
+                {% if perms.app.can_view_admin_dashboard %}
                 <li class="sidebar-item">
                     <a href="{% url 'personas:permisos_index'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Permisos</span>
                     </a>
                 </li>
+                {% endif %}
                 <li class="sidebar-item">
                     <a href="{% url 'general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
@@ -95,11 +101,15 @@
                         <li class="sidebar-item">
                             <a href="{% url 'personas:poblacion_vulnerable'%}" class="sidebar-link">Poblacion Vulnerable</a>
                         </li>
+                        {% if perms.app.can_view_reporteador_dashboard %}
                         <li class="sidebar-item">
                             <a href="{% url 'personas:P04'%}" class="sidebar-link">P04</a>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
+
+                {% if perms.app.can_view_usuario_dashboard %}
                 <li class="sidebar-item">
                     <a href="{% url 'cores:formacion_regular_index'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
@@ -119,7 +129,7 @@
                     </ul>
                 </li>
          
-              
+                {% endif %}
             </ul>
             <div class="sidebar-footer">
                 <a href="{% url 'personas:cierre_sesion'%}" class="sidebar-link">
@@ -130,7 +140,7 @@
         </aside>
         {% block contenido%}
         
-        {% include 'General/general.html' %}
+    
         {% endblock contenido%}
     </div>
         <script src="{% static 'bootstrap/js/home.js'%}"></script>

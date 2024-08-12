@@ -26,10 +26,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.http import HttpResponseForbidden
 from django.views.generic import CreateView,DeleteView,UpdateView
-
+from apps.personas.decorators import permission_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from apps.personas.forms import Form_rol
+
 #MENSAJE DE CAMBIO DE CONTRASEÑA
 class CustomPasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('personas:perfil') 
@@ -117,7 +118,7 @@ def inicio_sesion(request):
             user = authenticate(request, username=per_documento, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('personas:Home')  # Redirigir a la página principal u otra página
+                return redirect('general')  # Redirigir a la página principal u otra página
             else:
                 messages.error(request, 'Usuario o contraseña incorrectos')
     else:
@@ -184,7 +185,7 @@ class CustomPasswordResetDoneView(PasswordResetDoneView):
 
 
 
-
+@permission_required('can_view_reporteador_dashboard')
 def p04(request):
     per_documento = Persona.objects.all()
     
