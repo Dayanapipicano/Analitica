@@ -20,20 +20,8 @@
                                             <label for="fileUpload" class="form-label">Seleccionar archivo</label>
                                             <input class="form-control" type="file" id="excel_file" name="excel_file">
                                         </div>
-                                        <div class="mb-3">
-                                        
-                                            <div class="form-group">
-                                                <label for="persona">Seleccione una Persona:</label>
-                                                <select id="per_documento" name="per_documento" class="form-control">
-                                                    {% for persona in per_documento %}
-                                                        <option value="{{ persona.per_documento }}">
-                                                            {{ persona.per_documento }} - {{ persona.per_nombres }} {{ persona.per_apellidos }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            
-                                        </div>
+                                        <input id="per_documento" name="per_documento"  type="hidden" class="form-control" value="{{user.per_documento}}">
+
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-secondary">Subir</button>
                                         </div>
