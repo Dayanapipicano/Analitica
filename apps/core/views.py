@@ -55,25 +55,29 @@ def general(request):
     filtro_modalidad = 'PRESENCIAL'
     data =  P04.objects.filter(modalidad_formacion=filtro_modalidad)
     
+    filtro_modalidad = 'VIRTUAL'
+    data_virtual =  P04.objects.filter(modalidad_formacion=filtro_modalidad)
+    
   
     niveles_habilitados = {
-        'CURSO ESPECIAL' : [],
-        'TECNÓLOGO' : [],
-        'TÉCNICO' : [],
-        'AUXILIAR' : [],
-        'OPERARIO' : [],
-        'EVENTO' : []
+        'CURSO ESPECIAL' : 0,
+        'TECNÓLOGO' : 0,
+        'TÉCNICO' : 0,
+        'AUXILIAR' : 0,
+        'OPERARIO' : 0,
+        'EVENTO' : 0
     }
     
+    
+    #PRESENCIAL
     for aprendiz in data:
         activos = aprendiz.total_aprendices_activos
         nivel = aprendiz.nivel_formacion
         
         if nivel in niveles_habilitados:
-            niveles_habilitados[nivel].append(activos)
+            niveles_habilitados[nivel] += activos
             
-    for nivel in niveles_habilitados:
-        niveles_habilitados[nivel] = sum(niveles_habilitados[nivel])
+    
     
    
     
