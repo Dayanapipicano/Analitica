@@ -31,7 +31,7 @@ urlpatterns = [
 
 
 
-    path('general/index', views.general, name="general"),
+    
   
 
     path('estrategias/index', views.estrategias, name="estrategias"),

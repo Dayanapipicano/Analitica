@@ -49,9 +49,45 @@ def estrategias_institucionales(request):
 
 def formacion_regular(request):
     return render(request, 'Formacion_regular/formacion_regular.html')
-
+import json
 def general(request):
-    return render(request, 'General/general.html')
+    
+    filtro_modalidad = 'PRESENCIAL'
+    data =  P04.objects.filter(modalidad_formacion=filtro_modalidad)
+    
+  
+    niveles_habilitados = {
+        'CURSO ESPECIAL' : [],
+        'TECNÓLOGO' : [],
+        'TÉCNICO' : [],
+        'AUXILIAR' : [],
+        'OPERARIO' : [],
+        'EVENTO' : []
+    }
+    
+    for aprendiz in data:
+        activos = aprendiz.total_aprendices_activos
+        nivel = aprendiz.nivel_formacion
+        
+        if nivel in niveles_habilitados:
+            niveles_habilitados[nivel].append(activos)
+            
+    for nivel in niveles_habilitados:
+        niveles_habilitados[nivel] = sum(niveles_habilitados[nivel])
+    
+   
+    
+    labels = list(niveles_habilitados.keys())
+    data_values = list(niveles_habilitados.values())
+     
+    context = {
+    
+        'data_values':data_values
+    }
+    print(labels)
+    print(data_values)
+
+    return render(request, 'General/general.html', context)
 
 
 
@@ -291,6 +327,7 @@ class Meta_create(CreateView):
     template_name = 'Formacion_regular/formacion_regular.html'
     success_url = reverse_lazy('cores:formacion_regular_index') 
     
+
     def form_valid(self, form):
         response = super().form_valid(form)
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':

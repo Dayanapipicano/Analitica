@@ -32,6 +32,9 @@ urlpatterns = [
     path('modalidad/edit/<int:pk>', core_views.Modalidad_edit.as_view(), name='modalidad_edit'),
     
     #ROLES
-    path('asignacion_roles/', core_views.Asignacion_roles, name="asignacion_roles" )
+    path('asignacion_roles/', core_views.Asignacion_roles, name="asignacion_roles" ),
+    
+    #GRAFICAS GENERAL
+    path('general/index', core_views.general, name="general"),
 ]   
 

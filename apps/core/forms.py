@@ -24,7 +24,7 @@ class Form_meta(forms.ModelForm):
         'met_total_titulada',
         'met_total_complementaria',
         'met_total_poblacion_vulnerable',
-        'per_documento',
+        'per_documento'
         ]
         
         widgets =  {
@@ -33,8 +33,10 @@ class Form_meta(forms.ModelForm):
            
         }
     def __init__(self, *args, **kwargs):
+   
         super().__init__(*args, **kwargs)
         self.fields['met_centro_formacion'].choices = Centro_de_formacion.Centro_de_formacion_choices.choices
+      
 
     
 class Form_meta_formacion(forms.ModelForm):

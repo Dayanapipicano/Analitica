@@ -77,14 +77,14 @@
                 </li>
                 {% endif %}
                 <li class="sidebar-item">
-                    <a href="{% url 'general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    <a href="{% url 'cores:general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
                         <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         <span>Reportes</span>
                     </a>
                     <ul id="auth" class="sidebar-dropdown list-unstyled collapse" >
                         <li class="sidebar-item">
-                            <a href="{% url 'general'%}" class="sidebar-link">General</a>
+                            <a href="{% url 'cores:general'%}" class="sidebar-link">General</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'cores:cobertura'%}" class="sidebar-link">Cobertura</a>
