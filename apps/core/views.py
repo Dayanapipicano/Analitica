@@ -67,7 +67,14 @@ def general(request):
         'OPERARIO' : 0,
         'EVENTO' : 0
     }
-    
+    niveles_habilitados_virtual = {
+        'CURSO ESPECIAL' : 0,
+        'TECNÓLOGO' : 0,
+        'TÉCNICO' : 0,
+        'AUXILIAR' : 0,
+        'OPERARIO' : 0,
+        'EVENTO' : 0
+    }
     
     #PRESENCIAL
     for aprendiz in data:
@@ -77,19 +84,30 @@ def general(request):
         if nivel in niveles_habilitados:
             niveles_habilitados[nivel] += activos
             
-    
+    #PRESENCIAL
+    for aprendiz in data_virtual:
+        activos = aprendiz.total_aprendices_activos
+        nivel = aprendiz.nivel_formacion
+        
+        if nivel in niveles_habilitados_virtual:
+            niveles_habilitados_virtual[nivel] += activos
     
    
     
-    labels = list(niveles_habilitados.keys())
+    labels_presenciales = [f'{nivel} Presencial' for nivel in  niveles_habilitados.keys()] 
+    labels_virtuales = [f'{nivel} Virtual' for nivel in  niveles_habilitados_virtual.keys()]
     data_values = list(niveles_habilitados.values())
-     
+    data_values_virtual = list(niveles_habilitados_virtual.values())
+    data =data_values + data_values_virtual
     context = {
-    
-        'data_values':data_values
+        'labels_presenciales':json.dumps(labels_presenciales),
+        'labels_virtuales':json.dumps(labels_virtuales),
+        'data':data,
+        
     }
-    print(labels)
-    print(data_values)
+
+    print(data)
+ 
 
     return render(request, 'General/general.html', context)
 
@@ -331,8 +349,11 @@ class Meta_create(CreateView):
     template_name = 'Formacion_regular/formacion_regular.html'
     success_url = reverse_lazy('cores:formacion_regular_index') 
     
-
+   
     def form_valid(self, form):
+        user = self.request.user
+        persona = Persona.objects.get(per_documento=user.per_documento)
+  
         response = super().form_valid(form)
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             metas = Meta.objects.all()

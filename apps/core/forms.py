@@ -1,6 +1,6 @@
 from apps.personas.models import Meta
 from apps.core.models import Centro_de_formacion
-from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle
+from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona
 
 from django import forms
 class Form_meta(forms.ModelForm):
@@ -33,9 +33,10 @@ class Form_meta(forms.ModelForm):
            
         }
     def __init__(self, *args, **kwargs):
-   
         super().__init__(*args, **kwargs)
         self.fields['met_centro_formacion'].choices = Centro_de_formacion.Centro_de_formacion_choices.choices
+        self.fields['per_documento'].widget =  forms.HiddenInput()
+       
       
 
     

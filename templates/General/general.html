@@ -117,12 +117,18 @@
         </div>
     </div>
 </div>
-<script id="labels" type="application/json">
-    {{labels|safe}}
+
+<script id="data" type="application/json">
+    {{data|safe}}
 </script>
-<script id="data_values" type="application/json">
-    {{data_values|safe}}
+<script id="labels_virtuales" type="application/json">
+    {{labels_virtuales|safe}}
 </script>
+<script id="labels_presenciales" type="application/json">
+    {{labels_presenciales|safe}}
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'bootstrap/js/chart.js' %}"></script>
 
