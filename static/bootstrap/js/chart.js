@@ -1,7 +1,15 @@
 
+//datos del p04
 const data = JSON.parse(document.getElementById('data').textContent)
+
 const labels_virtuales = JSON.parse(document.getElementById('labels_virtuales').textContent)
 const labels_presenciales = JSON.parse(document.getElementById('labels_presenciales').textContent)
+// datos de las metas establecidas
+const metas_valores = JSON.parse(document.getElementById('metas_valores').textContent)
+
+
+console.log('dato',data)
+console.log('metas',metas_valores)
 
 
 function showChart(chartId) {
@@ -21,19 +29,29 @@ function Estado_de_color(value, max){
     return 'rgba(75, 192, 192, 0.2)';
 }
 
-const maxData = Math.max(data)
+
+const backgroundColors = metas_valores.map((meta, index) => {
+    const resultado = data[index];
+    return Estado_de_color(resultado, meta)
+})
+const borderColor = metas_valores.map((meta, index) => {
+    const resultado = data[index];
+    return Estado_de_color(resultado, meta).replace('0.2','1.0')
+})
+console.log(backgroundColors)
+
 const ctx_titulada = document.getElementById('barchart_titulada').getContext('2d');
 
 new Chart(ctx_titulada, {
     type: 'bar',
     data: { 
-        labels: [labels_presenciales[1],labels_presenciales[2],labels_presenciales[3],labels_presenciales[4],labels_presenciales[5],labels_presenciales[6],labels_virtuales[1],labels_virtuales[2],labels_virtuales[3],labels_virtuales[4],labels_virtuales[5],labels_virtuales[6]],
+        labels: [labels_presenciales[0],labels_presenciales[1],labels_presenciales[2],labels_presenciales[3],labels_presenciales[4],labels_presenciales[5],labels_virtuales[0],labels_virtuales[1],labels_virtuales[2],labels_virtuales[3],labels_virtuales[4],labels_virtuales[5],labels_virtuales[6]],
         datasets: [{
             label: '# de Aprendices',
             data: data,
             borderWidth: 1,
-            backgroundColor: data.map(value => Estado_de_color(value, maxData)),
-            borderColor: data.map(value => Estado_de_color(value, maxData).replace('0.2', '1')),
+            backgroundColor: backgroundColors,
+            borderColor:borderColor ,
         }
     ],
     },

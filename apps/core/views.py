@@ -16,6 +16,7 @@ from .serializers import MetaSerializer,EstrateiaSerializer
 from django.utils import timezone
 from apps.personas.models import Rol,Persona_rol
 from apps.personas.decorators import permission_required
+import json
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -49,15 +50,29 @@ def estrategias_institucionales(request):
 
 def formacion_regular(request):
     return render(request, 'Formacion_regular/formacion_regular.html')
-import json
+from django.db.models import Min, Max
 def general(request):
     
-    filtro_modalidad = 'PRESENCIAL'
-    data =  P04.objects.filter(modalidad_formacion=filtro_modalidad)
+    filtro_modalidad_presencial = 'PRESENCIAL'
+    data_presencial =  P04.objects.filter(modalidad_formacion=filtro_modalidad_presencial)
     
-    filtro_modalidad = 'VIRTUAL'
-    data_virtual =  P04.objects.filter(modalidad_formacion=filtro_modalidad)
+    filtro_modalidad_virtual = 'VIRTUAL'
+    data_virtual =  P04.objects.filter(modalidad_formacion=filtro_modalidad_virtual)
     
+    
+    #FECHAS PRESENCIAL
+    fecha_inicio_mas_baja_presencial = data_presencial.aggregate(Min('fecha_inicio_ficha'))
+    fecha_inicio_mas_baja_presencial_tabla = fecha_inicio_mas_baja_presencial.get('fecha_inicio_ficha__min')
+    
+    fecha_inicio_mas_alta_presencial = data_presencial.aggregate(Max('fecha_terminacion_ficha'))
+    fecha_inicio_mas_alta_presencial_tabla = fecha_inicio_mas_alta_presencial.get('fecha_terminacion_ficha__max')
+  
+    #FECHAS VIRTUAL
+    fecha_inicio_mas_baja_virtual = data_virtual.aggregate(Min('fecha_inicio_ficha'))
+    fecha_inicio_mas_baja_virtual_tabla = fecha_inicio_mas_baja_virtual.get('fecha_inicio_ficha__min')
+    
+    fecha_inicio_mas_alta_virtual = data_virtual.aggregate(Max('fecha_terminacion_ficha'))
+    fecha_inicio_mas_alta_virtual_tabla = fecha_inicio_mas_alta_virtual.get('fecha_terminacion_ficha__max')
   
     niveles_habilitados = {
         'CURSO ESPECIAL' : 0,
@@ -65,7 +80,7 @@ def general(request):
         'TÉCNICO' : 0,
         'AUXILIAR' : 0,
         'OPERARIO' : 0,
-        'EVENTO' : 0
+        'EVENTO' : 0,
     }
     niveles_habilitados_virtual = {
         'CURSO ESPECIAL' : 0,
@@ -73,18 +88,18 @@ def general(request):
         'TÉCNICO' : 0,
         'AUXILIAR' : 0,
         'OPERARIO' : 0,
-        'EVENTO' : 0
+        'EVENTO' : 0,
+      
     }
     
     #PRESENCIAL
-    for aprendiz in data:
+    for aprendiz in data_presencial:
         activos = aprendiz.total_aprendices_activos
         nivel = aprendiz.nivel_formacion
-        
+    
         if nivel in niveles_habilitados:
             niveles_habilitados[nivel] += activos
-            
-    #PRESENCIAL
+    #VIRTUAL
     for aprendiz in data_virtual:
         activos = aprendiz.total_aprendices_activos
         nivel = aprendiz.nivel_formacion
@@ -93,21 +108,53 @@ def general(request):
             niveles_habilitados_virtual[nivel] += activos
     
    
-    
+    #DATOS PARA RENDERIZAR LAS GRAFICAS 
     labels_presenciales = [f'{nivel} Presencial' for nivel in  niveles_habilitados.keys()] 
     labels_virtuales = [f'{nivel} Virtual' for nivel in  niveles_habilitados_virtual.keys()]
-    data_values = list(niveles_habilitados.values())
+    data_values_presencial = list(niveles_habilitados.values())
     data_values_virtual = list(niveles_habilitados_virtual.values())
-    data =data_values + data_values_virtual
+    data =data_values_presencial + data_values_virtual
+    
+    
+    #NOTA VERIFICA QUE PRESENCIAL=1,VIRTUAL=2,DISTANCIA=3
+    
+    modalidad_presencial_metas = 1
+    modalidad_virtual_metas = 2
+    metas_presencial = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas)
+    metas_virtual = Metas_formacion.objects.filter(metd_id=modalidad_virtual_metas)
+   
+    #DATOS PARA LA TABLA
+    
+    data_tabla_presencial = data_values_presencial + [fecha_inicio_mas_baja_presencial_tabla] +[fecha_inicio_mas_alta_presencial_tabla]
+    data_tabla_virtual = data_values_virtual + [fecha_inicio_mas_baja_virtual_tabla] + [fecha_inicio_mas_alta_virtual_tabla]
+    
+    #METAS CON PORCENTAJES
+    metas_presencial_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas)
+    metas_virtual_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_virtual_metas)
+    
+    metas_presencial_porcentaje_res = list(metas_presencial_porcentaje.values_list('met_formacion_curso_especial','met_formacion_tecnologo','met_formacion_tecnico','met_formacion_auxiliar','met_formacion_operario','met_formacion_evento'))
+    metas_virtual_porcentaje_res = list(metas_virtual_porcentaje.values_list('met_formacion_curso_especial','met_formacion_tecnologo','met_formacion_tecnico','met_formacion_auxiliar','met_formacion_operario','met_formacion_evento'))
+    
+    metas = metas_presencial_porcentaje_res + metas_virtual_porcentaje_res
+    metas_conversion = sum(metas, ())
+    metas_valores = list(metas_conversion)
+    
+
+   
     context = {
         'labels_presenciales':json.dumps(labels_presenciales),
         'labels_virtuales':json.dumps(labels_virtuales),
         'data':data,
-        
+  
+        'metas_presencial':metas_presencial,
+        'metas_virtual':metas_virtual,
+        'data_tabla_presencial':data_tabla_presencial,
+        'data_tabla_virtual':data_tabla_virtual,
+     
+        'metas_valores':json.dumps(metas_valores)
     }
 
-    print(data)
- 
+
 
     return render(request, 'General/general.html', context)
 
@@ -333,7 +380,7 @@ def Formacion_regular_index(request):
     form = Form_meta
     form_meta_formacion = Form_meta_formacion
 
-    
+ 
     context = {
         'form':form,
         'form_meta_formacion' : form_meta_formacion,

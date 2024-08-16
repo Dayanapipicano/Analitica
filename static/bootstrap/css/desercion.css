@@ -1,3 +1,9 @@
 .table-dark {
     background-color: #274f3b;
 }
+.fixed-header {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
+}

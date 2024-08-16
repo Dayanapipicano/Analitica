@@ -210,7 +210,7 @@ class Meta(models.Model):
     per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE, to_field='per_documento')
     
     def __str__(self):
-        return self.met_codigo
+        return self.met_año
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
     est_nombre = models.CharField(max_length=100)
@@ -245,15 +245,15 @@ class Estrategia_detalle(models.Model):
 class Metas_formacion(models.Model):
     metd_id = models.AutoField(primary_key=True)
     metd_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
-    met_formacion_operario = models.CharField(max_length=150)
-    met_formacion_auxiliar = models.CharField(max_length=150)
-    met_formacion_tecnico = models.CharField(max_length=150)
-    met_formacion_profundizacion_tecnica = models.CharField(max_length=150)
-    met_formacion_tecnologo = models.CharField(max_length=150)
-    met_formacion_evento = models.CharField(max_length=150)
-    met_formacion_curso_especial = models.CharField(max_length=150)
-    met_formacion_bilinguismo = models.CharField(max_length=150)
-    met_formacion_sin_bilinguismo = models.CharField(max_length=150)
+    met_formacion_operario = models.IntegerField()
+    met_formacion_auxiliar = models.IntegerField()
+    met_formacion_tecnico = models.IntegerField()
+    met_formacion_profundizacion_tecnica = models.IntegerField()
+    met_formacion_tecnologo = models.IntegerField()
+    met_formacion_evento = models.IntegerField()
+    met_formacion_curso_especial = models.IntegerField()
+    met_formacion_bilinguismo = models.IntegerField()
+    met_formacion_sin_bilinguismo = models.IntegerField()
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE, to_field='met_id')
 
 
