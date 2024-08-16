@@ -11,20 +11,19 @@
 
             <div class="row align-items-center">
                 <div class="col-md-3 mb-3">
-                    <!-- Fecha Inicio -->
+                   
                     <div class="form-group row">
                         <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="filtroFechaInicio">
+                            <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}" onchange="aplicarFiltrosGeneral()">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <!-- Fecha Fin -->
                     <div class="form-group row">
-                        <label for="filtroFechaFin" class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
+                        <label class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="filtroFechaFin">
+                            <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" onchange="aplicarFiltrosGeneral()" value="{{ request.GET.fecha_fin }}">
                         </div>
                     </div>
                 </div>
@@ -166,6 +165,23 @@
 </script>
 <script id="metas_valores" type="application/json">
     {{metas_valores|safe}}
+</script>
+<script>
+
+function aplicarFiltrosGeneral() {
+    const fecha_fin = document.getElementById('fecha_fin').value;
+    const fecha_inicio = document.getElementById('fecha_inicio').value;
+  
+  
+    let url = "{% url 'cores:general' %}?";
+    if (fecha_fin) {
+        url += `fecha_fin=${fecha_fin}&`;
+    }
+    if (fecha_inicio) {
+        url += `fecha_inicio=${fecha_inicio}`;
+    }
+    window.location.href = url;
+  }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'bootstrap/js/chart.js' %}"></script>

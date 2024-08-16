@@ -15,7 +15,7 @@
                         <div class="col-sm-7">
                             <input type="date" class="form-control form-control-sm" id="filtroFechaInicio" name="filtroFechaInicio"
                                    onchange="filtros_desercion()"
-                                   value="{{ select_fecha_inicio_ficha|default:fecha_actual }}">
+                                   value="{{ select_fecha_inicio_ficha}}">
                         </div>
                     </div>
                 </div>
@@ -59,8 +59,11 @@
 
                                 <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
                                 {% for choice in modalidad%}
-                                    <option value="{{ choice.0 }}" {% if choice.0 == select_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
+                                    <option value="{{ choice.id }}" {% if choice.id == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
                                 {% endfor %}
+
+
+                           
                             </select>
                         </div>
                     </div>

@@ -16,6 +16,7 @@ from .serializers import MetaSerializer,EstrateiaSerializer
 from django.utils import timezone
 from apps.personas.models import Rol,Persona_rol
 from apps.personas.decorators import permission_required
+from django.db.models import Min, Max
 import json
 #redirecciones a las vistas
 def menu(request):
@@ -33,12 +34,14 @@ def Desercion_index(request):
     regional = Regional.regional.field.choices
     centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
     modalidad = Modalidad.objects.all()
-    
+    desercion_datos = P04.objects.all()
+   
     context = {
         'municipio':municipio,
         'regional': regional,
         'centro_de_formacion' : centro_de_formacion,
-        'modalidad': modalidad
+        'modalidad': modalidad,
+        'desercion_datos':desercion_datos
     }
     return render(request, 'Desercion/desercion.html', context)
 
@@ -50,30 +53,43 @@ def estrategias_institucionales(request):
 
 def formacion_regular(request):
     return render(request, 'Formacion_regular/formacion_regular.html')
-from django.db.models import Min, Max
+
+
+
 def general(request):
+    select_fecha_inicio = request.GET.get('fecha_inicio')
+    print(select_fecha_inicio)
+    select_fecha_fin = request.GET.get('fecha_fin')
     
+    datos_p04= P04.objects.all()
+    
+    
+    if select_fecha_inicio:
+            select_fecha_inicio = datetime.strptime(select_fecha_inicio, '%Y-%m-%d').date()
+    if select_fecha_fin:
+        select_fecha_fin = datetime.strptime(select_fecha_fin, '%Y-%m-%d').date()
+    
+   
+    
+    if select_fecha_inicio and select_fecha_fin:
+        datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio, fecha_terminacion_ficha__lte=select_fecha_fin)
+     
+    elif select_fecha_inicio:
+        datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio)
+    
+    elif select_fecha_fin:
+        datos_p04 = datos_p04.filter(fecha_terminacion_ficha__lte=select_fecha_fin)
+        
+ 
     filtro_modalidad_presencial = 'PRESENCIAL'
-    data_presencial =  P04.objects.filter(modalidad_formacion=filtro_modalidad_presencial)
-    
     filtro_modalidad_virtual = 'VIRTUAL'
-    data_virtual =  P04.objects.filter(modalidad_formacion=filtro_modalidad_virtual)
+    
+    data_presencial =  datos_p04.filter(modalidad_formacion=filtro_modalidad_presencial)
     
     
-    #FECHAS PRESENCIAL
-    fecha_inicio_mas_baja_presencial = data_presencial.aggregate(Min('fecha_inicio_ficha'))
-    fecha_inicio_mas_baja_presencial_tabla = fecha_inicio_mas_baja_presencial.get('fecha_inicio_ficha__min')
+    data_virtual =  datos_p04.filter(modalidad_formacion=filtro_modalidad_virtual)
     
-    fecha_inicio_mas_alta_presencial = data_presencial.aggregate(Max('fecha_terminacion_ficha'))
-    fecha_inicio_mas_alta_presencial_tabla = fecha_inicio_mas_alta_presencial.get('fecha_terminacion_ficha__max')
-  
-    #FECHAS VIRTUAL
-    fecha_inicio_mas_baja_virtual = data_virtual.aggregate(Min('fecha_inicio_ficha'))
-    fecha_inicio_mas_baja_virtual_tabla = fecha_inicio_mas_baja_virtual.get('fecha_inicio_ficha__min')
     
-    fecha_inicio_mas_alta_virtual = data_virtual.aggregate(Max('fecha_terminacion_ficha'))
-    fecha_inicio_mas_alta_virtual_tabla = fecha_inicio_mas_alta_virtual.get('fecha_terminacion_ficha__max')
-  
     niveles_habilitados = {
         'CURSO ESPECIAL' : 0,
         'TECNÓLOGO' : 0,
@@ -107,6 +123,21 @@ def general(request):
         if nivel in niveles_habilitados_virtual:
             niveles_habilitados_virtual[nivel] += activos
     
+    
+    #FECHAS PRESENCIAL
+    fecha_inicio_mas_baja_presencial = data_presencial.aggregate(Min('fecha_inicio_ficha'))
+    fecha_inicio_mas_baja_presencial_tabla = fecha_inicio_mas_baja_presencial.get('fecha_inicio_ficha__min')
+    
+    fecha_inicio_mas_alta_presencial = data_presencial.aggregate(Max('fecha_terminacion_ficha'))
+    fecha_inicio_mas_alta_presencial_tabla = fecha_inicio_mas_alta_presencial.get('fecha_terminacion_ficha__max')
+  
+    #FECHAS VIRTUAL
+    fecha_inicio_mas_baja_virtual = data_virtual.aggregate(Min('fecha_inicio_ficha'))
+    fecha_inicio_mas_baja_virtual_tabla = fecha_inicio_mas_baja_virtual.get('fecha_inicio_ficha__min')
+    
+    fecha_inicio_mas_alta_virtual = data_virtual.aggregate(Max('fecha_terminacion_ficha'))
+    fecha_inicio_mas_alta_virtual_tabla = fecha_inicio_mas_alta_virtual.get('fecha_terminacion_ficha__max')
+  
    
     #DATOS PARA RENDERIZAR LAS GRAFICAS 
     labels_presenciales = [f'{nivel} Presencial' for nivel in  niveles_habilitados.keys()] 
@@ -151,7 +182,9 @@ def general(request):
         'data_tabla_presencial':data_tabla_presencial,
         'data_tabla_virtual':data_tabla_virtual,
      
-        'metas_valores':json.dumps(metas_valores)
+        'metas_valores':json.dumps(metas_valores),
+        'select_fecha_fin':select_fecha_fin,
+        'select_fecha_inicio':select_fecha_inicio
     }
 
 
@@ -291,7 +324,7 @@ def detalle_ficha(request, identificador_ficha):
 from datetime import datetime, date
 class Desercion(TemplateView):
     template_name = 'Desercion/desercion.html'
-    
+  
     
     def get(self, request, *args, **kwargs):
         
@@ -305,6 +338,7 @@ class Desercion(TemplateView):
        
         
         select_modalidad = request.GET.get('modalidad')
+        print(select_modalidad)
         select_municipio = request.GET.get('municipio')
         select_regional = request.GET.get('regional')
         select_centro_de_formacion = request.GET.get('centro_de_formacion')
@@ -346,32 +380,32 @@ class Desercion(TemplateView):
             filtros_desercion['nombre_municipio_curso'] = select_municipio
         
         desercion_datos = P04.objects.filter(**filtros_desercion)
-       
+        print(desercion_datos)
    
-        context = self.get_context_data(
+        context = {
             
-            modalidad = Modalidad.objects.all(),
-            municipio = Municipio.Municipio_choices.choices,
-            regional = Regional.Regional_choices.choices,
-            centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices,
+            'modalidad' : Modalidad.objects.all(),
+            'municipio' :Municipio.Municipio_choices.choices,
+            'regional' :Regional.Regional_choices.choices,
+            'centro_de_formacion' : Centro_de_formacion.Centro_de_formacion_choices.choices,
             
             #mantiene la opcion 
-            select_modalidad= select_modalidad,
-            select_municipio=select_municipio,
-            select_regional=select_regional,
-            select_centro_de_formacion = select_centro_de_formacion,
-            select_fecha_inicio_ficha =select_fecha_inicio_ficha,
-            select_fecha_terminacion_ficha =select_fecha_terminacion_ficha,
+            'select_modalidad': select_modalidad,
+            'select_municipio':select_municipio,
+            'select_regional':select_regional,
+            'select_centro_de_formacion' : select_centro_de_formacion,
+            'select_fecha_inicio_ficha' :select_fecha_inicio_ficha,
+            'select_fecha_terminacion_ficha' :select_fecha_terminacion_ficha,
             
-            desercion_datos = desercion_datos,
-            aprendices_activos=aprendices_activos,
-            deserciones=deserciones,
-            fecha_actual = date.today().strftime('%Y-%m-%d')
-           
-        )
+            'desercion_datos' :desercion_datos,
+            'aprendices_activos':aprendices_activos,
+            'deserciones':deserciones,
         
-        return self.render_to_response(context) 
-    
+           
+        } 
+        
+        
+        return render(request,'Desercion/desercion.html', context)
 
 
 #FORMACION REGULAR 

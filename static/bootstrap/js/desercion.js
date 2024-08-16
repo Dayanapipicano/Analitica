@@ -1,5 +1,5 @@
 function filtros_desercion() {
-    const modalidad = document.getElementById('id_modalidad').value;
+    const id_modalidad = document.getElementById('id_modalidad').value;
     const municipio = document.getElementById('id_municipio').value;
     const regional = document.getElementById('id_regional').value;
     const centro_de_formacion = document.getElementById('id_centro_de_formacion').value;
@@ -19,8 +19,8 @@ function filtros_desercion() {
         url_filtro += `fecha_terminacion_ficha=${today}&`;
     }
 
-    if (modalidad) {
-        url_filtro += `modalidad=${modalidad}&`;
+    if (id_modalidad) {
+        url_filtro += `id_modalidad=${id_modalidad}&`;
     }
 
     if (municipio) {

@@ -188,3 +188,4 @@ new Chart(ctx_complementaria, {
     plugins: [customPlugin],
 });
 
+
