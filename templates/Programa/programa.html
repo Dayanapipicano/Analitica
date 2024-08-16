@@ -48,7 +48,7 @@
 
                                     <option value="" disabled {% if not selected_modalidad %}selected{% endif %}>Selecciona modalidad</option>
                                     {% for choice in modalidad %}
-                                        <option value="{{ choice.0 }}" {% if choice.0 == selected_modalidad %}selected{% endif %}>{{ choice.1 }}</option>
+                                        <option value="{{ choice.id }}" {% if choice.id == selected_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
