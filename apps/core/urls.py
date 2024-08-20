@@ -36,5 +36,8 @@ urlpatterns = [
     
     #GRAFICAS GENERAL
     path('general/index', core_views.general, name="general"),
+    
+    #estrategias institucionales graficas 
+    path('estrategias/index', core_views.estrategias, name="estrategias_index"),
 ]   
 

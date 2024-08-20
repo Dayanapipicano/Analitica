@@ -31,7 +31,10 @@ class Municipio(models.Model):
         MORALES = 'MORALES','Morales',
         PATIA_EL_BORDO = 'PATIA (EL BORDO)','Patía (El Bordo)',
         PAEZ_BELALCAZAR = 'PAEZ (BELALCAZAR)','Páez (Belalcázar)',
+        PIENDAMÓ = 'PIENDAMÓ','Piendamó',
+        PIAMONTE ='PIAMONTE','Piamonte',
         POPAYAN ='POPAYÁN','Popayán',
+        ROSAS='ROSAS','Rosas',
         PUERTO_TEJADA = 'PUERTO TEJADA','Puerto Tejada',
         PURACÉ_COCONUCO = 'PURACÉ (COCONUCO)','Puracé (Coconuco)',
         SAN_SEBASTIAN = 'SAN SEBASTIÁN','San Sebastián',
@@ -42,9 +45,11 @@ class Municipio(models.Model):
         SUCRE = 'SUCRE','Sucre',
         SUAREZ = 'SUAREZ','Suarez',
         TIMBIO = 'TIMBIO','Timbío',
+        TORIBIO = 'TORIBIO','Toribio',
         TIMBIQUI = 'TIMBIQUI','Timbiquí',
         TOTORO = 'TOTORO','Totoró',
-        VILLA_RICA = 'VILLA RICA','Villa Rica' 
+        VILLA_RICA = 'VILLA RICA','Villa Rica'
+         
 
     
     nombre = models.CharField(max_length=150, choices=Municipio_choices.choices)

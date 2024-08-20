@@ -34,7 +34,7 @@ urlpatterns = [
     
   
 
-    path('estrategias/index', views.estrategias, name="estrategias"),
+    
 
     path('grafica', views.grafica, name="grafica"),
   

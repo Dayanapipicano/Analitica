@@ -45,8 +45,6 @@ def Desercion_index(request):
     }
     return render(request, 'Desercion/desercion.html', context)
 
-def estrategias(request):
-    return render(request, 'Estrategias/estrategias.html')
 
 def estrategias_institucionales(request):
     return render(request, 'Estrategias_institucionales/estrategias_institucionales.html')
@@ -54,7 +52,9 @@ def estrategias_institucionales(request):
 def formacion_regular(request):
     return render(request, 'Formacion_regular/formacion_regular.html')
 
-
+#Graficas de es
+def estrategias(request):
+    return render(request, 'Estrategias/estrategias.html')
 
 def general(request):
     select_fecha_inicio = request.GET.get('fecha_inicio')
@@ -235,19 +235,20 @@ class Cobertura_mapa(TemplateView):
     template_name = 'Cobertura/cobertura.html'
     
     def get(self, request, *args, **kwargs):
-        nombre_municipio = request.GET.get('nombre_municipio', None)
+        selected_municipio = request.GET.get('nombre_municipio', None)
+        
         programas_lista = []
         municipio = Municipio.nombre.field.choices
 
-        if nombre_municipio:
-            programas = P04.objects.filter(nombre_municipio_curso=nombre_municipio).values_list('nombre_programa_formacion', flat=True).distinct()
+        if selected_municipio:
+            programas = P04.objects.filter(nombre_municipio_curso=selected_municipio).values_list('nombre_programa_formacion', flat=True).distinct()
             programas_lista = list(programas)
         
         
         cantidad_de_programas =  len(programas_lista)
     
         
-        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,cantidad_de_programas=cantidad_de_programas)
+        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,cantidad_de_programas=cantidad_de_programas,selected_municipio=selected_municipio)
         return self.render_to_response(context)
 
 #PROGRAMA

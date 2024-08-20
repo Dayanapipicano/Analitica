@@ -16,7 +16,9 @@
 .mapadiv path:hover {
     fill: rgb(12, 111, 224);
 }
-
+.mapadiv path.selected {
+    fill: rgb(12, 111, 224); /* Mismo color o un color diferente para cuando esté seleccionado */
+}
 .mapa{
     width: 100%;
     margin-left: auto;
