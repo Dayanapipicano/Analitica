@@ -235,20 +235,41 @@ class Cobertura_mapa(TemplateView):
     template_name = 'Cobertura/cobertura.html'
     
     def get(self, request, *args, **kwargs):
-        selected_municipio = request.GET.get('nombre_municipio', None)
+        selected_municipio = request.GET.get('nombre_municipio', '')
+        selected_fecha_inicio = request.GET.get('filtroFechaInicio')
+        selected_fecha_fin = request.GET.get('filtroFechaFin')
         
         programas_lista = []
         municipio = Municipio.nombre.field.choices
 
+        
         if selected_municipio:
-            programas = P04.objects.filter(nombre_municipio_curso=selected_municipio).values_list('nombre_programa_formacion', flat=True).distinct()
+            programas = P04.objects.filter(nombre_municipio_curso=selected_municipio).values_list('nombre_programa_formacion', flat=True)
+       
+        if not selected_fecha_fin:
+            selected_fecha_fin = timezone.now().date()
+        if selected_fecha_inicio and not selected_fecha_fin:
+            programas = P04.objects.filter(fecha_inicio_ficha__gte=selected_fecha_inicio).values_list('nombre_programa_formacion', flat=True)
+        elif selected_fecha_inicio and selected_fecha_fin:
+            programas = P04.objects.filter(fecha_inicio_ficha__range=[selected_fecha_inicio,selected_fecha_fin]).values_list('nombre_programa_formacion', flat=True)
+            
+            
             programas_lista = list(programas)
-        
-        
-        cantidad_de_programas =  len(programas_lista)
+            
+            municipio = programas.values_list('nombre_municipio_curso', flat=True).distinct()
+            
+            
+            print(municipio)
     
+            
+     
+        # Filtrar los municipios en el modelo Municipio que están habilitados
+            
         
-        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,cantidad_de_programas=cantidad_de_programas,selected_municipio=selected_municipio)
+        
+       
+       
+        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,selected_municipio=selected_municipio,selected_fecha_inicio=selected_fecha_inicio,selected_fecha_fin=selected_fecha_fin)
         return self.render_to_response(context)
 
 #PROGRAMA
