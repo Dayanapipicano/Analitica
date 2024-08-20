@@ -44,12 +44,16 @@
                         <div class="form-group row">
                             <label for="filtroSeleccion3" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Modalidad:</label>
                             <div class="col-sm-8">
-                                <select class="form-control form-control-sm custom-select" id="modalidad" onchange="aplicarFiltros()">
+                                <select class="form-control form-control-sm custom-select" id="modalidad" name="modalidad"onchange="aplicarFiltros()">
 
-                                    <option value="" disabled {% if not selected_modalidad %}selected{% endif %}>Selecciona modalidad</option>
-                                    {% for choice in modalidad %}
-                                        <option value="{{ choice.id }}" {% if choice.id == selected_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
-                                    {% endfor %}
+                                   
+                                    <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                                {% for choice in modalidad%}
+                                    <option value="{{ choice.id }}" {% if choice.id == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
+                                {% endfor %}
+                      
+                                
+
                                 </select>
                             </div>
                         </div>

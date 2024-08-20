@@ -55,16 +55,21 @@
                     <div class="form-group row">
                         <label for="filtroMunicipio1" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
                         <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="id_modalidad" onchange="filtros_desercion()" required>
+                            <select class="form-control form-control-sm custom-select" id="id_modalidad"name="modalidad" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                                   
+
+                                    <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
                                 {% for choice in modalidad%}
                                     <option value="{{ choice.id }}" {% if choice.id == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
                                 {% endfor %}
-
+                      
+                                
 
                            
                             </select>
+                           
+                            
                         </div>
                     </div>
                 </div>
@@ -74,7 +79,7 @@
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="id_regional" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona modalidad</option>
+                                <option value="" disabled {% if not select_regional %}selected{% endif %}>Selecciona regional</option>
                                 {% for choice in regional%}
                                     <option value="{{ choice.0 }}" {% if choice.0 == select_regional %}selected{% endif %}>{{ choice.1 }}</option>
                                 {% endfor %}
@@ -84,11 +89,11 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Centro de formacion:</label>
+                        <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Centro de centro de formacion:</label>
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="id_centro_de_formacion" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona modalidad</option>
+                                <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona centro de formacion</option>
                                 {% for choice in centro_de_formacion%}
                                     <option value="{{ choice.0 }}" {% if choice.0 == select_centro_de_formacion %}selected{% endif %}>{{ choice.1 }}</option>
                                 {% endfor %}
@@ -102,7 +107,7 @@
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_municipio %}selected{% endif %}>Selecciona modalidad</option>
+                                <option value="" disabled {% if not select_municipio %}selected{% endif %}>Selecciona municipio</option>
                                 {% for choice in municipio%}
                                     <option value="{{ choice.0 }}" {% if choice.0 == select_municipio %}selected{% endif %}>{{ choice.1 }}</option>
                                 {% endfor %}

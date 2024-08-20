@@ -324,7 +324,7 @@ def detalle_ficha(request, identificador_ficha):
 from datetime import datetime, date
 class Desercion(TemplateView):
     template_name = 'Desercion/desercion.html'
-  
+    
     
     def get(self, request, *args, **kwargs):
         
@@ -338,7 +338,6 @@ class Desercion(TemplateView):
        
         
         select_modalidad = request.GET.get('modalidad')
-        print(select_modalidad)
         select_municipio = request.GET.get('municipio')
         select_regional = request.GET.get('regional')
         select_centro_de_formacion = request.GET.get('centro_de_formacion')
@@ -369,7 +368,9 @@ class Desercion(TemplateView):
             filtros_desercion['fecha_inicio_ficha__lte'] = fecha_fin
 
         if select_modalidad and select_fecha_inicio_ficha:
+            
             filtros_desercion['modalidad_formacion'] = select_modalidad
+          
         if select_regional and select_modalidad:
             filtros_desercion['nombre_regional'] = select_regional
         if select_centro_de_formacion and select_regional:
@@ -380,33 +381,32 @@ class Desercion(TemplateView):
             filtros_desercion['nombre_municipio_curso'] = select_municipio
         
         desercion_datos = P04.objects.filter(**filtros_desercion)
-        print(desercion_datos)
+       
    
-        context = {
+        context = self.get_context_data(
             
-            'modalidad' : Modalidad.objects.all(),
-            'municipio' :Municipio.Municipio_choices.choices,
-            'regional' :Regional.Regional_choices.choices,
-            'centro_de_formacion' : Centro_de_formacion.Centro_de_formacion_choices.choices,
+            modalidad = Modalidad.objects.all(),
+            municipio = Municipio.Municipio_choices.choices,
+            regional = Regional.Regional_choices.choices,
+            centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices,
             
             #mantiene la opcion 
-            'select_modalidad': select_modalidad,
-            'select_municipio':select_municipio,
-            'select_regional':select_regional,
-            'select_centro_de_formacion' : select_centro_de_formacion,
-            'select_fecha_inicio_ficha' :select_fecha_inicio_ficha,
-            'select_fecha_terminacion_ficha' :select_fecha_terminacion_ficha,
+            select_modalidad= select_modalidad,
+ 
+            select_municipio=select_municipio,
+            select_regional=select_regional,
+            select_centro_de_formacion = select_centro_de_formacion,
+            select_fecha_inicio_ficha =select_fecha_inicio_ficha,
+            select_fecha_terminacion_ficha =select_fecha_terminacion_ficha,
             
-            'desercion_datos' :desercion_datos,
-            'aprendices_activos':aprendices_activos,
-            'deserciones':deserciones,
-        
+            desercion_datos = desercion_datos,
+            aprendices_activos=aprendices_activos,
+            deserciones=deserciones,
+            fecha_actual = date.today().strftime('%Y-%m-%d')
            
-        } 
+        )
         
-        
-        return render(request,'Desercion/desercion.html', context)
-
+        return self.render_to_response(context) 
 
 #FORMACION REGULAR 
 
