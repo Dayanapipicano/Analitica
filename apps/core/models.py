@@ -2,6 +2,18 @@ from django.db import models
 
 
     
+class Bilinguismo(models.Model):
+    
+    class Bilinguismo_choices(models.TextChoices):
+        ENGLISH_DOES_WORK_LEVEL_1 = 'ENGLISH DOES WORK - LEVEL 1','English does work - level 1',
+        ENGLISH_DOES_WORK_LEVEL_5 = 'ENGLISH DOES WORK - LEVEL 5','English does work - level 5',
+        ENGLISH_DOES_WORK_LEVEL_6 = 'ENGLISH DOES WORK - LEVEL 6','English does work - level 6',
+        INGLES_BASICO_NIVEL_1 = 'INGLES BASICO - NIVEL 1','Ingles basico nivel 1',
+        INGLES_BASICO_NIVEL_3 = 'INGLES BASICO - NIVEL 3','Ingles basico nivel 3',
+        INGLES_BASICO_NIVEL_4 = 'INGLES BASICO - NIVEL 4','Ingles basico nivel 4',
+     
+        
+    nombre_bilinguismo = models.CharField(max_length=150, choices=Bilinguismo_choices.choices)
     
 class Municipio(models.Model):
     
@@ -207,10 +219,11 @@ class Nivel_formacion(models.Model):
         EVENTO ='EVENTO','Evento',
         OPERARIO ='OPERARIO','Operario',
         TECNICO ='TÉCNICO','Técnico',
-        TECNOLOGO ='TECNÓLOGO','Tecnólogo'
-        PROFUNDIZACION = 'PROFUNDIZACION', 'Profundizacion'
-        BILINGUISMO = 'BILINGUISMO', 'Bilinguismo'
-        SIN_BILINGUISMO = 'SIN_BILINGUISMO','Sin_bilinguismo'
+        TECNOLOGO ='TECNÓLOGO','Tecnólogo',
+        PROFUNDIZACION = 'PROFUNDIZACION', 'Profundizacion',
+        BILINGUISMO = 'BILINGUISMO', 'Bilinguismo',
+        SIN_BILINGUISMO = 'SIN BILINGUISMO','Sin_bilinguismo',
+    
        
     
     nivel_formacion = models.CharField(max_length=150, choices=Nivel_formacion_choices.choices)

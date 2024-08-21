@@ -2,7 +2,7 @@ from django.forms import BaseModelForm
 from django.shortcuts import render
 from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from apps.core.models import Municipio,Regional,Centro_de_formacion
+from apps.core.models import Municipio,Regional,Centro_de_formacion,Bilinguismo
 from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad
 from django.views.generic import TemplateView, CreateView, UpdateView
 from apps.core.models import Programas_formacion,Nivel_formacion
@@ -193,16 +193,6 @@ def general(request):
 
 
 
-def Programa_index(request):
-    modalidad = Modalidad.objects.all()
-    programa_formacion_choices = Programas_formacion.Programas_formacion_choices.choices
-    nivel_formacion = Nivel_formacion.Nivel_formacion_choices.choices
-    context = {
-        'modalidad': modalidad,
-        'programa_formacion': programa_formacion_choices,
-        'nivel_formacion':nivel_formacion
-    }
-    return render(request, 'Programa/programa.html', context)
 
 
 
@@ -263,46 +253,110 @@ class Cobertura_mapa(TemplateView):
         programas_conteo = Counter(programas_lista)
         
         programa_data = [{'programa': programa, 'programa_count': count} for programa, count in programas_conteo.items()]
-        print('jshf',programa_data)
+    
         context = self.get_context_data(programa_data=programa_data,municipio=municipio,selected_municipio=selected_municipio,selected_fecha_inicio=selected_fecha_inicio,selected_fecha_fin=selected_fecha_fin,programas_conteo=programas_conteo)
         return self.render_to_response(context)
 
+
+
 #PROGRAMA
+def capitalizar_texto(text):
+    return text.capitalize()
+def Programa_index(request):
+    modalidad = Modalidad.objects.all()
+    programa_formacion_choices = Programas_formacion.Programas_formacion_choices.choices
+    nivel_formacion = Nivel_formacion.Nivel_formacion_choices.choices
+    context = {
+        'modalidad': modalidad,
+        'programa_formacion': programa_formacion_choices,
+        'nivel_formacion':nivel_formacion
+    }
+    return render(request, 'Programa/programa.html', context)
+
 class Programa(TemplateView):
     template_name = 'Programa/programa.html'
     
     def get(self, request, *args, **kwargs):
-        selected_nivel_formacion = request.GET.get('nivel_formacion')
+        selected_nivel_formacion = request.GET.get('nivel_formacion','')
+        
         selected_programa_formacion = request.GET.get('programa_formacion')
         selected_modalidad = request.GET.get('modalidad')
-       
+        #estabas aqui queriendo solucionar lo de porque no me filtra por bilinguismo toca cambiarlo a curso especial para ue funcione
+        if selected_programa_formacion == 'BILINGUISMO':
+            selected_programa_formacion = 'CURSO ESPECIAL'
+            print('sdfdsf',selected_nivel_formacion)
+        modalidad_nombre = ''
+        
+        #esto me manda las modaldades convertidas pero en realizad no solucionaron la idea es que se quede mantenida nada mas 
+        if selected_modalidad == '1':
+            print('entisjsdfjks')
+            modalidad_nombre = 'PRESENCIAL'
+            print('hello',modalidad_nombre)
+        elif selected_modalidad == '2':
+            modalidad_nombre = 'VIRTUAL'
+            
+            
+        selected_modalidad = [{'id':selected_modalidad,'modalidad':modalidad_nombre}]
+        print(selected_modalidad)
+        
+        
+        #DATOS DE LOS SELECT
+        if selected_nivel_formacion == 'BILINGUISMO':
+            programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
+            
+            programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL', nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
+            valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
+        elif selected_nivel_formacion =='SIN BILINGUISMO':
+            programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
+
+            programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL').exclude(nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
+            valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
+        else:
+            programas_habilitados = P04.objects.filter(nivel_formacion=selected_nivel_formacion).values('nombre_programa_formacion').distinct()
+            valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
+
+        modalidad_id = {
+            'PRESENCIAL':1,
+            'VIRTUAL':2,
+            'DISTANCIA':3,
+            
+        }
+        modalidades_habilitados = P04.objects.filter(nombre_programa_formacion=selected_programa_formacion).values('modalidad_formacion').distinct()
+        valores_modalidad = [
+          {
+        'id': modalidad_id.get(modalidad['modalidad_formacion'].upper(), 0),  # Obtener el ID
+        'modalidad': capitalizar_texto(modalidad['modalidad_formacion'])  # Capitalizar el nombre
+        } for modalidad in modalidades_habilitados ]
+     
+  
+        
+        
+            
+        #FILTROS DE PROGRAMA
         
         filtros_programa = {}
-
-        fichas = P04.objects.all()
-
+        
+        
         if selected_nivel_formacion:
             filtros_programa['nivel_formacion'] = selected_nivel_formacion
+            print('ksdf', filtros_programa)
         
-        # Filtrar por programa_formacion solo si ya se seleccionó nivel_formacion
         if selected_programa_formacion and selected_nivel_formacion:
             filtros_programa['nombre_programa_formacion'] = selected_programa_formacion
-        
-        if selected_modalidad and selected_programa_formacion:
-            filtros_programa['modalidad_formacion'] = selected_modalidad
-            
+       
+       
         
         lista_filtros = P04.objects.filter(**filtros_programa)
-
-
+        
         municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
+
 
        
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
-            programa_formacion=Programas_formacion.Programas_formacion_choices.choices,
-            modalidad=Modalidad.objects.all(),
+            programa_formacion=valores_programa,
+            modalidad=valores_modalidad,
             
             #Mantiene la opcion en el select
             selected_nivel_formacion=selected_nivel_formacion,

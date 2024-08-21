@@ -32,7 +32,7 @@
                             <label for="filtroSeleccion2" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Programa:</label>
                             <div class="col-sm-8">
                                 <select class="form-control form-control-sm custom-select" id="programa_formacion" onchange="aplicarFiltros()">
-                                    <option value="" disabled {% if not selected_programa_formacion %}selected{% endif %}>Selecciona programa</option>
+                                    <option value="" >Selecciona programa</option>
                                     {% for choice in programa_formacion %}
                                         <option value="{{ choice.0 }}" {% if choice.0 == selected_programa_formacion %}selected{% endif %}>{{ choice.1 }}</option>
                                     {% endfor %}
@@ -44,12 +44,15 @@
                         <div class="form-group row">
                             <label for="filtroSeleccion3" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Modalidad:</label>
                             <div class="col-sm-8">
+                                        <p>Valor seleccionado: {{ selected_modalidad }}</p>
                                 <select class="form-control form-control-sm custom-select" id="modalidad" name="modalidad"onchange="aplicarFiltros()">
 
                                    
-                                    <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
-                                {% for choice in modalidad%}
-                                    <option value="{{ choice.id }}" {% if choice.id == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
+                                    <option value="" {% if not selected_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                            
+                                    {% for choice in modalidad%}
+
+                                    <option value="{{ choice.id }}" {% if choice.id == selected_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
                                 {% endfor %}
                       
                                 
@@ -199,6 +202,21 @@
         
         window.location.href = url;
       }
+      document.getElementById('nivel_formacion').addEventListener('change', function() {
+        // Limpia los filtros dependientes y aplica los nuevos filtros
+        document.getElementById('programa_formacion').value = ''; // Limpia el filtro de programa
+        document.getElementById('modalidad').value = ''; // Limpia el filtro de modalidad
+        aplicarFiltros();
+    });
+    
+    document.getElementById('programa_formacion').addEventListener('change', function() {
+        // Limpia el filtro de modalidad y aplica los nuevos filtros
+        document.getElementById('modalidad').value = '';
+        aplicarFiltros();
+    });
+    
+
+
 
       
 </script>
