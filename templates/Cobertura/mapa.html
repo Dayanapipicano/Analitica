@@ -283,6 +283,7 @@
 
 
             function obtenerProgramas(nombre_municipio) {
+            
                 var filtroFechaInicio = $('#filtroFechaInicio').val();
                 var filtroFechaFin = $('#filtroFechaFin').val();
             
@@ -301,6 +302,7 @@
                     url += "filtroFechaInicio=" + encodeURIComponent(filtroFechaInicio) + "&";
                 }
                 if (filtroFechaFin) {
+                    console.log(filtroFechaFin)
                     url += "filtroFechaFin=" + encodeURIComponent(filtroFechaFin) + "&";
                 }
             

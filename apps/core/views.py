@@ -230,7 +230,7 @@ def administrador(request):
 def cobertura(request):
     municipio = Municipio.nombre.field.choices
     return render(request, 'Cobertura/cobertura.html', {'municipio':municipio})
-
+from collections import Counter
 class Cobertura_mapa(TemplateView):
     template_name = 'Cobertura/cobertura.html'
     
@@ -238,38 +238,33 @@ class Cobertura_mapa(TemplateView):
         selected_municipio = request.GET.get('nombre_municipio', '')
         selected_fecha_inicio = request.GET.get('filtroFechaInicio')
         selected_fecha_fin = request.GET.get('filtroFechaFin')
+       
         
-        programas_lista = []
+        
         municipio = Municipio.nombre.field.choices
 
-        
-        if selected_municipio:
-            programas = P04.objects.filter(nombre_municipio_curso=selected_municipio).values_list('nombre_programa_formacion', flat=True)
-       
+    
         if not selected_fecha_fin:
             selected_fecha_fin = timezone.now().date()
-        if selected_fecha_inicio and not selected_fecha_fin:
-            programas = P04.objects.filter(fecha_inicio_ficha__gte=selected_fecha_inicio).values_list('nombre_programa_formacion', flat=True)
-        elif selected_fecha_inicio and selected_fecha_fin:
-            programas = P04.objects.filter(fecha_inicio_ficha__range=[selected_fecha_inicio,selected_fecha_fin]).values_list('nombre_programa_formacion', flat=True)
             
-            
-            programas_lista = list(programas)
-            
-            municipio = programas.values_list('nombre_municipio_curso', flat=True).distinct()
-            
-            
-            print(municipio)
     
-            
-     
-        # Filtrar los municipios en el modelo Municipio que están habilitados
-            
+        p04 = P04.objects.all()
         
+        if selected_fecha_inicio and selected_fecha_fin:
+            p04 = p04.filter(fecha_inicio_ficha__range=[selected_fecha_inicio, selected_fecha_fin])
+        elif selected_fecha_inicio:
+            p04 = p04.filter(fecha_inicio_ficha__gte=selected_fecha_inicio)
+
+
+        if selected_municipio:
+            p04 = p04.filter(nombre_municipio_curso=selected_municipio)
+
+        programas_lista = list(p04.values_list('nombre_programa_formacion', flat=True))
+        programas_conteo = Counter(programas_lista)
         
-       
-       
-        context = self.get_context_data(programas_lista=programas_lista,municipio=municipio,selected_municipio=selected_municipio,selected_fecha_inicio=selected_fecha_inicio,selected_fecha_fin=selected_fecha_fin)
+        programa_data = [{'programa': programa, 'programa_count': count} for programa, count in programas_conteo.items()]
+        print('jshf',programa_data)
+        context = self.get_context_data(programa_data=programa_data,municipio=municipio,selected_municipio=selected_municipio,selected_fecha_inicio=selected_fecha_inicio,selected_fecha_fin=selected_fecha_fin,programas_conteo=programas_conteo)
         return self.render_to_response(context)
 
 #PROGRAMA
