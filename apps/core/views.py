@@ -281,22 +281,10 @@ class Programa(TemplateView):
         
         selected_programa_formacion = request.GET.get('programa_formacion')
         selected_modalidad = request.GET.get('modalidad')
-        #estabas aqui queriendo solucionar lo de porque no me filtra por bilinguismo toca cambiarlo a curso especial para ue funcione
-        if selected_programa_formacion == 'BILINGUISMO':
-            selected_programa_formacion = 'CURSO ESPECIAL'
-            print('sdfdsf',selected_nivel_formacion)
-        modalidad_nombre = ''
         
-        #esto me manda las modaldades convertidas pero en realizad no solucionaron la idea es que se quede mantenida nada mas 
-        if selected_modalidad == '1':
-            print('entisjsdfjks')
-            modalidad_nombre = 'PRESENCIAL'
-            print('hello',modalidad_nombre)
-        elif selected_modalidad == '2':
-            modalidad_nombre = 'VIRTUAL'
+        
             
-            
-        selected_modalidad = [{'id':selected_modalidad,'modalidad':modalidad_nombre}]
+       
         print(selected_modalidad)
         
         
@@ -337,16 +325,24 @@ class Programa(TemplateView):
         filtros_programa = {}
         
         
-        if selected_nivel_formacion:
+        
+        
+        if selected_nivel_formacion == 'BILINGUISMO':
+            filtros_programa['nombre_programa_especial'] = 'PROGRAMA DE BILINGUISMO'
+        elif selected_nivel_formacion:
             filtros_programa['nivel_formacion'] = selected_nivel_formacion
-            print('ksdf', filtros_programa)
+            
         
         if selected_programa_formacion and selected_nivel_formacion:
             filtros_programa['nombre_programa_formacion'] = selected_programa_formacion
-       
+        
+        if selected_modalidad and selected_programa_formacion:
+            filtros_programa['modalidad_formacion'] = selected_modalidad
        
         
+        
         lista_filtros = P04.objects.filter(**filtros_programa)
+        print(lista_filtros)
         
         municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
@@ -356,7 +352,7 @@ class Programa(TemplateView):
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
             programa_formacion=valores_programa,
-            modalidad=valores_modalidad,
+            modalidad=Modalidad.objects.all(),
             
             #Mantiene la opcion en el select
             selected_nivel_formacion=selected_nivel_formacion,
