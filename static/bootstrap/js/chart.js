@@ -1,4 +1,5 @@
 
+//GRAFICA TITULADA
 //datos del p04
 const data = JSON.parse(document.getElementById('data').textContent)
 
@@ -8,17 +9,30 @@ const labels_presenciales = JSON.parse(document.getElementById('labels_presencia
 const metas_valores = JSON.parse(document.getElementById('metas_valores').textContent)
 
 
-console.log('dato',data)
-console.log('metas',metas_valores)
+//GRAFICA COMPLEMENTARIA 
+const bilinguismo_activos_virtual = JSON.parse(document.getElementById('bilinguismo_activos_virtual').textContent)
+const bilinguismo_activos_data_presencial = JSON.parse(document.getElementById('bilinguismo_activos_data_presencial').textContent)
+
+const sin_bilinguismo_activos_data_virtual = JSON.parse(document.getElementById('sin_bilinguismo_activos_data_virtual').textContent)
+const sin_bilinguismo_activos_data_presencial = JSON.parse(document.getElementById('sin_bilinguismo_activos_data_presencial').textContent)
+//METAS
 
 
-function showChart(chartId) {
+
+//funcion de cambiar las graficas
+function showChart(chartId,tableId) {
     // Oculta todos los gráficos
     document.querySelectorAll('.chart').forEach(chart => {
         chart.style.display = 'none';
     });
     // Muestra el gráfico seleccionado
     document.getElementById(chartId).style.display = 'block';
+    // Oculta todos las tablas
+    document.querySelectorAll('.data-table').forEach(table => {
+        table.style.display = 'none';
+    });
+    document.getElementById(tableId).style.display = 'block';
+
 }
 
 function Estado_de_color(value, max){
@@ -29,7 +43,7 @@ function Estado_de_color(value, max){
     return 'rgba(75, 192, 192, 0.2)';
 }
 
-
+//porcentajes metas titulada
 const backgroundColors = metas_valores.map((meta, index) => {
     const resultado = data[index];
     return Estado_de_color(resultado, meta)
@@ -38,7 +52,8 @@ const borderColor = metas_valores.map((meta, index) => {
     const resultado = data[index];
     return Estado_de_color(resultado, meta).replace('0.2','1.0')
 })
-console.log(backgroundColors)
+
+//porcentaje metas complementaria
 
 const ctx_titulada = document.getElementById('barchart_titulada').getContext('2d');
 
@@ -101,49 +116,21 @@ new Chart(ctx_titulada, {
 
 
 
+
+
+//COMPLEMENTARIA
 const ctx_complementaria = document.getElementById('barchart_complementaria').getContext('2d');
 
-
-const customPlugin = {
-    id: 'customPlugin',
-    
-    afterDraw: (chart) => {
-        const ctx = chart.ctx;
-        ctx.save();
-        const xAxis = chart.scales.x;
-        const yAxis = chart.scales.y;
-
-        // Set the font for the custom labels
-        ctx.font = '14px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        
-          
-
-        // Define the custom labels and their positions
-        const customLabels = ['Estrategia 1', 'Estrategia 2', 'Estrategia 3', 'Estrategia 4', 'Estrategia 5', 'Estrategia 6', 'Estrategia 7'];
-        const labelPositions = xAxis.getPixelForTick(1); // Get position for the first pair
-
-        // Loop through the labels and draw them at the correct positions
-        customLabels.forEach((label, index) => {
-            const posX = xAxis.getPixelForTick(index * 2 + 1);
-            ctx.fillText(label, posX, yAxis.bottom + 25);
-          
-        });
-
-        ctx.restore();
-    }
-};
 new Chart(ctx_complementaria, {
     width: 100,
     type: 'bar',
     data:  {
     
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['Bilingüismo Presencial', 'Bilingüismo Virtual', 'Sin Bilingüismo Presencial', 'Sin Bilingüismo Virtual'],
      
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: [bilinguismo_activos_data_presencial, bilinguismo_activos_virtual, sin_bilinguismo_activos_data_presencial, sin_bilinguismo_activos_data_virtual],
             borderWidth: 1,
            
             backgroundColor: [
@@ -185,7 +172,5 @@ new Chart(ctx_complementaria, {
             }
         }
     },
-    plugins: [customPlugin],
+  
 });
-
-

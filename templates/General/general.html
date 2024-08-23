@@ -50,8 +50,8 @@
 
             <div class="container my-4">
                 <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-primary" onclick="showChart('chart1')">Titulada</button>
-                    <button type="button" class="btn btn-secondary" onclick="showChart('chart2')">Complementaria</button>
+                    <button type="button" class="btn btn-primary" onclick="showChart('chart1','resultados_tabla')">Titulada</button>
+                    <button type="button" class="btn btn-secondary"  onclick="showChart('chart2','resultados_tabla2')">Complementaria</button>
                 </div>
 
                 <div id="chart1" class="chart">
@@ -65,7 +65,7 @@
 
             <div class="container">
                 <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
-                    <table class="table table-striped table-hover" id="resultados">
+                    <table class="table table-striped table-hover data-table" id="resultados_tabla">
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col" style="min-width: 200px;" class="fixed-header"></th>
@@ -139,6 +139,68 @@
                     
                 </div>
              </div>
+             <div class="container">
+                <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
+                    <table class="table table-striped table-hover data-table" id="resultados_tabla2" >
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col" style="min-width: 200px;" class="fixed-header"></th>
+                              
+        
+                                <th scope="col" style="min-width: 150px;" class="fixed-header">Bilinguismo</th>  
+                                <th scope="col" style="min-width: 150px;" class="fixed-header">Sin bilinguismo</th>  
+                             
+                                
+    
+                            </tr>
+                        </thead>
+                      
+                        <tbody id="resultados">
+                            <tr>
+                                <td class="fixed-column">Modalidad presencial</td>
+                              
+                                <td>{{bilinguismo_activos_data_presencial}}</td>
+                                <td>{{sin_bilinguismo_activos_data_presencial}}</td>
+                                
+                              
+                               
+                             
+                             
+                            </tr>
+                            <tr>
+                                <td class="fixed-column">Modalidad virtual</td>
+                                <td>{{bilinguismo_activos_virtual}}</td>
+                                <td>{{sin_bilinguismo_activos_data_virtual}}</td>
+                               
+                            </tr>
+                            <tr>
+                                <td class="fixed-column">Meta Presencial</td>
+                                {%for metas_presencial_bilinguismo in metas_presencial%}
+                                <td>{{metas_presencial_bilinguismo.met_formacion_bilinguismo}}</td>
+                                <td>{{metas_presencial_bilinguismo.met_formacion_sin_bilinguismo}}</td>
+                                
+                             
+                            
+                               
+                                {%endfor%}
+
+                
+                            </tr>
+                            <tr>
+                                <td class="fixed-column">Meta Virtual</td>
+                                {%for meta_presencial_sin_bilinguismo in metas_virtual%}
+                                <td>{{meta_presencial_sin_bilinguismo.met_formacion_bilinguismo}}</td>
+                                <td>{{meta_presencial_sin_bilinguismo.met_formacion_sin_bilinguismo}}</td>
+                               
+                                {%endfor%}
+                            </tr>
+                          
+                        </tbody>
+                    </table>
+                    
+                </div>
+             </div>
+             
     </div>
 </div>
 
@@ -166,6 +228,30 @@
 <script id="metas_valores" type="application/json">
     {{metas_valores|safe}}
 </script>
+
+<script id="bilinguismo_activos_virtual" type="application/json">
+    {{bilinguismo_activos_virtual|safe}}
+</script>
+<script id="bilinguismo_activos_data_presencial" type="application/json">
+    {{bilinguismo_activos_data_presencial|safe}}
+</script>
+<script id="sin_bilinguismo_activos_data_presencial" type="application/json">
+    {{sin_bilinguismo_activos_data_presencial|safe}}
+</script>
+
+<script id="sin_bilinguismo_activos_data_virtual" type="application/json">
+    {{sin_bilinguismo_activos_data_virtual|safe}}
+</script>
+
+<script id="metas_formacion_bilinguismo_presencial" type="application/json">
+    {{metas_formacion_bilinguismo_presencial|safe}}
+</script>
+<script id="metas_presencial_sin_bilinguismo" type="application/json">
+    {{metas_presencial_sin_bilinguismo|safe}}
+</script>
+
+    <!-- Metas_complementaria virtuales y presenciales  -->
+
 <script>
 
 function aplicarFiltrosGeneral() {
@@ -183,7 +269,9 @@ function aplicarFiltrosGeneral() {
     window.location.href = url;
   }
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'bootstrap/js/chart.js' %}"></script>
+
 
 {% endblock contenido %}

@@ -57,8 +57,10 @@ def estrategias(request):
     return render(request, 'Estrategias/estrategias.html')
 
 def general(request):
+    
+    #filtros de fecha
     select_fecha_inicio = request.GET.get('fecha_inicio')
-    print(select_fecha_inicio)
+    
     select_fecha_fin = request.GET.get('fecha_fin')
     
     datos_p04= P04.objects.all()
@@ -80,6 +82,7 @@ def general(request):
     elif select_fecha_fin:
         datos_p04 = datos_p04.filter(fecha_terminacion_ficha__lte=select_fecha_fin)
         
+    #funcionalida para grafica titulada
  
     filtro_modalidad_presencial = 'PRESENCIAL'
     filtro_modalidad_virtual = 'VIRTUAL'
@@ -170,9 +173,69 @@ def general(request):
     metas_conversion = sum(metas, ())
     metas_valores = list(metas_conversion)
     
-
-   
+    #FUNCIONALIDAD PARA GRAFICA COMPLEMENTARIA
+    
+    
+    #DATOS PARA RENDERIZAR LAS GRAFICAS 
+    
+    #virtual bilinguismo
+    
+    bilinguismo = data_virtual.filter(nombre_programa_especial='PROGRAMA DE BILINGUISMO').values('total_aprendices_activos')
+    bilinguismo_activos_virtual = [aprendices_bilinguismo['total_aprendices_activos'] for aprendices_bilinguismo in bilinguismo]
+    bilinguismo_activos_data_virtual = sum(bilinguismo_activos_virtual)
+    
+    #presencial bilinguismo
+    
+    bilinguismo = data_presencial.filter(nombre_programa_especial='PROGRAMA DE BILINGUISMO').values('total_aprendices_activos')
+    bilinguismo_activos_presencial = [aprendices_bilinguismo_presencial['total_aprendices_activos'] for aprendices_bilinguismo_presencial in bilinguismo]
+    
+    bilinguismo_activos_data_presencial = sum(bilinguismo_activos_presencial)
+    
+    
+    
+    #virtual sin bilinguismo 
+    sin_bilinguismo = data_virtual.filter(nivel_formacion='CURSO ESPECIAL').values('total_aprendices_activos')
+    
+    sin_bilinguismo_data = sin_bilinguismo.exclude(nombre_programa_especial='PROGRAMA DE BILINGUISMO')
+    sin_bilinguismo_activos_virtual = [aprendices_sin_bilinguismo_virtual['total_aprendices_activos'] for aprendices_sin_bilinguismo_virtual in sin_bilinguismo_data]
+    
+    sin_bilinguismo_activos_data_virtual = sum(sin_bilinguismo_activos_virtual)
+    
+    
+    #presencial sin bilinguismo 
+    sin_bilinguismo = data_presencial.filter(nivel_formacion='CURSO ESPECIAL').values('total_aprendices_activos')
+    
+    sin_bilinguismo_data = sin_bilinguismo.exclude(nombre_programa_especial='PROGRAMA DE BILINGUISMO')
+    sin_bilinguismo_activos_presencial = [aprendices_sin_bilinguismo_presencial['total_aprendices_activos'] for aprendices_sin_bilinguismo_presencial in sin_bilinguismo_data]
+    
+    sin_bilinguismo_activos_data_presencial = sum(sin_bilinguismo_activos_presencial)
+    
+    
+    
+    #metas presencial bilinguismo 
+    metas_presencial = Metas_formacion.objects.filter(metd_modalidad=1)
+    #bilinguismo presencial
+    metas_formacion_bilinguismo_presencial = metas_presencial.values('met_formacion_bilinguismo')
+    bilinguismo_meta_presencial = [bilinguismo_metas_presencial['met_formacion_bilinguismo'] for bilinguismo_metas_presencial in metas_formacion_bilinguismo_presencial]
+    #sin bilinguismo presencial
+    metas_formacion_sin_bilinguismo_presencial = metas_presencial.values('met_formacion_sin_bilinguismo')
+    sin_bilinguismo_meta_presencial = [sin_bilinguismo_metas_presencial['met_formacion_sin_bilinguismo'] for sin_bilinguismo_metas_presencial in metas_formacion_sin_bilinguismo_presencial]
+    
+    #metas presencial sin bilinguismo 
+    metas_virtual = Metas_formacion.objects.filter(metd_modalidad=2)
+    #bilinguismo virtual
+    metas_formacion_bilinguismo_virtual = metas_virtual.values('met_formacion_bilinguismo')
+    bilinguismo_meta_virtual = [bilinguismo_metas_virtual['met_formacion_bilinguismo'] for bilinguismo_metas_virtual in metas_formacion_bilinguismo_virtual]
+    #sin bilinguismo virtual
+    metas_formacion_sin_bilinguismo_virtual = metas_virtual.values('met_formacion_sin_bilinguismo')
+    sin_bilinguismo_meta_virtual = [sin_bilinguismo_metas_virtual['met_formacion_sin_bilinguismo'] for sin_bilinguismo_metas_virtual in metas_formacion_sin_bilinguismo_virtual]
+    
+    metas_complementaria = bilinguismo_meta_presencial + bilinguismo_meta_virtual + sin_bilinguismo_meta_presencial + sin_bilinguismo_meta_virtual
+    aprendices_activos_complementaria = bilinguismo_activos_data_presencial + bilinguismo_activos_data_virtual + sin_bilinguismo_activos_data_presencial + sin_bilinguismo_activos_data_virtual
+    
+    print(aprendices_activos_complementaria)
     context = {
+        #grafica titulada
         'labels_presenciales':json.dumps(labels_presenciales),
         'labels_virtuales':json.dumps(labels_virtuales),
         'data':data,
@@ -184,7 +247,20 @@ def general(request):
      
         'metas_valores':json.dumps(metas_valores),
         'select_fecha_fin':select_fecha_fin,
-        'select_fecha_inicio':select_fecha_inicio
+        'select_fecha_inicio':select_fecha_inicio,
+        #grafica complementaria
+        'bilinguismo_activos_virtual':bilinguismo_activos_data_virtual,
+        'bilinguismo_activos_data_presencial':bilinguismo_activos_data_presencial,
+        
+        'sin_bilinguismo_activos_data_virtual':sin_bilinguismo_activos_data_virtual,
+        'sin_bilinguismo_activos_data_presencial':sin_bilinguismo_activos_data_presencial,
+        #metas tabla
+        'metas_presencial':metas_presencial,
+        'metas_virtual':metas_virtual,
+        
+        #metas_complementaria
+        'metas_complementaria':metas_complementaria,
+      
     }
 
 
@@ -375,7 +451,7 @@ class Programa(TemplateView):
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
 
 
-        print('fsd',selected_modalidades)
+     
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
             programa_formacion=valores_programa,
