@@ -10,11 +10,9 @@ const metas_valores = JSON.parse(document.getElementById('metas_valores').textCo
 
 
 //GRAFICA COMPLEMENTARIA 
-const bilinguismo_activos_virtual = JSON.parse(document.getElementById('bilinguismo_activos_virtual').textContent)
-const bilinguismo_activos_data_presencial = JSON.parse(document.getElementById('bilinguismo_activos_data_presencial').textContent)
+const metas_complementaria = JSON.parse(document.getElementById('metas_complementaria').textContent)
+const aprendices_activos_complementaria = JSON.parse(document.getElementById('aprendices_activos_complementaria').textContent)
 
-const sin_bilinguismo_activos_data_virtual = JSON.parse(document.getElementById('sin_bilinguismo_activos_data_virtual').textContent)
-const sin_bilinguismo_activos_data_presencial = JSON.parse(document.getElementById('sin_bilinguismo_activos_data_presencial').textContent)
 //METAS
 
 
@@ -54,6 +52,16 @@ const borderColor = metas_valores.map((meta, index) => {
 })
 
 //porcentaje metas complementaria
+const backgroundColorsC = metas_complementaria.map((metas_complementaria, index) => {
+    const resultado = aprendices_activos_complementaria[index];
+    return Estado_de_color(resultado, metas_complementaria)
+})
+const borderColorC = metas_complementaria.map((metas_complementaria, index) => {
+    const resultado = aprendices_activos_complementaria[index];
+    return Estado_de_color(resultado, metas_complementaria).replace('0.2','1.0')
+})
+
+
 
 const ctx_titulada = document.getElementById('barchart_titulada').getContext('2d');
 
@@ -130,25 +138,10 @@ new Chart(ctx_complementaria, {
      
         datasets: [{
             label: '# of Votes',
-            data: [bilinguismo_activos_data_presencial, bilinguismo_activos_virtual, sin_bilinguismo_activos_data_presencial, sin_bilinguismo_activos_data_virtual],
+            data: [aprendices_activos_complementaria[0],aprendices_activos_complementaria[1],aprendices_activos_complementaria[2],aprendices_activos_complementaria[3]],
             borderWidth: 1,
-           
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ]
+            backgroundColor: backgroundColorsC,
+            borderColor:borderColorC ,
         }]
     },
     options: {

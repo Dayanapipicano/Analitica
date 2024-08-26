@@ -231,9 +231,12 @@ def general(request):
     sin_bilinguismo_meta_virtual = [sin_bilinguismo_metas_virtual['met_formacion_sin_bilinguismo'] for sin_bilinguismo_metas_virtual in metas_formacion_sin_bilinguismo_virtual]
     
     metas_complementaria = bilinguismo_meta_presencial + bilinguismo_meta_virtual + sin_bilinguismo_meta_presencial + sin_bilinguismo_meta_virtual
-    aprendices_activos_complementaria = bilinguismo_activos_data_presencial + bilinguismo_activos_data_virtual + sin_bilinguismo_activos_data_presencial + sin_bilinguismo_activos_data_virtual
+    aprendices_activos_complementaria= [bilinguismo_activos_data_presencial , bilinguismo_activos_data_virtual , sin_bilinguismo_activos_data_presencial , sin_bilinguismo_activos_data_virtual]
+    
+     
     
     print(aprendices_activos_complementaria)
+    print(metas_complementaria)
     context = {
         #grafica titulada
         'labels_presenciales':json.dumps(labels_presenciales),
@@ -260,6 +263,7 @@ def general(request):
         
         #metas_complementaria
         'metas_complementaria':metas_complementaria,
+        'aprendices_activos_complementaria':aprendices_activos_complementaria,
       
     }
 
