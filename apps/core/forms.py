@@ -1,7 +1,7 @@
 from apps.personas.models import Meta
 from apps.core.models import Centro_de_formacion
 from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona
-
+from django.core.exceptions import ValidationError
 from django import forms
 class Form_meta(forms.ModelForm):
     
@@ -28,8 +28,20 @@ class Form_meta(forms.ModelForm):
         ]
         
         widgets =  {
-            'met_fecha_inicio': forms.DateInput(attrs={'class':'form_control', 'type': 'date'}),
-            'met_fecha_fin': forms.DateInput(attrs={'class':'form_control', 'type': 'date'}),
+            'met_fecha_inicio': forms.DateInput(attrs={'class':'form-control', 'type': 'date'}),
+            'met_fecha_fin': forms.DateInput(attrs={'class':'form-control', 'type': 'date'}),
+            
+            'met_centro_formacion': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_codigo': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion'}),
+            'met_año': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_otras_poblaciones': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_victimas': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_hechos_victimizantes': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_desplazados_violencia': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_titulada': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_complementaria': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_total_poblacion_vulnerable': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            
            
         }
     def __init__(self, *args, **kwargs):
@@ -37,8 +49,14 @@ class Form_meta(forms.ModelForm):
         self.fields['met_centro_formacion'].choices = Centro_de_formacion.Centro_de_formacion_choices.choices
         self.fields['per_documento'].widget =  forms.HiddenInput()
        
-      
-
+    def clean_meta_año(self):
+        met_año = self.cleaned_data.get('met_año')
+       
+        
+       
+        if len(str(met_año)) > 4:
+            raise ValidationError('El año no puede tener mas de 4 caracteres')
+        return met_año
     
 class Form_meta_formacion(forms.ModelForm):
     

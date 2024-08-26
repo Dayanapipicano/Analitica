@@ -51,6 +51,7 @@
                         </div>
                     </div>
                 </div>
+                {% if perms.can_view_admin_dashboard %}
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <span class="icono" data-toggle="modal" data-target="#Modal_estrategia">
@@ -67,6 +68,7 @@
                         </span>
                     </div>
                 </div>
+                {%endif%}
             </div>
         </div>
         {% for estrategias in estrategia%}

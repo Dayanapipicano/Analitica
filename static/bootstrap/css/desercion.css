@@ -7,3 +7,23 @@
     background-color: #f8f9fa;
     z-index: 1;
 }
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.form-header {
+    margin-bottom: 20px;
+}
+.form-header h2 {
+    margin: 0;
+}
+.modal-header{
+    background-color: #274f3b;
+}
+.modal-title{
+    color: #ffffff;
+}
