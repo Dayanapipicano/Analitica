@@ -59,11 +59,11 @@
 
                                    
 
-                                    <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                                <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
                                 {% for choice in modalidad%}
-                                {% for modalidad_id in select_modalidad%}
-                                    <option value="{{ choice.id }}" {% if choice.id == modalidad_id.id %}selected{% endif %}>{{ choice.modalidad }}</option>
-                                {% endfor %}
+                                
+                                        <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
+                                    
                                 {% endfor %}
                       
                                 
@@ -155,37 +155,47 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for desercion in  desercion_datos%}
-                        <tr>
-                            <td>{{desercion.identificador_ficha}}</td>
-                            <td>{{desercion.identificador_unico_ficha}}</td>
-                            <td>{{desercion.estado_curso}}</td>
-                            <td>{{desercion.fecha_inicio_ficha}}</td>
-                            <td>{{desercion.fecha_fin_ficha}}</td>
-                            <td>{{desercion.codigo_nivel_formacion}}</td>
-                            <td>{{desercion.nivel_formacion}}</td>
-                            <td>{{desercion.codigo_jornada}}</td>
-                            <td>{{desercion.nombre_jornada}}</td>
-                            <td>{{desercion.tipo_de_formacion}}</td>
-                            <td>{{desercion.etapa_ficha}}</td> 
-                            <td>{{desercion.nombre_sector_programa}}</td>
-                            <td>{{desercion.codigo_ocupacion}}</td>
+                        {%if desercion_datos%}
+                            {% for desercion in  desercion_datos%}
+                                <tr>
+                                    <td>{{desercion.identificador_ficha}}</td>
+                                    <td>{{desercion.identificador_unico_ficha}}</td>
+                                    <td>{{desercion.estado_curso}}</td>
+                                    <td>{{desercion.fecha_inicio_ficha}}</td>
+                                    <td>{{desercion.fecha_fin_ficha}}</td>
+                                    <td>{{desercion.codigo_nivel_formacion}}</td>
+                                    <td>{{desercion.nivel_formacion}}</td>
+                                    <td>{{desercion.codigo_jornada}}</td>
+                                    <td>{{desercion.nombre_jornada}}</td>
+                                    <td>{{desercion.tipo_de_formacion}}</td>
+                                    <td>{{desercion.etapa_ficha}}</td> 
+                                    <td>{{desercion.nombre_sector_programa}}</td>
+                                    <td>{{desercion.codigo_ocupacion}}</td>
 
-                            <td>{{desercion.nombre_ocupacion}}</td>
-                            <td>{{desercion.modalidad_formacion}}</td>
-                            <td>{{desercion.codigo_programa}}</td>
-                            <td>{{desercion.nombre_programa_formacion}}</td>
-                            <td>{{desercion.red}}</td>
-                            <td>{{desercion.nombre_departamento_curso}}</td>
-                            <td>{{desercion.nombre_municipio_curso}}</td>
-                            <td>{{desercion.nombre_programa_especial}}</td>
-                            <td>{{desercion.total_aprendices_masculinos}}</td>
-                            <td>{{desercion.total_aprendices_femeninos}}</td>
-                            <td>{{desercion.nombre_nuevo_sector}}</td>
+                                    <td>{{desercion.nombre_ocupacion}}</td>
+                                    <td>{{desercion.modalidad_formacion}}</td>
+                                    <td>{{desercion.codigo_programa}}</td>
+                                    <td>{{desercion.nombre_programa_formacion}}</td>
+                                    <td>{{desercion.red}}</td>
+                                    <td>{{desercion.nombre_departamento_curso}}</td>
+                                    <td>{{desercion.nombre_municipio_curso}}</td>
+                                    <td>{{desercion.nombre_programa_especial}}</td>
+                                    <td>{{desercion.total_aprendices_masculinos}}</td>
+                                    <td>{{desercion.total_aprendices_femeninos}}</td>
+                                    <td>{{desercion.nombre_nuevo_sector}}</td>
                           
-                        </tr>
+                                </tr>
                         
-                        {%endfor%}
+                            {%endfor%}
+                        {%else%}
+                        
+                        <tr>
+                            <td colspan="24" class="text-justify">No hay datos</td>
+                        </tr>
+
+                        {%endif%}
+
+
                     </tbody>
                 </table>
              

@@ -16,7 +16,8 @@ from .serializers import MetaSerializer,EstrateiaSerializer
 from django.utils import timezone
 from apps.personas.models import Rol,Persona_rol
 from apps.personas.decorators import permission_required
-from django.db.models import Min, Max
+from datetime import datetime, date
+
 import json
 #redirecciones a las vistas
 def menu(request):
@@ -29,21 +30,6 @@ def registro(request):
     return render(request, 'registro.html')
 
 
-def Desercion_index(request):
-    municipio = Municipio.nombre.field.choices
-    regional = Regional.regional.field.choices
-    centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
-    modalidad = Modalidad.objects.all()
-    desercion_datos = P04.objects.all()
-   
-    context = {
-        'municipio':municipio,
-        'regional': regional,
-        'centro_de_formacion' : centro_de_formacion,
-        'modalidad': modalidad,
-        'desercion_datos':desercion_datos
-    }
-    return render(request, 'Desercion/desercion.html', context)
 
 
 def estrategias_institucionales(request):
@@ -470,38 +456,57 @@ def detalle_ficha(request, identificador_ficha):
    
     return JsonResponse(data)
 
-from datetime import datetime, date
+
+
+def Desercion_index(request):
+    municipio = Municipio.nombre.field.choices
+    regional = Regional.regional.field.choices
+    centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
+    #deserciones
+    resultado_activo = P04.objects.aggregate(total_aprendices=Sum('total_aprendices_activos'))
+    resultado_total = P04.objects.aggregate(total_aprendices=Sum('total_aprendices'))
+    aprendices_activos = int(resultado_activo['total_aprendices'])
+    total_aprendices = int(resultado_total['total_aprendices'])
+    deserciones = total_aprendices - aprendices_activos
+    modalidad = Modalidad.objects.all()
+    
+    desercion_datos = P04.objects.all()
+   
+    context = {
+        'municipio':municipio,
+        'regional': regional,
+        'centro_de_formacion' : centro_de_formacion,
+        'modalidad': modalidad,
+        'deserciones':deserciones,
+        'aprendices_activos':aprendices_activos,
+        'desercion_datos':desercion_datos
+    }
+    return render(request, 'Desercion/desercion.html', context)
+
 class Desercion(TemplateView):
     template_name = 'Desercion/desercion.html'
     
     
     def get(self, request, *args, **kwargs):
         
-        #deserciones
-        resultado_activo = P04.objects.aggregate(total_aprendices=Sum('total_aprendices_activos'))
-        resultado_total = P04.objects.aggregate(total_aprendices=Sum('total_aprendices'))
         
-        aprendices_activos = int(resultado_activo['total_aprendices'])
-        total_aprendices = int(resultado_total['total_aprendices'])
-        deserciones = total_aprendices - aprendices_activos
        
         
-        select_modalidad = request.GET.get('modalidad')
+        select_modalidad = request.GET.get('id_modalidad')
         select_municipio = request.GET.get('municipio')
         select_regional = request.GET.get('regional')
         select_centro_de_formacion = request.GET.get('centro_de_formacion')
         select_fecha_inicio_ficha = request.GET.get('fecha_inicio_ficha')
         select_fecha_terminacion_ficha = request.GET.get('fecha_terminacion_ficha')
         
-      
+        
        
        
         filtros_desercion = {}
         
        
             
-        if not select_fecha_inicio_ficha:
-            select_fecha_inicio_ficha = date.today().strftime('%Y-%m-%d')
+        
         
         # Convertir la fecha de inicio a formato de fecha y aplicar filtro mayor o igual
         fecha_inicio = datetime.strptime(select_fecha_inicio_ficha, '%Y-%m-%d').date()
@@ -515,11 +520,18 @@ class Desercion(TemplateView):
             # Si no se proporciona fecha de terminación, establecerla como la fecha actual
             fecha_fin = date.today()
             filtros_desercion['fecha_inicio_ficha__lte'] = fecha_fin
-
+        modalidades = {
+            '1':'PRESENCIAL',
+            '2':'VIRTUAL',
+            '3':'DISTANCIA'
+        }
         if select_modalidad and select_fecha_inicio_ficha:
+            modalidad = modalidades.get(select_modalidad)
             
-            filtros_desercion['modalidad_formacion'] = select_modalidad
-          
+            
+            filtros_desercion['modalidad_formacion'] = modalidad
+        
+        
         if select_regional and select_modalidad:
             filtros_desercion['nombre_regional'] = select_regional
         if select_centro_de_formacion and select_regional:
@@ -530,7 +542,16 @@ class Desercion(TemplateView):
             filtros_desercion['nombre_municipio_curso'] = select_municipio
         
         desercion_datos = P04.objects.filter(**filtros_desercion)
-       
+        
+        #deserciones
+        aprendices_activos_resultado = [resultado.total_aprendices_activos for resultado in desercion_datos]
+        aprendices_totales_resultado = [resultado_total.total_aprendices for resultado_total in desercion_datos]
+
+        
+        resultado_activo = sum(aprendices_activos_resultado)
+        resultado_total_aprendices = sum(aprendices_totales_resultado)
+      
+        deserciones = resultado_total_aprendices - resultado_activo
    
         context = self.get_context_data(
             
@@ -549,7 +570,7 @@ class Desercion(TemplateView):
             select_fecha_terminacion_ficha =select_fecha_terminacion_ficha,
             
             desercion_datos = desercion_datos,
-            aprendices_activos=aprendices_activos,
+            aprendices_activos=resultado_activo,
             deserciones=deserciones,
             fecha_actual = date.today().strftime('%Y-%m-%d')
            
