@@ -66,21 +66,13 @@ def general(request):
     datos_p04= P04.objects.all()
     
     
-    if select_fecha_inicio:
-            select_fecha_inicio = datetime.strptime(select_fecha_inicio, '%Y-%m-%d').date()
-    if select_fecha_fin:
-        select_fecha_fin = datetime.strptime(select_fecha_fin, '%Y-%m-%d').date()
-    
    
     
     if select_fecha_inicio and select_fecha_fin:
-        datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio, fecha_terminacion_ficha__lte=select_fecha_fin)
+        datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio, fecha_inicio_ficha__lte=select_fecha_fin)
+        print(datos_p04)
      
-    elif select_fecha_inicio:
-        datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio)
-    
-    elif select_fecha_fin:
-        datos_p04 = datos_p04.filter(fecha_terminacion_ficha__lte=select_fecha_fin)
+
         
     #funcionalida para grafica titulada
  
@@ -127,20 +119,7 @@ def general(request):
             niveles_habilitados_virtual[nivel] += activos
     
     
-    #FECHAS PRESENCIAL
-    fecha_inicio_mas_baja_presencial = data_presencial.aggregate(Min('fecha_inicio_ficha'))
-    fecha_inicio_mas_baja_presencial_tabla = fecha_inicio_mas_baja_presencial.get('fecha_inicio_ficha__min')
     
-    fecha_inicio_mas_alta_presencial = data_presencial.aggregate(Max('fecha_terminacion_ficha'))
-    fecha_inicio_mas_alta_presencial_tabla = fecha_inicio_mas_alta_presencial.get('fecha_terminacion_ficha__max')
-  
-    #FECHAS VIRTUAL
-    fecha_inicio_mas_baja_virtual = data_virtual.aggregate(Min('fecha_inicio_ficha'))
-    fecha_inicio_mas_baja_virtual_tabla = fecha_inicio_mas_baja_virtual.get('fecha_inicio_ficha__min')
-    
-    fecha_inicio_mas_alta_virtual = data_virtual.aggregate(Max('fecha_terminacion_ficha'))
-    fecha_inicio_mas_alta_virtual_tabla = fecha_inicio_mas_alta_virtual.get('fecha_terminacion_ficha__max')
-  
    
     #DATOS PARA RENDERIZAR LAS GRAFICAS 
     labels_presenciales = [f'{nivel} Presencial' for nivel in  niveles_habilitados.keys()] 
@@ -157,10 +136,7 @@ def general(request):
     metas_presencial = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas)
     metas_virtual = Metas_formacion.objects.filter(metd_id=modalidad_virtual_metas)
    
-    #DATOS PARA LA TABLA
-    
-    data_tabla_presencial = data_values_presencial + [fecha_inicio_mas_baja_presencial_tabla] +[fecha_inicio_mas_alta_presencial_tabla]
-    data_tabla_virtual = data_values_virtual + [fecha_inicio_mas_baja_virtual_tabla] + [fecha_inicio_mas_alta_virtual_tabla]
+   
     
     #METAS CON PORCENTAJES
     metas_presencial_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas)
@@ -235,8 +211,7 @@ def general(request):
     
      
     
-    print(aprendices_activos_complementaria)
-    print(metas_complementaria)
+
     context = {
         #grafica titulada
         'labels_presenciales':json.dumps(labels_presenciales),
@@ -245,8 +220,8 @@ def general(request):
   
         'metas_presencial':metas_presencial,
         'metas_virtual':metas_virtual,
-        'data_tabla_presencial':data_tabla_presencial,
-        'data_tabla_virtual':data_tabla_virtual,
+        'data_tabla_presencial':data_values_presencial,
+        'data_tabla_virtual':data_values_virtual,
      
         'metas_valores':json.dumps(metas_valores),
         'select_fecha_fin':select_fecha_fin,

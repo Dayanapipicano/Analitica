@@ -17,8 +17,12 @@ const aprendices_activos_complementaria = JSON.parse(document.getElementById('ap
 
 
 
-//funcion de cambiar las graficas
+
+
+
 function showChart(chartId,tableId) {
+    localStorage.setItem('chartIdGraficas', chartId)
+    localStorage.setItem('tableIdGraficas', tableId)
     // Oculta todos los gráficos
     document.querySelectorAll('.chart').forEach(chart => {
         chart.style.display = 'none';
@@ -31,7 +35,17 @@ function showChart(chartId,tableId) {
     });
     document.getElementById(tableId).style.display = 'block';
 
+    
+
 }
+
+document.addEventListener('DOMContentLoaded', function(){
+    const saveCharId  = localStorage.getItem('chartIdGraficas') 
+    const saveTableId  = localStorage.getItem('tableIdGraficas') 
+
+    showChart(saveCharId,saveTableId)
+})
+
 
 function Estado_de_color(value, max){
     const porcentaje = value / max;

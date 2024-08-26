@@ -119,7 +119,7 @@ def inicio_sesion(request):
             user = authenticate(request, username=per_documento, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('personas:Home')  # Redirigir a la página principal u otra página
+                return redirect('cores:general')  # Redirigir a la página principal u otra página
             else:
                 messages.error(request, 'Usuario o contraseña incorrectos')
     else:
@@ -208,6 +208,8 @@ def subir_P04(request):
                 df['FECHA_TERMINACION_FICHA'] = pd.to_datetime(df['FECHA_TERMINACION_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                
                 df = df.replace(r'^\s*$', np.nan, regex=True)
+                
+                P04.objects.all().delete()
 
            
 

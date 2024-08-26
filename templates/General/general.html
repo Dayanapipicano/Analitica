@@ -27,6 +27,9 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="id_chart" value="chart1">
+                <input type="hidden" id="id_table" value="resultados_tabla">
+                
                 <div class="col-md-6 mb-3 d-flex prueba">
                     <!-- Cuadros de colores -->
                     <div class="meta">
@@ -76,10 +79,8 @@
                                 <th scope="col" style="min-width: 100px;" class="fixed-header">Auxiliar</th>
                                 <th scope="col" style="min-width: 100px;" class="fixed-header">Operario </th>
                                 <th scope="col" style="min-width: 150px;" class="fixed-header">Evento</th>
-                                <th scope="col" style="min-width: 150px;" class="fixed-header">Fecha inicio</th> 
-                                <th scope="col" style="min-width: 150px;" class="fixed-header">Fecha fin</th> 
-                                <th scope="col" style="min-width: 150px;" class="fixed-header">Bilinguismo</th>  
-                                <th scope="col" style="min-width: 150px;" class="fixed-header">Sin bilinguismo</th>  
+                     
+
                              
                                 
     
@@ -112,8 +113,7 @@
                                 <td>{{metas_presencial.met_formacion_auxiliar}}</td>
                                 <td>{{metas_presencial.met_formacion_operario}}</td>
                                 <td>{{metas_presencial.met_formacion_evento}}</td>
-                                <td>{{metas_presencial.met_id.met_fecha_inicio}}</td>
-                                <td>{{metas_presencial.met_id.met_fecha_fin}}</td>
+                           
                             
                                
                                 {%endfor%}
@@ -129,8 +129,7 @@
                                 <td>{{metas_virtual.met_formacion_auxiliar}}</td>
                                 <td>{{metas_virtual.met_formacion_operario}}</td>
                                 <td>{{metas_virtual.met_formacion_evento}}</td>
-                                <td>{{metas_virtual.met_id.met_fecha_inicio}}</td>
-                                <td>{{metas_virtual.met_id.met_fecha_fin}}</td>
+                          
                                 {%endfor%}
                             </tr>
                           
@@ -246,8 +245,11 @@
 function aplicarFiltrosGeneral() {
     const fecha_fin = document.getElementById('fecha_fin').value;
     const fecha_inicio = document.getElementById('fecha_inicio').value;
+
   
   
+
+
     let url = "{% url 'cores:general' %}?";
     if (fecha_fin) {
         url += `fecha_fin=${fecha_fin}&`;
@@ -256,8 +258,12 @@ function aplicarFiltrosGeneral() {
         url += `fecha_inicio=${fecha_inicio}`;
     }
     window.location.href = url;
+
+ 
   }
+ 
 </script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'bootstrap/js/chart.js' %}"></script>
