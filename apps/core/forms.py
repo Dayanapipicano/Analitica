@@ -50,13 +50,14 @@ class Form_meta(forms.ModelForm):
         self.fields['per_documento'].widget =  forms.HiddenInput()
        
     def clean_meta_año(self):
-        met_año = self.cleaned_data.get('met_año')
-       
+        met_años = self.cleaned_data.get('met_año')
+        if Meta.objects.filter(met_año=met_años).exists():
+            raise forms.ValidationError('Este año ya existe')
         
        
-        if len(str(met_año)) > 4:
+        if len(str(met_años)) > 4:
             raise ValidationError('El año no puede tener mas de 4 caracteres')
-        return met_año
+        return met_años
     
 class Form_meta_formacion(forms.ModelForm):
     

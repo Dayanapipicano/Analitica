@@ -29,7 +29,19 @@ def inicio_sesion(request):
 def registro(request):
     return render(request, 'registro.html')
 
-
+def Verificar_año(request):
+    
+    if request.method == 'POST':
+        print('hola')
+        data = json.loads(request.body)
+        met_año = data.get('id_met_año')
+        print(met_año)
+        
+        
+        existe = Meta.objects.filter(met_año=met_año).exists()
+        print(existe)
+        
+        return JsonResponse({'existe':existe})
 
 
 def estrategias_institucionales(request):

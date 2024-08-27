@@ -40,3 +40,5 @@ function filtros_desercion() {
 
 document.getElementById('filtroFechaInicio').addEventListener('change', filtros_desercion);
 document.getElementById('filtroFechaFin').addEventListener('change', filtros_desercion);
+
+
