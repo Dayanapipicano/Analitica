@@ -637,8 +637,20 @@ class Meta_formacion_create(CreateView):
     form_class = Form_meta_formacion
     template_name = 'Formacion_regular/formacion_regular.html'
     success_url = reverse_lazy('cores:formacion_regular_index') 
+
+def Verificacion_meta_formacion_regular(request):
+    meta_id = request.GET.get('id_met_id')
     
+   
     
+    modalidades_registrada = Metas_formacion.objects.filter(met_id=meta_id).values('metd_modalidad')
+    print('aa',modalidades_registrada)
+    modalidades = Modalidad.objects.filter()
+    modalidad_habilitada = Modalidad.objects.exclude(id__in=modalidades_registrada)
+    print('sd',modalidad_habilitada)
+    opciones_disponibles = [{'id': modalidad.id, 'modalidad':modalidad.modalidad} for modalidad in modalidad_habilitada]
+    
+    return JsonResponse(opciones_disponibles, safe=False)
 #ESTRATEGIAS_INSTITUCIONALES
 def Estrategias_institucionales_index(request):
     form_estrategias_institucionales  = Form_estrategias

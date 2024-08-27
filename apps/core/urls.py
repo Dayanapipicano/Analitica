@@ -40,6 +40,8 @@ urlpatterns = [
     #estrategias institucionales graficas 
     path('estrategias/index', core_views.estrategias, name="estrategias_index"),
     #ALERTAS
-    path('verificar-año/', core_views.Verificar_año, name='verificar_año')
+    path('verificar-año/', core_views.Verificar_año, name='verificar_año'),
+    #verificaciones de formularios meta formacion 
+    path('verificacion_meta_formacion_regular/', core_views.Verificacion_meta_formacion_regular, name="verificacion_meta_formacion_regular")
 ]   
 

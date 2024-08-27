@@ -31,7 +31,7 @@ class Form_meta(forms.ModelForm):
             'met_fecha_inicio': forms.DateInput(attrs={'class':'form-control', 'type': 'date'}),
             'met_fecha_fin': forms.DateInput(attrs={'class':'form-control', 'type': 'date'}),
             
-            'met_centro_formacion': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_centro_formacion': forms.Select(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
             'met_codigo': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion'}),
             'met_año': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
             'met_total_otras_poblaciones': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
@@ -80,6 +80,21 @@ class Form_meta_formacion(forms.ModelForm):
             
             
         ]
+        widgets =  {
+            'metd_modalidad': forms.Select(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_operario': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_auxiliar': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_tecnico': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_profundizacion_tecnica': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_tecnologo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_evento': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_curso_especial': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_bilinguismo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_formacion_sin_bilinguismo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_id': forms.Select(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+
+            
+        }
     
     
 
