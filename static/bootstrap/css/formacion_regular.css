@@ -1,70 +1,73 @@
-.card-header {
+.table-dark {
     background-color: #274f3b;
-    color: white;
-    text-align: center;
-    padding: 4px;
-    font-size: 18px;
-   
-  
 }
-.result-row {
-    margin-bottom: 15px;
-}
-.result-col {
-    text-align: center;
-    padding: 10px;
-
-}
-.result-title {
-
-    margin-bottom: 5px;
-    font-size: 15px;
-}
-.result-value {
-    font-size: 15px;
-    color: #ffffff;
-    background-color: #333;
-    border-radius: 20px;
-    width: 100px;
-    justify-content:center;
-    align-items: center;
-}
-
-
-.card-body{
-    display: flex;
-}
-.card{
-    border-radius: 15px;
-    width: 600px;
-    
-  
-}
-
-.formacion_complementaria{
-    width: 300px;
-}
-.card .gran-total {
-   
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #b6b9bb; /* Light background for the total container */
-    border: 1px solid #dee2e6; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 15px; /* Padding inside the container */
-    font-size: 16px; /* Font size */
-   
-}
-
-.abajo{
-    margin-top: 20px;
-}
-
-.gran-total {
+.fixed-header {
+    position: sticky;
+    top: 0;
     background-color: #f8f9fa;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: right;
-    margin-top: 400px;
+    z-index: 1;
+}
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.form-header {
+    margin-bottom: 20px;
+}
+.form-header h2 {
+    margin: 0;
+}
+.modal-header{
+    background-color: #274f3b;
+}
+.modal-title{
+    color: #ffffff;
+}
+
+/* Ajusta el tamaño del contenedor del modal */
+.modal-dialog {
+    max-width: 600px; /* Ajusta el ancho según sea necesario */
+    margin: 1.75rem auto; /* Ajusta el margen superior e inferior del modal */
+}
+
+/* Hacer que el modal sea un contenedor flex */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 70vh; /* Ajusta la altura según sea necesario */
+}
+
+/* Fijar el tamaño de la cabecera y el pie del modal */
+.modal-header,
+.modal-footer {
+    flex-shrink: 0; /* Evita que la cabecera y el pie se reduzcan de tamaño */
+}
+
+/* Asegura que la cabecera y el pie no se muevan */
+.modal-header {
+    /* Opcional: Ajustar altura de la cabecera si es necesario */
+    min-height: 60px; /* Ajusta la altura mínima si es necesario */
+}
+
+.modal-footer {
+    /* Opcional: Ajustar altura del pie si es necesario */
+    min-height: 50px; /* Ajusta la altura mínima si es necesario */
+}
+
+/* Hacer que el cuerpo del modal sea desplazable */
+.modal-body {
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+    flex: 1; /* Hace que el cuerpo del modal ocupe el espacio restante */
+}
+#eliminarModal .modal-content{
+    max-height: 3000px;
+    height: 20vh;
+}
+
+.error-message{
+    color: red;
 }

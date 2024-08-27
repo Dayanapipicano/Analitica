@@ -63,3 +63,11 @@
     overflow-y: auto; /* Permite el desplazamiento vertical */
     flex: 1; /* Hace que el cuerpo del modal ocupe el espacio restante */
 }
+#eliminarModal .modal-content{
+    max-height: 3000px;
+    height: 20vh;
+}
+
+.error-message{
+    color: red;
+}

@@ -644,13 +644,18 @@ def Verificacion_meta_formacion_regular(request):
    
     
     modalidades_registrada = Metas_formacion.objects.filter(met_id=meta_id).values('metd_modalidad')
-    print('aa',modalidades_registrada)
+   
     modalidades = Modalidad.objects.filter()
     modalidad_habilitada = Modalidad.objects.exclude(id__in=modalidades_registrada)
-    print('sd',modalidad_habilitada)
+   
     opciones_disponibles = [{'id': modalidad.id, 'modalidad':modalidad.modalidad} for modalidad in modalidad_habilitada]
     
     return JsonResponse(opciones_disponibles, safe=False)
+
+class Meta_formacion_delete(DeleteView):
+    model = Metas_formacion
+    success_url = reverse_lazy('cores:formacion_regular_index')
+
 #ESTRATEGIAS_INSTITUCIONALES
 def Estrategias_institucionales_index(request):
     form_estrategias_institucionales  = Form_estrategias
@@ -869,6 +874,7 @@ class metas_formacion_filtros(TemplateView):
             'met_id__met_fecha_inicio',
             'met_id__met_fecha_fin',
             'met_id__met_año',
+            'metd_id',
         )
 
         data = {

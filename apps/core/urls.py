@@ -42,6 +42,11 @@ urlpatterns = [
     #ALERTAS
     path('verificar-año/', core_views.Verificar_año, name='verificar_año'),
     #verificaciones de formularios meta formacion 
-    path('verificacion_meta_formacion_regular/', core_views.Verificacion_meta_formacion_regular, name="verificacion_meta_formacion_regular")
+    path('verificacion_meta_formacion_regular/', core_views.Verificacion_meta_formacion_regular, name="verificacion_meta_formacion_regular"),
+    
+    #eliminar y editar meta formacion (formacion regular)
+    path('meta_formacion/delete/<int:pk>', core_views.Meta_formacion_delete.as_view(), name="verificacion_meta_formacion_regular"),
+
 ]   
+
 
