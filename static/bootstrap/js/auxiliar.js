@@ -1,3 +1,7 @@
+
+const total_auxiliar_activos = JSON.parse(document.getElementById('total_auxiliar_activos').textContent)
+
+
 const auxiliar = document.getElementById('auxiliar').getContext('2d');
 
 new Chart(auxiliar, {
@@ -5,7 +9,7 @@ new Chart(auxiliar, {
     data: {
         labels: ['Presencial', 'Virtual'],
         datasets: [{
-            data: [12, 19, 3, 5, 2, 3],
+            data: total_auxiliar_activos,
             borderWidth: 1,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',

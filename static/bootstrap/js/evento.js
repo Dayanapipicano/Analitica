@@ -1,3 +1,5 @@
+const total_evento_activos = JSON.parse(document.getElementById('total_evento_activos').textContent)
+
 const evento = document.getElementById('evento').getContext('2d');
 
 new Chart(evento, {
@@ -5,7 +7,7 @@ new Chart(evento, {
     data: {
         labels: ['Presencial', 'Virtual'],
         datasets: [{
-            data: [12, 19, 3, 5, 2, 3],
+            data: total_evento_activos,
             borderWidth: 1,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',

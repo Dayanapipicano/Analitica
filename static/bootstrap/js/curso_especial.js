@@ -1,3 +1,5 @@
+const total_curso_especial_activos = JSON.parse(document.getElementById('total_curso_especial_activos').textContent)
+
 const curso_especial = document.getElementById('curso_especial').getContext('2d');
 
 new Chart(curso_especial, {
@@ -5,7 +7,7 @@ new Chart(curso_especial, {
     data: {
         labels: ['Presencial', 'Virtual'],
         datasets: [{
-            data: [12, 19, 3, 5, 2, 3],
+            data: total_curso_especial_activos,
             borderWidth: 1,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',

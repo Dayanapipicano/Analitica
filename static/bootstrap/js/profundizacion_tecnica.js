@@ -1,3 +1,5 @@
+const  total_profundizacion_tecnica_activos = JSON.parse(document.getElementById('total_profundizacion_tecnica_activos').textContent)
+
 const profundizacion_tecnica = document.getElementById('profundizacion_tecnica').getContext('2d');
 
 new Chart(profundizacion_tecnica, {
@@ -5,7 +7,7 @@ new Chart(profundizacion_tecnica, {
     data: {
         labels: ['Presencial', 'Virtual'],
         datasets: [{
-            data: [12, 19, 3, 5, 2, 3],
+            data:  total_profundizacion_tecnica_activos,
             borderWidth: 1,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -37,7 +39,7 @@ new Chart(profundizacion_tecnica, {
             },
             title: {
                 display: true, // Mostrar el título
-                text: 'Tecnologo', // Título de la gráfica
+                text: 'Profundización Técnica', // Título de la gráfica
                 font: {
                     size: 14 // Tamaño de la fuente del título
                 }

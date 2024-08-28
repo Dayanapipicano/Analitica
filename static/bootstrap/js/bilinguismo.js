@@ -1,13 +1,13 @@
-const total_tecnico_activos = JSON.parse(document.getElementById('total_tecnico_activos').textContent)
+const total_bilinguismo_activos = JSON.parse(document.getElementById('total_bilinguismo_activos').textContent)
 
-const var_tecnico = document.getElementById('tecnico').getContext('2d');
+const bilinguismo = document.getElementById('bilinguismo').getContext('2d');
 
-new Chart(var_tecnico, {
+new Chart(bilinguismo, {
     type: 'bar',
     data: {
         labels: ['Presencial', 'Virtual'],
         datasets: [{
-            data: total_tecnico_activos,
+            data: total_bilinguismo_activos,
             borderWidth: 1,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -39,7 +39,7 @@ new Chart(var_tecnico, {
             },
             title: {
                 display: true, // Mostrar el título
-                text: 'Técnico', // Título de la gráfica
+                text: 'Bilingüismo', // Título de la gráfica
                 font: {
                     size: 14 // Tamaño de la fuente del título
                 }
@@ -47,5 +47,4 @@ new Chart(var_tecnico, {
         }
     }
 });
-
 

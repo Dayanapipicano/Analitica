@@ -32,14 +32,11 @@ def registro(request):
 def Verificar_año(request):
     
     if request.method == 'POST':
-        print('hola')
+       
         data = json.loads(request.body)
         met_año = data.get('id_met_año')
-        print(met_año)
-        
-        
+       
         existe = Meta.objects.filter(met_año=met_año).exists()
-        print(existe)
         
         return JsonResponse({'existe':existe})
 
@@ -52,8 +49,96 @@ def formacion_regular(request):
 
 #Graficas de es
 def estrategias(request):
-    return render(request, 'Estrategias/estrategias.html')
+    
+    datos_p04 = P04.objects.all()
+    
+    filtro_modalidad_presencial = 'PRESENCIAL'
+    filtro_modalidad_virtual = 'VIRTUAL'
+    
+    data_presencial = datos_p04.filter(modalidad_formacion=filtro_modalidad_presencial)
+    data_virtual = datos_p04.filter(modalidad_formacion=filtro_modalidad_virtual)
+    data_presencial =  datos_p04.filter(modalidad_formacion=filtro_modalidad_presencial)
+    
+    
+    data_virtual =  datos_p04.filter(modalidad_formacion=filtro_modalidad_virtual)
+    
+    #DATOS PARA LAS GRAFICAS DEL P04
+    
+    def calcular_total_aprendices(data_presencial, data_virtual,nivel_formacion):
+        total_presencial = sum(aprendices['total_aprendices_activos'] for aprendices in data_presencial.filter(nivel_formacion=nivel_formacion).values('total_aprendices_activos'))
+        total_virtual = sum(aprendices['total_aprendices_activos'] for aprendices in data_virtual.filter(nivel_formacion=nivel_formacion).values('total_aprendices_activos'))
+        
+        return total_presencial, total_virtual
+    
+    total_curso_especial_activos = calcular_total_aprendices(data_presencial,data_virtual,'CURSO ESPECIAL')
+    total_tecnologo_activos = calcular_total_aprendices(data_presencial,data_virtual,'TECNÓLOGO')
+    total_tecnico_activos = calcular_total_aprendices(data_presencial,data_virtual,'TÉCNICO')
+    total_auxiliar_activos = calcular_total_aprendices(data_presencial,data_virtual,'AUXILIAR')
+    total_operario_activos = calcular_total_aprendices(data_presencial,data_virtual,'OPERARIO')
+    total_evento_activos = calcular_total_aprendices(data_presencial,data_virtual,'EVENTO')
+    total_profundizacion_tecnica_activos = calcular_total_aprendices(data_presencial,data_virtual,'PROFUNDIZACION TECNICA')
+    
+    #datos para conplementaria  bilinguismo
+    def calcular_total_aprendices_complementario(data_presencial, data_virtual,nivel_formacion):
+        total_presencial_complementaria = sum(aprendices['total_aprendices_activos'] for aprendices in data_presencial.filter(nombre_programa_especial=nivel_formacion).values('total_aprendices_activos'))
+        total_virtual_complementaria= sum(aprendices['total_aprendices_activos'] for aprendices in data_virtual.filter(nombre_programa_especial=nivel_formacion).values('total_aprendices_activos'))
+        
+        return total_presencial_complementaria, total_virtual_complementaria
+    
+    total_bilinguismo_activos = calcular_total_aprendices_complementario(data_presencial,data_virtual,'PROGRAMA DE BILINGUISMO')
+    
+    #datos para complementaria sin bilinguismo
+    
+    def calcular_total_aprendices_complementario_sin_bilinguismo(data_presencial,data_virtual,nivel_formacion):
+        
+        sin_bilinguismo_presencial= data_presencial.filter(nivel_formacion=nivel_formacion).values('total_aprendices_activos')
+        sin_bilinguismo_virtual= data_virtual.filter(nivel_formacion=nivel_formacion).values('total_aprendices_activos')
+        
 
+        total_presencial_sin_bilinguismo = sum(aprendices['total_aprendices_activos'] for aprendices in sin_bilinguismo_presencial.exclude(nombre_programa_especial='PROGRAMA DE BILINGUISMO'))
+        total_virtual_sin_bilinguismo = sum(aprendices['total_aprendices_activos'] for aprendices in sin_bilinguismo_virtual.exclude(nombre_programa_especial='PROGRAMA DE BILINGUISMO').values('total_aprendices_activos'))
+      
+    
+        return total_presencial_sin_bilinguismo,total_virtual_sin_bilinguismo
+
+    total_sin_bilinguismo_activos = calcular_total_aprendices_complementario_sin_bilinguismo(data_presencial,data_virtual,'CURSO ESPECIAL')
+    
+    
+    #DATOS DE LAS METAS DE ESTRATEGIA 
+
+    
+    select_estrategia = request.GET.get('estrategia')
+    print('dd',select_estrategia)
+    metas_estrategias = Estrategia_detalle.objects.all()
+    if select_estrategia:
+        metas_estrategias = Estrategia_detalle.objects.filter(est_id=select_estrategia)
+        
+    presencial_meta = metas_estrategias.filter(estd_modalidad=1)
+    print('dd',presencial_meta)
+    
+    
+    
+    context = {
+        'total_curso_especial_activos':json.dumps(total_curso_especial_activos),
+        'total_tecnologo_activos':json.dumps(total_tecnologo_activos),
+        'total_tecnico_activos':json.dumps(total_tecnico_activos),
+        'total_auxiliar_activos':json.dumps(total_auxiliar_activos),
+        'total_operario_activos':json.dumps(total_operario_activos),
+        'total_evento_activos':json.dumps(total_evento_activos),
+        'total_profundizacion_tecnica_activos':json.dumps(total_profundizacion_tecnica_activos),
+        'total_bilinguismo_activos':json.dumps(total_bilinguismo_activos),
+        'total_sin_bilinguismo_activos':json.dumps(total_sin_bilinguismo_activos),
+        'estrategias':Estrategia.objects.all(),
+        'metas_estrategias':metas_estrategias,
+        'select_estrategia':select_estrategia,
+       
+       
+    }
+
+
+    return render(request, 'Estrategias/estrategias.html',context)
+
+    
 def general(request):
     
     #filtros de fecha
@@ -792,6 +877,7 @@ def meta_data(request,id_estrategia):
     
     metas = estrategia.met_id
     meta_serializer = MetaSerializer(metas)
+    print(meta_serializer)
     data = {
         'meta': meta_serializer.data
     }
@@ -943,7 +1029,7 @@ class estrategias_institucionales_filtros(TemplateView):
         # Filtrar datos según los filtros aplicados
         resultados = Estrategia_detalle.objects.filter(**estrategia_detalle_filtro).values(
             'estd_id',
-            'estd_modalidad',
+            'estd_modalidad__modalidad',
             'est_id__est_nombre',
             'estd_operario_meta',
             'estd_auxiliar_meta',

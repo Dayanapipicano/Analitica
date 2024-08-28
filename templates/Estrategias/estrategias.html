@@ -34,12 +34,15 @@
                             <div class="form-group row">
                                 <label for="filtroSeleccion" class="col-sm-5 col-form-label col-form-label-sm">Estrategia:</label>
                                 <div class="col-sm-7">
-                                    <select class="form-control form-control-sm custom-select" id="filtroSeleccion">
-                                        <option selected>Seleccionar</option>
-                                        <option value="opcion1">Campesena</option>
-                                        <option value="opcion2">Economia popular</option>
-                                   
+                                  
+                                    <select name="estrategia" id="estrategia" onchange="aplicarFiltrosEstrategias()">
+                                        <option value="" disabled {% if not select_estrategia %}selected{% endif %}>Seleccione una estrategia</option>
+                                        {% for estrategia in estrategias %}
+                                            <option value="{{ estrategia.est_id }}" {% if estrategia.est_id|stringformat:"s" == select_estrategia %}selected{% endif %}>{{ estrategia.est_nombre }}</option>
+                                        {% endfor %}
                                     </select>
+                                    
+                                  
                                 </div>
                             </div>
                         </div>
@@ -73,60 +76,181 @@
         <div class="row row-cols-3 row-cols-lg-3  ">
             <div class="col p-1">
                
-                    <div class="chart">
+                    
                         <canvas id="auxiliar" width="300" height="300"></canvas>
-                    </div>
+               
            
             </div>
             <div class="col p-1">
                
-                    <div class="chart">
+                   
                         <canvas id="tecnico" width="300" height="300"></canvas>
-                    </div>
+                  
                 </div>
           
             <div class="col p-1 ">
                
-                    <div class="chart">
+                    
                         <canvas id="tecnologo" width="300" height="300"></canvas>
-                    </div>
+                   
             
             </div>
        
-            <div class="col p-1">
+            <div class="col p-1 ">
               
-                    <div class="chart">
+                  
                         <canvas id="profundizacion_tecnica" width="300" height="300"></canvas>
-                    </div>
+              
          
             </div>
             <div class="col p-1">
            
-                    <div class="chart">
+              
                         <canvas id="evento" width="300" height="300"></canvas>
-                    </div>
+             
                
             </div>
             <div class="col p-1">
               
-                    <div class="chart">
+                   
                         <canvas id="operario" width="300" height="300"></canvas>
-                    </div>
+                  
            
             </div>
      
        
             <div class="col p-1">
                
-                    <div class="chart">
+                   
                         <canvas id="curso_especial" width="300" height="300"></canvas>
-                    </div>
+                
          
+            </div>
+            <div class="col p-1">
+                <canvas id="bilinguismo" width="300" height="300"></canvas>
+            </div>
+            <div class="col p-1">
+                <canvas id="sin_bilinguismo" width="300" height="300"></canvas>
             </div>
         </div>
     </div>
+    <div class="container">
+        <div style="max-height: 400px; overflow-x: auto; overflow-y: auto;">
+            <table class="table table-striped table-hover data-table" id="resultados_tabla">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" style="min-width: 200px;" class="fixed-header"></th>
+                      
+                        <th scope="col" style="min-width: 200px;" class="fixed-header">Auxiliar</th>
+                        <th scope="col" style="min-width: 200px;" class="fixed-header">Técnico</th>
+                        <th scope="col" style="min-width: 100px;" class="fixed-header">Tecnólogo</th>
+                        <th scope="col" style="min-width: 100px;" class="fixed-header">Profundización Técnica</th>
+                        <th scope="col" style="min-width: 100px;" class="fixed-header">Evento</th>
+                        <th scope="col" style="min-width: 150px;" class="fixed-header">Operario</th>
+                        <th scope="col" style="min-width: 150px;" class="fixed-header">Curso Especial</th>
+                        <th scope="col" style="min-width: 150px;" class="fixed-header">Bilingüismo</th>
+                        <th scope="col" style="min-width: 150px;" class="fixed-header">Sin Bilingüismo</th>
+             
+
+                     
+                        
+
+                    </tr>
+                </thead>
+              
+                <tbody id="resultados">
+                    <tr>
+                        <td class="fixed-column">Modalidad presencial</td>
+                    
+                         {%for data_presencial in data_tabla_presencial%}
+                        <td>{{data_presencial}}</td>
+                       
+                        {%endfor%}
+                    </tr>
+                    <tr>
+                        <td class="fixed-column">Modalidad virtual</td>
+                 
+                        {%for data_virtual in data_tabla_virtual%}
+                        <td>{{data_virtual}}</td>
+                       
+                        {%endfor%}
+                    </tr>
+                    <tr>
+                        <td class="fixed-column">Meta Presencial</td>
+                        {%for metas_presencial in metas_presencial%}
+                        <td>{{metas_presencial.met_formacion_curso_especial}}</td>
+                        <td>{{metas_presencial.met_formacion_tecnologo}}</td>
+                        <td>{{metas_presencial.met_formacion_tecnico}}</td>
+                        <td>{{metas_presencial.met_formacion_auxiliar}}</td>
+                        <td>{{metas_presencial.met_formacion_operario}}</td>
+                        <td>{{metas_presencial.met_formacion_evento}}</td>
+                   
+                    
+                       
+                        {%endfor%}
+
         
-        
+                    </tr>
+                    <tr>
+                        <td class="fixed-column">Meta Virtual</td>
+                        {%for metas_virtual in metas_virtual%}
+                        <td>{{metas_virtual.met_formacion_curso_especial}}</td>
+                        <td>{{metas_virtual.met_formacion_tecnologo}}</td>
+                        <td>{{metas_virtual.met_formacion_tecnico}}</td>
+                        <td>{{metas_virtual.met_formacion_auxiliar}}</td>
+                        <td>{{metas_virtual.met_formacion_operario}}</td>
+                        <td>{{metas_virtual.met_formacion_evento}}</td>
+                  
+                        {%endfor%}
+                    </tr>
+                  
+                </tbody>
+            </table>
+            
+        </div>
+     </div>
+    <script id="total_curso_especial_activos" type="application/json">
+        {{total_curso_especial_activos|safe}}
+    </script>
+    <script id="total_tecnologo_activos" type="application/json">
+        {{total_tecnologo_activos|safe}}
+    </script>
+    <script id="total_tecnico_activos" type="application/json">
+        {{total_tecnico_activos|safe}}
+    </script>
+    <script id="total_auxiliar_activos" type="application/json">
+        {{total_auxiliar_activos|safe}}
+    </script>
+    <script id="total_operario_activos" type="application/json">
+        {{total_operario_activos|safe}}
+    </script>
+    <script id="total_evento_activos" type="application/json">
+        {{total_evento_activos|safe}}
+    </script>
+    <script id="total_profundizacion_tecnica_activos" type="application/json">
+        {{total_profundizacion_tecnica_activos|safe}}
+    </script>
+    <script id="total_bilinguismo_activos" type="application/json">
+        {{total_bilinguismo_activos|safe}}
+    </script>
+    <script id="total_sin_bilinguismo_activos" type="application/json">
+        {{total_sin_bilinguismo_activos|safe}}
+    </script>
+    <script>
+        let filtro_url = "{% url 'cores:estrategias_index' %}?";
+
+function aplicarFiltrosEstrategias() {
+    const estrategia = document.getElementById('estrategia').value;
+   
+    console.log('jdj',estrategia)
+    let url = filtro_url;
+    if (estrategia) {
+        url += `estrategia=${estrategia}`;
+    }
+    
+    window.location.href = url;
+  }
+    </script>
     </div>
    
     
@@ -138,6 +262,9 @@
     <script src="{% static 'bootstrap/js/profundizacion_tecnica.js' %}"></script>
     <script src="{% static 'bootstrap/js/tecnico.js' %}"></script>
     <script src="{% static 'bootstrap/js/tecnologo.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bilinguismo.js' %}"></script>
+    <script src="{% static 'bootstrap/js/sin_bilinguismo.js' %}"></script>
+    <script src="{% static 'bootstrap/js/estrategias.js' %}"></script>
 </div>
 </div>
 </div>

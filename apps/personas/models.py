@@ -214,7 +214,6 @@ class Meta(models.Model):
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
     est_nombre = models.CharField(max_length=100)
-    est_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
     est_total_meta = models.CharField(max_length=100)
     met_id = models.ForeignKey(Meta, on_delete=models.CASCADE, to_field='met_id')
     def __str__(self):
@@ -225,7 +224,7 @@ class Estrategia(models.Model):
 
 class Estrategia_detalle(models.Model):
     estd_id = models.AutoField(primary_key=True)
-    estd_modalidad = models.CharField(max_length=150)
+    estd_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
     estd_operario_meta = models.CharField(max_length=150)
     estd_auxiliar_meta = models.CharField(max_length=150)
     estd_tecnico_meta = models.CharField(max_length=150)

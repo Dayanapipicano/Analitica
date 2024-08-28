@@ -1,3 +1,5 @@
+const total_tecnologo_activos = JSON.parse(document.getElementById('total_tecnologo_activos').textContent)
+
 const tecnologo = document.getElementById('tecnologo').getContext('2d');
 
 new Chart(tecnologo, {
@@ -5,7 +7,7 @@ new Chart(tecnologo, {
     data: {
         labels: ['Presencial', 'Virtual'],
         datasets: [{
-            data: [12, 19, 3, 5, 2, 3],
+            data: total_tecnologo_activos,
             borderWidth: 1,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -37,7 +39,7 @@ new Chart(tecnologo, {
             },
             title: {
                 display: true, // Mostrar el título
-                text: 'Tecnologo', // Título de la gráfica
+                text: 'Tecnólogo', // Título de la gráfica
                 font: {
                     size: 14 // Tamaño de la fuente del título
                 }
@@ -45,5 +47,6 @@ new Chart(tecnologo, {
         }
     }
 });
+
 
 

@@ -77,40 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //maneja filtros dentro del formulario metas formacion (est_id)
 document.addEventListener('DOMContentLoaded', function () {
-    const modalidadField = document.querySelector('#id_estd_modalidad');
+    
     const estrategiaField = document.querySelector('#id_est_id');
     const metaField = document.querySelector('#id_estd_meta');
 
-    modalidadField.addEventListener('change', function () {
-        const id_estd_modalidad = this.value;
-        console.log(id_estd_modalidad)
-        
-        console.log('asfsd',this.value = id_estd_modalidad)
-     
-
-        fetch(`/get_estrategia_data/${id_estd_modalidad}/`)
-            .then(response => response.json())
-            .then(data => {
-             
-                estrategiaField.innerHTML = '<option value"">selecionar</option>'
-
-            
-                data.estrategia.forEach(estrategia => {
-                    const option = document.createElement('option');
-                    option.value = estrategia.estrategia_id;
-                    option.textContent = estrategia.estrategia_nombre;
-                    estrategiaField.appendChild(option);
-
-                    // Selecciona la opción recién añadida
-                    estrategiaField.value = data.estrategia_id;
-                })
-                  
-            
-                
-                
-
-            });
-    });
 
     estrategiaField.addEventListener('change', function(){
         const id_estrategia = this.value;
@@ -128,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const meta = data.meta;
                     const option = document.createElement('option');
                     option.value = meta.met_id;
-                    option.textContent = meta.met_codigo;
+                    option.textContent = meta.met_año;
                     metaField.appendChild(option)
 
 

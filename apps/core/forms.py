@@ -109,7 +109,7 @@ class Form_estrategias(forms.ModelForm):
         fields = [
          
             'est_nombre',
-            'est_modalidad',
+            
             'met_id',
             'est_total_meta',
             
@@ -126,8 +126,6 @@ class Form_estrategias(forms.ModelForm):
         
 class Form_meta_estrategia_detalle(forms.ModelForm):
     
-    estd_modalidad =forms.ModelChoiceField(queryset=Modalidad.objects.all(),to_field_name='id',widget=forms.Select)
-    est_id = forms.ModelChoiceField(queryset=Estrategia.objects.none())
  
     class Meta: 
         model = Estrategia_detalle
