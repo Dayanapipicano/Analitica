@@ -117,7 +117,11 @@
     max-height: 3000px;
     height: 40vh;
 }
-editarModal
+#viewModal .modal-content{
+    max-height: 3000px;
+    height: 25vh;
+}
+
 .error-message{
     color: red;
 }
