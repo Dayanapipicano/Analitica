@@ -1,8 +1,22 @@
 
 const total_auxiliar_activos = JSON.parse(document.getElementById('total_auxiliar_activos').textContent)
 
+const auxiliar_meta= JSON.parse(document.getElementById('auxiliar_meta').textContent)
 
 const auxiliar = document.getElementById('auxiliar').getContext('2d');
+
+
+//porcentajes auxiliar
+const backgroundColors = auxiliar_meta.map((meta, index) => {
+    const resultado = total_auxiliar_activos[index];
+    return Estado_de_color(resultado, meta)
+})
+const borderColor = auxiliar_meta.map((meta, index) => {
+    const resultado = total_auxiliar_activos[index];
+    return Estado_de_color(resultado, meta).replace('0.2','1.0')
+})
+
+
 
 new Chart(auxiliar, {
     type: 'bar',
@@ -11,22 +25,8 @@ new Chart(auxiliar, {
         datasets: [{
             data: total_auxiliar_activos,
             borderWidth: 1,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-             'rgba(75, 192, 192, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ]
+            backgroundColor: backgroundColors,
+            borderColor: borderColor,
         }]
     },
     options: {

@@ -1,6 +1,17 @@
 const total_tecnologo_activos = JSON.parse(document.getElementById('total_tecnologo_activos').textContent)
+const tecnologo_meta = JSON.parse(document.getElementById('tecnologo_meta').textContent)
 
 const tecnologo = document.getElementById('tecnologo').getContext('2d');
+
+//porcentajes tecnologo
+const backgroundColorsTecnologo = tecnologo_meta.map((meta, index) => {
+    const resultado = total_tecnologo_activos[index];
+    return Estado_de_color(resultado, meta)
+})
+const borderColorTecnologo = tecnologo_meta.map((meta, index) => {
+    const resultado = total_tecnologo_activos[index];
+    return Estado_de_color(resultado, meta).replace('0.2','1.0')
+})
 
 new Chart(tecnologo, {
     type: 'bar',
@@ -9,22 +20,8 @@ new Chart(tecnologo, {
         datasets: [{
             data: total_tecnologo_activos,
             borderWidth: 1,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-             'rgba(75, 192, 192, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ]
+            backgroundColor: backgroundColorsTecnologo,
+            borderColor:borderColorTecnologo
         }]
     },
     options: {

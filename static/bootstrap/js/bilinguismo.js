@@ -1,6 +1,19 @@
 const total_bilinguismo_activos = JSON.parse(document.getElementById('total_bilinguismo_activos').textContent)
+const bilinguismo_meta = JSON.parse(document.getElementById('bilinguismo_meta').textContent)
 
 const bilinguismo = document.getElementById('bilinguismo').getContext('2d');
+
+
+//porcentajes bilinguismo
+const backgroundColorsBilinguismo = bilinguismo_meta.map((meta, index) => {
+    const resultado = total_bilinguismo_activos[index];
+    return Estado_de_color(resultado, meta)
+})
+const borderColorBilinguismo = bilinguismo_meta.map((meta, index) => {
+    const resultado = total_bilinguismo_activos[index];
+    return Estado_de_color(resultado, meta).replace('0.2','1.0')
+})
+
 
 new Chart(bilinguismo, {
     type: 'bar',

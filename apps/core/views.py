@@ -50,7 +50,21 @@ def formacion_regular(request):
 #Graficas de es
 def estrategias(request):
     
-    datos_p04 = P04.objects.all()
+    #filtros de fecha
+    select_fecha_inicio = request.GET.get('fecha_inicio')
+    
+    select_fecha_fin = request.GET.get('fecha_fin')
+    
+    datos_p04= P04.objects.all()
+    
+    
+   
+    
+    if select_fecha_inicio and select_fecha_fin:
+        datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio, fecha_inicio_ficha__lte=select_fecha_fin)
+        print(datos_p04)
+    
+    
     
     filtro_modalidad_presencial = 'PRESENCIAL'
     filtro_modalidad_virtual = 'VIRTUAL'
@@ -103,20 +117,70 @@ def estrategias(request):
 
     total_sin_bilinguismo_activos = calcular_total_aprendices_complementario_sin_bilinguismo(data_presencial,data_virtual,'CURSO ESPECIAL')
     
+    auxiliar_presencial, auxiliar_virtual = total_auxiliar_activos
+    tecnico_presencial, tecnico_virtual = total_tecnico_activos
+    tecnologo_presencial, tecnologo_virtual = total_tecnologo_activos
+    profundizacion_tecnica_presencial, profundizacion_tecnica_virtual = total_profundizacion_tecnica_activos
+    evento_presencial, evento_virtual = total_evento_activos
+    operario_presencial, operario_virtual = total_operario_activos
+    curso_especial_presencial, curso_especial_virtual = total_curso_especial_activos
+    bilinguismo_presencial, bilinguismo_virtual = total_bilinguismo_activos
+    sin_bilinguismo_presencial, sin_bilinguismo_virtual = total_sin_bilinguismo_activos
+    
+    data_presencial_p04_tabla = [auxiliar_presencial,tecnico_presencial,tecnologo_presencial,profundizacion_tecnica_presencial,evento_presencial,operario_presencial,curso_especial_presencial,bilinguismo_presencial,sin_bilinguismo_presencial]
+    data_virtual_p04_tabla = [auxiliar_virtual,tecnico_virtual,tecnologo_virtual,profundizacion_tecnica_presencial,evento_virtual,operario_virtual,curso_especial_virtual,bilinguismo_virtual,sin_bilinguismo_virtual]
+    
+    
     
     #DATOS DE LAS METAS DE ESTRATEGIA 
 
-    
     select_estrategia = request.GET.get('estrategia')
-    print('dd',select_estrategia)
+    if not select_estrategia:
+        select_estrategia = Estrategia_detalle.objects.first().est_id
+    
     metas_estrategias = Estrategia_detalle.objects.all()
     if select_estrategia:
         metas_estrategias = Estrategia_detalle.objects.filter(est_id=select_estrategia)
         
     presencial_meta = metas_estrategias.filter(estd_modalidad=1)
-    print('dd',presencial_meta)
+    virtual_meta_estrategia = metas_estrategias.filter(estd_modalidad=2)
+  
     
+    auxiliar = []
+    tecnico= []
+    tecnologo  =[]
+    profundizacion_tecnica = []
+    evento = []
+    operario = []
+    curso_especial = []
+    bilinguismo = []
+    sin_bilinguismo =[]
+        
+
+    #separa las metas para cada nivel de formacion en virtual y presencial
     
+    for meta in presencial_meta:
+        auxiliar.append(int(meta.estd_auxiliar_meta))
+        tecnico.append(int(meta.estd_tecnico_meta))
+        tecnologo.append(int(meta.estd_tecnologo))
+        profundizacion_tecnica.append(int(meta.estd_profundizacion_tecnica_meta))
+        evento.append(int(meta.estd_evento))
+        operario.append(int(meta.estd_operario_meta))
+        curso_especial.append(int(meta.estd_curso_especial))
+        bilinguismo.append(int(meta.estd_bilinguismo))
+        sin_bilinguismo.append(int(meta.estd_sin_bilinguismo))
+        
+    for meta in virtual_meta_estrategia:
+        auxiliar.append(int(meta.estd_auxiliar_meta))
+        tecnico.append(int(meta.estd_tecnico_meta))
+        tecnologo.append(int(meta.estd_tecnologo))
+        profundizacion_tecnica.append(int(meta.estd_profundizacion_tecnica_meta))
+        evento.append(int(meta.estd_evento))
+        operario.append(int(meta.estd_operario_meta))
+        curso_especial.append(int(meta.estd_curso_especial))
+        bilinguismo.append(int(meta.estd_bilinguismo))
+        sin_bilinguismo.append(int(meta.estd_sin_bilinguismo))
+        
     
     context = {
         'total_curso_especial_activos':json.dumps(total_curso_especial_activos),
@@ -129,10 +193,21 @@ def estrategias(request):
         'total_bilinguismo_activos':json.dumps(total_bilinguismo_activos),
         'total_sin_bilinguismo_activos':json.dumps(total_sin_bilinguismo_activos),
         'estrategias':Estrategia.objects.all(),
-        'metas_estrategias':metas_estrategias,
         'select_estrategia':select_estrategia,
-       
-       
+        'presencial_meta':presencial_meta,
+        'virtual_meta_estrategia':virtual_meta_estrategia,
+        'data_presencial_p04_tabla':data_presencial_p04_tabla,
+        'data_virtual_p04_tabla':data_virtual_p04_tabla,
+        #METAS PARA PORCENTAJES
+        'auxiliar_meta':json.dumps(auxiliar),
+        'tecnico_meta':json.dumps(tecnico),
+        'tecnologo_meta':json.dumps(tecnologo),
+        'profundizacion_tecnica_meta':json.dumps(profundizacion_tecnica),
+        'evento_meta':json.dumps(evento),
+        'operario_meta':json.dumps(operario),
+        'curso_especial_meta':json.dumps(curso_especial),
+        'bilinguismo_meta':json.dumps(bilinguismo),
+        'sin_bilinguismo_meta':json.dumps(sin_bilinguismo)
     }
 
 

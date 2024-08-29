@@ -1,6 +1,22 @@
 const total_evento_activos = JSON.parse(document.getElementById('total_evento_activos').textContent)
+const evento_meta = JSON.parse(document.getElementById('evento_meta').textContent)
+
+
+//porcentajes evento
+const backgroundColorsEvento = evento_meta.map((meta, index) => {
+    const resultado = total_evento_activos[index];
+    return Estado_de_color(resultado, meta)
+})
+const borderColorEvento = evento_meta.map((meta, index) => {
+    const resultado = total_evento_activos[index];
+    return Estado_de_color(resultado, meta).replace('0.2','1.0')
+})
+
+
 
 const evento = document.getElementById('evento').getContext('2d');
+
+
 
 new Chart(evento, {
     type: 'bar',
@@ -9,22 +25,8 @@ new Chart(evento, {
         datasets: [{
             data: total_evento_activos,
             borderWidth: 1,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-             'rgba(75, 192, 192, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ]
+            backgroundColor: backgroundColorsEvento,
+            borderColor: borderColorEvento
         }]
     },
     options: {
