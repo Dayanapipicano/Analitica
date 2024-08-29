@@ -9,6 +9,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token }}">
 
 <div class="main p-3">
     <div class="text-center">
@@ -19,7 +20,7 @@
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
                         <label for="selectAnio">Selecciona un año:</label>
-                        <select name="año" id="año"></select>
+                        <select class="form-control form-control-sm custom-select" name="año" id="año"></select>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -56,7 +57,7 @@
                     <div class="form-group row">
                         <span class="icono" data-toggle="modal" data-target="#Modal_estrategia">
                             Estrategia
-                            <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
+                            <img src="{% static 'bootstrap/img/agregar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         </span>
                     </div>
                 </div>
@@ -64,7 +65,7 @@
                     <div class="form-group row">
                         <span class="icono" data-toggle="modal" data-target="#myModal4">
                             Meta estrategia
-                            <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
+                            <img src="{% static 'bootstrap/img/agregar.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
                         </span>
                     </div>
                 </div>
@@ -124,7 +125,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Estrategias</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Estrategia</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -132,8 +133,28 @@
                     <div class="modal-body">
                         <form action="{% url 'cores:estrategias_create' %}" method="post">
                             {% csrf_token %}
-                            {{ form_estrategias_institucionales.as_p }}
-                            <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
+                           
+
+                            <div class="mb-3">
+                                <label for="" class="form-label">Modalidad</label>
+                                {{ form_estrategias_institucionales.est_nombre}}
+                                <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta</label>
+                                {{ form_estrategias_institucionales.met_id}}
+                                <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Total Meta</label>
+                                {{ form_estrategias_institucionales.est_total_meta}}
+                                <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                            </div>
+                            Meta
+                            <img src="{% static 'bootstrap/img/agregar.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
+                            <br><br>                    
+                        </div>
+                    
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -144,32 +165,114 @@
             </div>
         </div>
 
-        <!-- Segundo Modal meta -->
+     
       
-       <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+     <!-- Segundo Modal -->
+     <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content" id="Modal1-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitulo">Meta</h5>
+                    <h5 class="modal-title" id="modalTitulo">Metas</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="second-modal-form_meta" action="{% url 'cores:meta_create' %}" method="post">
+                    <form id="second-modal-form_meta" action="{% url 'cores:meta_estrategia_detalle' %}" method="post">
                         {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="" class="form-label">Fecha Inicio</label>
+                            {{ form_meta.met_centro_formacion }}
+                          
+
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="" class="form-label">Fecha Inicio</label>
+                            {{ form_meta.met_fecha_inicio }}
+                          
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Fecha Fin</label>
+                            {{ form_meta.met_fecha_fin }}
+                            <span class="error-message" id="dateErrorMeta" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                            
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Año</label>
+                            {{ form_meta.met_año }}
+                            
+                            <span class="error-message" id="errorDocumentoExists" style="display: none;  bottom: -45px;">El año ya esta registrado</span>
+                            
+                            
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Codigo</label>
+                            {{ form_meta.met_codigo}}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Otras Poblaciones </label>
+                            {{ form_meta.met_total_otras_poblaciones }} 
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Total De Victimas</label>
+                            {{ form_meta.met_total_victimas }}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Hechos Victimizantes</label>
+                            {{ form_meta.met_total_hechos_victimizantes }}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Desplazados Violencia</label>
+                            {{ form_meta.met_total_desplazados_violencia }}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Poblacion Vulnerable</label>
+                            {{ form_meta.met_total_poblacion_vulnerable }}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Titulada</label>
+                            {{ form_meta.met_total_titulada }}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Meta Complementaria</label>
+                            {{ form_meta.met_total_complementaria }}
+
+                        </div>
+                        
+                      
                         <input id="per_documento" name="per_documento"  type="hidden" class="form-control" value="{{user.per_documento}}">
 
-                        {{ form_meta.as_p }}
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
-                            <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
-                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                        <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
+
+                    </div>
                     </form>
-                </div>
+                
             </div>
         </div>
     </div>
+    
+    
+ 
+     
+    
+    
+ 
         <!-- Modal meta estrategia -->
         <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -183,13 +286,65 @@
                     <div class="modal-body">
                         <form id="second-modal-form_meta" action="{% url 'cores:meta_estrategia_detalle' %}" method="post">
                             {% csrf_token %}
-                            {{ form_meta_estrategia_detalle.as_p }}
+                            
+                            <div class="mb-3">
+                                <label for="" class="form-label">Modalidad</label>
+                                {{ form_meta_estrategia_detalle.estd_modalidad }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Estrategia</label>
+                                {{ form_meta_estrategia_detalle.est_id }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta</label>
+                                {{ form_meta_estrategia_detalle.estd_meta }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Profundización Técnica</label>
+                                {{ form_meta_estrategia_detalle.estd_profundizacion_tecnica_meta }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Curso Especial</label>
+                                {{ form_meta_estrategia_detalle.estd_curso_especial }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Técnico</label>
+                                {{ form_meta_estrategia_detalle.estd_tecnico_meta }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Evento</label>
+                                {{ form_meta_estrategia_detalle.estd_evento }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Tecnólogo</label>
+                                {{ form_meta_estrategia_detalle.estd_tecnologo }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Bilingüismo</label>
+                                {{ form_meta_estrategia_detalle.estd_bilinguismo }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Sin Bilingüismo</label>
+                                {{ form_meta_estrategia_detalle.estd_sin_bilinguismo }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Operario</label>
+                                {{ form_meta_estrategia_detalle.estd_operario_meta }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Meta Auxiliar</label>
+                                {{ form_meta_estrategia_detalle.estd_auxiliar_meta }}
+                            </div>
+
+                        </div>
                             <div class="modal-footer">
+
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
                                 <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
                             </div>
                         </form>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -352,23 +507,19 @@
           const modalidadSelect = document.getElementById('modalidad');
           const modalidadSeleccionada = modalidadSelect.value;
   
-          modalidadSelect.innerHTML = '<option value="">--Selecciona modalidad--</option>';
+          modalidadSelect.innerHTML = '<option value=""> Selecciona modalidad </option>';
   
           modalidadesDisponibles.forEach(modalidad => {
               const [id, nombre] = modalidad;  // Desestructurar la tupla [id, nombre]
   
               const option = document.createElement('option');
-              option.value = nombre;  // ID de la modalidad
+              option.value = id;  // ID de la modalidad
               option.textContent = nombre;  // Nombre de la modalidad
           
-              if (nombre === modalidadSeleccionada) {
-                  option.selected = true;
-              }
-  
-
-      
+           
               modalidadSelect.appendChild(option);
           });
+          modalidadSelect.value = modalidadSeleccionada
       }
   
       function cargarAnios() {
@@ -376,14 +527,14 @@
           const currentYear = new Date().getFullYear();
           añoSelect.innerHTML = '',
 
-          añoSelect.options.add(new Option('--Selecciona año--', ''));
+          añoSelect.options.add(new Option(' Selecciona año ', ''));
 
 
           for (let i = currentYear; i >= 1900; i--) {
             añoSelect.options.add(new Option(i, i));
           }
 
-          console.log('dsfsdgs',añoSelect.value)
+          
       }
 
       function limpiarAño(){
@@ -434,7 +585,8 @@
   }
   
   
-  
+  url_meta_formacion = '{% url "cores:verificacion_meta_formacion_regular" %}'
+
 
 
 

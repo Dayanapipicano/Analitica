@@ -109,3 +109,86 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+  //alaertas para el formulario de meta create
+document.getElementById('id_met_año').addEventListener('input',function(){
+    const id_met_año = this.value
+    console.log(id_met_año)
+    console.log(id_met_año)
+
+    fetch('/verificar-año/',{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ id_met_año: id_met_año })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const errorAño = document.getElementById('errorDocumentoExists');
+        const botonBloqueado = document.getElementById('submit-second-modal_meta');
+        
+        if(data.existe){
+            errorAño.style.display = 'block';
+            botonBloqueado.disabled = true;
+        }else{
+            errorAño.style.display = 'none';
+            botonBloqueado.disabled = false;
+        }
+    });
+});
+
+//verificacion de formulario metas formacion 
+
+$(document).ready(function() {
+    $('#id_met_id').change(function() {
+        
+        var id_met_id = $(this).val();
+        console.log('hola',id_met_id)
+        if (id_met_id) {
+            $.ajax({
+                url: url_meta_formacion,
+                method: 'GET',
+                data: { id_met_id: id_met_id },
+                success: function(data) {
+                    var select = $('#id_metd_modalidad');
+                    select.empty();
+                    select.append('<option value="">Selecciona modalidad</option>');
+                    $.each(data, function(index, modalidad) {
+                        select.append('<option value="' + modalidad.id + '">' + modalidad.modalidad + '</option>');
+                    });
+                },
+                error: function() {
+                    alert('Error al cargar las modalidades.');
+                }
+            });
+        } else {
+            $('#id_metd_modalidad').empty().append('<option value="">Selecciona modalidad</option>');
+        }
+    });
+});
+
+//fechas inicio y fin 
+document.getElementById('id_met_fecha_inicio').addEventListener('change', validateDates);
+document.getElementById('id_met_fecha_fin').addEventListener('change', validateDates);
+
+function validateDates() {
+    const startDateInput = document.getElementById('id_met_fecha_inicio');
+    const endDateInput = document.getElementById('id_met_fecha_fin');
+    const errorDiv = document.getElementById('dateErrorMeta');
+    const submitButton = document.getElementById('submit-second-modal_meta');
+
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+
+    if (startDate && endDate && startDate >= endDate) {
+        errorDiv.style.display = 'block';  // Mostrar mensaje de error
+        submitButton.disabled = true;      // Desactivar el botón
+    } else {
+        errorDiv.style.display = 'none';   // Ocultar mensaje de error
+        submitButton.disabled = false;     // Activar el botón
+    }
+}
+
+

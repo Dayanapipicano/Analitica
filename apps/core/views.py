@@ -1092,7 +1092,7 @@ class estrategias_institucionales_filtros(TemplateView):
         if año:
             id_metas_año = Meta.objects.filter(met_año=año).values_list('met_id', flat=True)
             estrategia_detalle_filtro['estd_meta__in'] = id_metas_año
-            print('fdsfdsfsdmeta',estrategia_detalle_filtro)
+            
         
        
 
