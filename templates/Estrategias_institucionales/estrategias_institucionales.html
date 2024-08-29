@@ -76,13 +76,18 @@
         <div class="card">
             
             <div class="card-title">{{estrategias.est_nombre}}</div>
+            <div class="card-title">{{estrategias.est_total_meta}}</div>
             <div class="card-content">
                 <div class="card-item"><strong>Meta:</strong><button type="button" data-toggle="modal" data-target="#viewModal" onclick="openModal('{{ estrategias.met_id_id }}')"class="btn-icon">
                     <img src="{% static 'bootstrap/img/visualizar.png' %}" 
                          alt="Protection Icon" 
                          style="width: 20px; height: 20px;">
-                </button></div>
-                
+                </button>
+                </div>
+                {% if perms.can_view_admin_dashboard %}  
+                <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModal" data-id="{{estrategias.est_id}}" data-nombre="{{estrategias.est_nombre}}" data-meta="{{estrategias.met_id_id}}" data-total-meta="{{estrategias.est_total_meta}}"onclick="Editar_estrategia(this)">Editar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModal"  data-id="{{estrategias.est_id}}" onclick="Delete_estrategia(this)">Eliminar</button>
+                {%endif%}
             </div>
             
         </div>
@@ -105,8 +110,9 @@
                             <th scope="col" style="min-width: 100px;" class="fixed-header">Operario</th>
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Evento</th>
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Tecnologo</th>   
-                            <th scope="col" style="min-width: 150px;" class="fixed-header">  Tecnico</th>   
+                            <th scope="col" style="min-width: 150px;" class="fixed-header">Tecnico</th>   
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Meta</th>
+                            <th scope="col" style="min-width: 150px;" class="fixed-header">Acciones</th>
                             
 
                         </tr>
@@ -117,6 +123,46 @@
                     </tbody>
                     
                 </table>
+            </div>
+        </div>
+          <!-- Modal Editar estrategia -->
+          <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true"data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editarModalLabel">Editar estrategia</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                
+                        <form id="editarForm" method="post">
+                            <div class="form-group">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Modalidad</label>
+                                    {{ form_estrategias_institucionales.est_nombre}}
+                                    <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Meta</label>
+                                    {{ form_estrategias_institucionales.met_id}}
+                                    <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Total Meta</label>
+                                    {{ form_estrategias_institucionales.est_total_meta}}
+                                    <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+                </div>
             </div>
         </div>
 
@@ -164,6 +210,30 @@
                 </div>
             </div>
         </div>
+        <!-- Modal Eliminar estrategia -->
+        <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true"data-backdrop="static">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="eliminarModalLabel">Eliminar Estrategia</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro de que quieres eliminar esta estrategia?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form id="deleteForm" method="post">
+                            {% csrf_token%}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
      
       
@@ -390,6 +460,29 @@
             </div>
         </div>
     
+        <!-- Modal Eliminar tabla -->
+        <div class="modal fade" id="eliminarModalTabla" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true"data-backdrop="static">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="eliminarModalLabel">Eliminar Meta formacion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro de que quieres eliminar este registro?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form id="deleteFormMetaEstrategia" method="post">
+                            {% csrf_token%}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         
     </div>
@@ -398,6 +491,7 @@
 
 <script>
 
+  
     document.addEventListener('DOMContentLoaded', function() {
       let modalidadesDisponibles = [];
       let modalidadSeleccionada = '';
@@ -484,7 +578,11 @@
                                      alt="Protection Icon" 
                                      style="width: 20px; height: 20px;">
                             </button>
-                        </td>                           
+                          </td>   
+                          <td>
+                            <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModal" data-id="${dato.estd_id}" data-nombre="${dato.est_id__est_nombre}" onclick="Editar_meta_estrategia(this)">Editar</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModalTabla"  data-id="${dato.estd_id}" onclick="Delete_meta_estrategia(this)">Eliminar</button>
+                          </td>                        
                 
                       `;
                       resultadosTableBody.appendChild(row);

@@ -851,7 +851,21 @@ class Estrategias_create(CreateView):
     form_class = Form_estrategias
     template_name = 'Estrategias_institucionales/estrategias_institucionales'
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
-    
+
+class estrategia_institucional_delete(DeleteView):
+    model = Estrategia
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
+class meta_estrategias_intitucionales_delete(DeleteView):
+    model = Estrategia_detalle
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
+
+
+
+class estrategia_institucional_edit(UpdateView):
+    model = Estrategia
+    from_class = Form_meta_estrategia_detalle
+    fields = ['est_nombre','met_id','est_total_meta']
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
 
 def get_meta_valores(request,met_id):

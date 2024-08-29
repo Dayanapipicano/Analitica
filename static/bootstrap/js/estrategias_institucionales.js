@@ -44,15 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // suma de los datos para total meta
 document.addEventListener('DOMContentLoaded', function() {
-        const metaSelect = document.querySelector('select[name="met_id"]');
-        const totalMetaField = document.querySelector('input[name="est_total_meta"]');
+        const metaSelects = document.querySelectorAll('select[name="met_id"]');
+        const totalMetaFields = document.querySelectorAll('input[name="est_total_meta"]');
     
-        metaSelect.addEventListener('change', function() {
-            const selectedMetaId = metaSelect.value;
-            fetchMetaValues(selectedMetaId);
+        metaSelects.forEach((metaSelect, index) => {
+            const totalMetaField = totalMetaFields[index]; // Campo total correspondiente
+    
+            metaSelect.addEventListener('change', function() {
+                const selectedMetaId = metaSelect.value;
+                fetchMetaValues(selectedMetaId, totalMetaField);
+            });
         });
-    
-        function fetchMetaValues(metaId) {
+        function fetchMetaValues(metaId, totalMetaField) {
             fetch(`/estrategias/est_total_meta/${metaId}/`)
                 .then(response => response.json())
                 .then(data => {
@@ -192,3 +195,35 @@ function validateDates() {
 }
 
 
+
+function Delete_estrategia(button) {
+    const pk = button.getAttribute('data-id');
+    document.getElementById('deleteForm').action = `/estrategia_institucional/delete/${pk}`;
+}
+function Editar_estrategia(button){
+    const pk = button.getAttribute('data-id');
+    const id_est_nombre = button.getAttribute('data-nombre')
+    const id_met_id = button.getAttribute('data-meta')
+    const id_est_total_meta = button.getAttribute('data-total-meta')
+
+    document.getElementById('editarForm').action = `/estrategia_institucional/edit/${pk}`;
+    document.getElementById('id_est_nombre').value = id_est_nombre
+    document.getElementById('id_met_id').value = id_met_id
+    document.getElementById('id_est_total_meta').value = id_est_total_meta
+}
+
+function Delete_meta_estrategia(button) {
+    const pk = button.getAttribute('data-id');
+    document.getElementById('deleteFormMetaEstrategia').action = `/meta_estrategias_intitucionales/delete/${pk}`;
+}
+function Editar_meta_estrategia(button){
+    const pk = button.getAttribute('data-id');
+    const id_est_nombre = button.getAttribute('data-nombre')
+    const id_met_id = button.getAttribute('data-meta')
+    const id_est_total_meta = button.getAttribute('data-total-meta')
+
+    document.getElementById('editarForm').action = `/estrategia_institucional/edit/${pk}`;
+    document.getElementById('id_est_nombre').value = id_est_nombre
+    document.getElementById('id_met_id').value = id_met_id
+    document.getElementById('id_est_total_meta').value = id_est_total_meta
+}

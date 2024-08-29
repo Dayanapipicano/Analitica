@@ -116,7 +116,7 @@ class Form_estrategias(forms.ModelForm):
         ]
         widgets =  {
             'est_nombre': forms.TextInput(attrs={'class':'form-control'}),
-            'met_id': forms.Select(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_id': forms.Select(attrs={'class':'form-control'}),
             'est_total_meta': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
          }
    
@@ -124,6 +124,8 @@ class Form_estrategias(forms.ModelForm):
        
         #para bloquear el campo y solo visualizar 
            self.fields['est_total_meta'].widget.attrs['readonly'] = True
+           self.fields['met_id'].empty_label = "Selecciona una meta"
+           
         
         
         
