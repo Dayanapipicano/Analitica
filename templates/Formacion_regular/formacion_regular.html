@@ -102,6 +102,80 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Modal editar meta formacion -->
+            <div class="modal fade" id="editarModalMetaFormacion" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel2" aria-hidden="true"data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarModalLabel2">Editar Meta formacion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                    
+                            <form id="editarFormMetaFormacion" method="post">
+                                <div class="form-group">
+                                    {% csrf_token %}
+                                
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion operario</label>
+                                        {{ form_meta_formacion.met_formacion_operario }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion auxiliar</label>
+                                        {{ form_meta_formacion.met_formacion_auxiliar }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion tecnico</label>
+                                        {{ form_meta_formacion.met_formacion_tecnico }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion profundizacion tecnica</label>
+                                        {{ form_meta_formacion.met_formacion_profundizacion_tecnica }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion tecnologo</label>
+                                        {{ form_meta_formacion.met_formacion_tecnologo }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion evento</label>
+                                        {{ form_meta_formacion.met_formacion_evento }}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formaicion curso especial</label>
+                                        {{ form_meta_formacion.met_formacion_curso_especial }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_met_id" class="form-label">Meta formacion bilinguismo</label>
+                                        {{ form_meta_formacion.met_formacion_bilinguismo }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta formacion sin bilinguismo</label>
+                                        {{ form_meta_formacion.met_formacion_sin_bilinguismo }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Meta</label>
+                                        {{ form_meta_formacion.met_id }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Modalidad</label>
+                                        {{ form_meta_formacion.metd_modalidad}}
+                                    </div>
+
+
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
             </div><!-- Primer Modal meta formacion create -->
             <div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
@@ -185,79 +259,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Modal editar meta formacion -->
-            <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel2" aria-hidden="true"data-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editarModalLabel2">Editar Meta formacion</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                    
-                            <form id="editarForm" method="post">
-                                <div class="form-group">
-                                    {% csrf_token %}
-                                
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion operario</label>
-                                        {{ form_meta_formacion.met_formacion_operario }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion auxiliar</label>
-                                        {{ form_meta_formacion.met_formacion_auxiliar }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion tecnico</label>
-                                        {{ form_meta_formacion.met_formacion_tecnico }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion profundizacion tecnica</label>
-                                        {{ form_meta_formacion.met_formacion_profundizacion_tecnica }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion tecnologo</label>
-                                        {{ form_meta_formacion.met_formacion_tecnologo }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion evento</label>
-                                        {{ form_meta_formacion.met_formacion_evento }}
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formaicion curso especial</label>
-                                        {{ form_meta_formacion.met_formacion_curso_especial }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="id_met_id" class="form-label">Meta formacion bilinguismo</label>
-                                        {{ form_meta_formacion.met_formacion_bilinguismo }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta formacion sin bilinguismo</label>
-                                        {{ form_meta_formacion.met_formacion_sin_bilinguismo }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Meta</label>
-                                        {{ form_meta_formacion.met_id }}
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Modalidad</label>
-                                        {{ form_meta_formacion.metd_modalidad}}
-                                    </div>
-
-
-                                </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-            </div>
+            
             <!-- Modal Eliminar meta formacion-->
             <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true"data-backdrop="static">
                 <div class="modal-dialog" role="document">
@@ -466,11 +468,12 @@
                                     <td>${dato.met_id__met_fecha_inicio}</td>
                                     <td>${dato.met_id__met_fecha_fin}</td>
                                     <td>${dato.met_id__met_año}</td>
+                                    
                                     {% if perms.can_view_admin_dashboard %}
                                     <td>
 
                                         
-                                        <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modalEdit" data-target="#editarModal" data-nombre="${dato.met_formacion_auxiliar}" data-id="${dato.metd_id}" onclick="Editar_meta_formacion(this)">Editar</button>
+                                        <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModalMetaFormacion" data-operario="${dato.met_formacion_operario}"data-auxiliar="${dato.met_formacion_auxiliar}" data-tecnico="${dato.met_formacion_tecnico}" data-profundizacion="${dato.met_formacion_profundizacion_tecnica}" data-tecnologo="${dato.met_formacion_tecnologo}"   data-evento="${dato.met_formacion_evento}" data-curso-especial="${dato.met_formacion_curso_especial}" data-bilinguismo="${dato.met_formacion_bilinguismo}" data-sin-bilinguismo="${dato.met_formacion_sin_bilinguismo}"  data-meta="${dato.met_id}" data-id="${dato.metd_id}" data-modalidad="${dato.metd_modalidad}"  onclick="Editar_meta_formacion(this)">Editar</button>
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModal"  onclick="Delete_meta_formacion(${dato.metd_id})">Eliminar</button>
                                     </td>
                                     {% endif %}

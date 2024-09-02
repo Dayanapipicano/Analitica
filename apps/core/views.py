@@ -816,6 +816,25 @@ class Meta_formacion_delete(DeleteView):
     model = Metas_formacion
     success_url = reverse_lazy('cores:formacion_regular_index')
 
+
+class Meta_formacion_edit(UpdateView):
+    model = Metas_formacion
+    from_class = Form_meta_formacion
+    fields = ['metd_id',
+              'metd_modalidad',
+              'met_formacion_operario',
+              'met_formacion_auxiliar',
+              'met_formacion_tecnico',
+              'met_formacion_profundizacion_tecnica',
+              'met_formacion_tecnologo',
+              'met_formacion_evento',
+              'met_formacion_curso_especial',
+              'met_formacion_bilinguismo',
+              'met_formacion_sin_bilinguismo',
+              'met_formacion_sin_bilinguismo',
+              'met_id']
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
+    
 #ESTRATEGIAS_INSTITUCIONALES
 def Estrategias_institucionales_index(request):
     form_estrategias_institucionales  = Form_estrategias
@@ -871,7 +890,7 @@ class meta_estrategias_intitucionales_delete(DeleteView):
 class meta_estrategias_intitucionales_edit(UpdateView):
     model = Estrategia_detalle
     from_class = Form_meta_estrategia_detalle
-    fields = ['est_id','estd_modalidad','estd_operario_meta','estd_auxiliar_meta','estd_tecnico_meta','estd_profundizacion_tecnica_meta','estd_tecnologo','estd_evento','estd_curso_especial','estd_bilinguismo','estd_meta']
+    fields = ['est_id','estd_modalidad','estd_operario_meta','estd_auxiliar_meta','estd_tecnico_meta','estd_profundizacion_tecnica_meta','estd_tecnologo','estd_evento','estd_curso_especial','estd_bilinguismo','estd_sin_bilinguismo','estd_meta']
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
 def get_meta_valores(request,met_id):
@@ -1042,6 +1061,7 @@ class metas_formacion_filtros(TemplateView):
         # Filtrar datos según los filtros aplicados
         resultados = Metas_formacion.objects.filter(**filtros_formacion).values(
             'metd_modalidad__modalidad',
+            'metd_modalidad',
             'met_formacion_operario',
             'met_formacion_auxiliar',
             'met_formacion_tecnico',
@@ -1056,6 +1076,7 @@ class metas_formacion_filtros(TemplateView):
             'met_id__met_fecha_inicio',
             'met_id__met_fecha_fin',
             'met_id__met_año',
+            'met_id',
             'metd_id',
         )
 

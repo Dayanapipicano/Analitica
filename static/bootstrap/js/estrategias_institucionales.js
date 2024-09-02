@@ -121,8 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
   //alaertas para el formulario de meta create
 document.getElementById('id_met_año').addEventListener('input',function(){
     const id_met_año = this.value
-    console.log(id_met_año)
-    console.log(id_met_año)
+
 
     fetch('/verificar-año/',{
         method: 'POST',

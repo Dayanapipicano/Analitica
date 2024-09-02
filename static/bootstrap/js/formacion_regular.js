@@ -35,27 +35,7 @@
     });
 });
 
-//funcionalidad de eliminar meta formacion
-function Delete_meta_formacion(button) {
-  console.log(button)
-      
-  document.getElementById('deleteForm').action = `/meta_formacion/delete/${button}`;
-}
-//funcionalidad de editar meta formacion
 
-function Editar_meta_formacion(button){
-  
-
-  const pk = button.getAttribute('data-id');
-  const met_formacion_auxiliar = button.getAttribute('data-nombre')
-  
-  
-  document.getElementById('editarForm').action = `/modalidad/edit/${pk}`;
-  var res = document.getElementById('id_met_formacion_auxiliar').value = met_formacion_auxiliar
-  
-  console.log(res)
-  
-}
 
   //alaertas para el formulario de meta create
   document.getElementById('id_met_año').addEventListener('input',function(){
@@ -88,17 +68,21 @@ function Editar_meta_formacion(button){
 //verificacion de formulario metas formacion 
 
 $(document).ready(function() {
-    $('#id_met_id').change(function() {
+    $(document).on('change','#id_met_id',function() {
+        
         
         var id_met_id = $(this).val();
-        console.log('hola',id_met_id)
+        var $modal = $(this).closest('.modal');
+
+
         if (id_met_id) {
             $.ajax({
                 url: url_meta_formacion,
                 method: 'GET',
                 data: { id_met_id: id_met_id },
                 success: function(data) {
-                    var select = $('#id_metd_modalidad');
+
+                    var select = $modal.find('#id_metd_modalidad');
                     select.empty();
                     select.append('<option value="">Selecciona modalidad</option>');
                     $.each(data, function(index, modalidad) {
@@ -138,3 +122,46 @@ function validateDates() {
 }
 
 
+//funcionalidad de eliminar meta formacion
+function Delete_meta_formacion(button) {
+    console.log(button)
+        
+    document.getElementById('deleteForm').action = `/meta_formacion/delete/${button}`;
+  }
+  //funcionalidad de editar meta formacion
+  
+  function Editar_meta_formacion(button){
+    
+  
+    const pk = button.getAttribute('data-id');
+    const id_met_formacion_operario = button.getAttribute('data-operario')
+    const id_met_formacion_auxiliar = button.getAttribute('data-auxiliar')
+    const id_met_formacion_tecnico = button.getAttribute('data-tecnico')
+    const id_met_formacion_profundizacion_tecnica = button.getAttribute('data-profundizacion')
+    const id_met_formacion_tecnologo = button.getAttribute('data-tecnologo')
+    const id_met_formacion_evento = button.getAttribute('data-evento')
+    const id_met_formacion_curso_especial = button.getAttribute('data-curso-especial')
+    const id_met_formacion_bilinguismo = button.getAttribute('data-bilinguismo')
+    const id_met_formacion_sin_bilinguismo = button.getAttribute('data-sin-bilinguismo')
+    const id_met_id = button.getAttribute('data-meta')
+    const id_metd_modalidad = button.getAttribute('data-modalidad')
+    
+
+    
+    document.getElementById('editarFormMetaFormacion').action = `/modalidad/edit/${pk}`;
+    document.getElementById('id_met_formacion_operario').value = id_met_formacion_operario
+    document.getElementById('id_met_formacion_auxiliar').value = id_met_formacion_auxiliar
+    document.getElementById('id_met_formacion_tecnico').value = id_met_formacion_tecnico
+    document.getElementById('id_met_formacion_profundizacion_tecnica').value = id_met_formacion_profundizacion_tecnica
+    document.getElementById('id_met_formacion_tecnologo').value = id_met_formacion_tecnologo
+    document.getElementById('id_met_formacion_evento').value = id_met_formacion_evento
+    document.getElementById('id_met_formacion_curso_especial').value = id_met_formacion_curso_especial
+    document.getElementById('id_met_formacion_bilinguismo').value = id_met_formacion_bilinguismo
+    document.getElementById('id_met_formacion_sin_bilinguismo').value = id_met_formacion_sin_bilinguismo
+    document.getElementById('id_met_id').value = id_met_id
+    document.getElementById('id_metd_modalidad').value = id_metd_modalidad
+    
+    
+
+    
+  }
