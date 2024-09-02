@@ -845,7 +845,7 @@ def Estrategias_institucionales_index(request):
     }
     
     return render(request, 'Estrategias_institucionales/estrategias_institucionales.html', context)
-
+#cruds de  estrategia
 class Estrategias_create(CreateView):
     model = Estrategia
     form_class = Form_estrategias
@@ -855,11 +855,6 @@ class Estrategias_create(CreateView):
 class estrategia_institucional_delete(DeleteView):
     model = Estrategia
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
-class meta_estrategias_intitucionales_delete(DeleteView):
-    model = Estrategia_detalle
-    success_url = reverse_lazy('cores:estrategias_institucionales_index')
-
-
 
 class estrategia_institucional_edit(UpdateView):
     model = Estrategia
@@ -867,7 +862,18 @@ class estrategia_institucional_edit(UpdateView):
     fields = ['est_nombre','met_id','est_total_meta']
     success_url = reverse_lazy('cores:estrategias_institucionales_index')
     
+#meta estrategias intitucionales
+class meta_estrategias_intitucionales_delete(DeleteView):
+    model = Estrategia_detalle
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
 
+
+class meta_estrategias_intitucionales_edit(UpdateView):
+    model = Estrategia_detalle
+    from_class = Form_meta_estrategia_detalle
+    fields = ['est_id','estd_modalidad','estd_operario_meta','estd_auxiliar_meta','estd_tecnico_meta','estd_profundizacion_tecnica_meta','estd_tecnologo','estd_evento','estd_curso_especial','estd_bilinguismo','estd_meta']
+    success_url = reverse_lazy('cores:estrategias_institucionales_index')
+    
 def get_meta_valores(request,met_id):
     
     
@@ -962,11 +968,12 @@ def get_estrategia_data(request,id_estd_modalidad):
     
 #datos para los filtros de meta_estrategia
 def meta_data(request,id_estrategia):
-    estrategia = Estrategia.objects.get(est_id=id_estrategia)
     
+    estrategia = Estrategia.objects.get(est_id=id_estrategia)
+    print('asdsad',estrategia)
     metas = estrategia.met_id
     meta_serializer = MetaSerializer(metas)
-    print(meta_serializer)
+    
     data = {
         'meta': meta_serializer.data
     }
@@ -1119,7 +1126,9 @@ class estrategias_institucionales_filtros(TemplateView):
         resultados = Estrategia_detalle.objects.filter(**estrategia_detalle_filtro).values(
             'estd_id',
             'estd_modalidad__modalidad',
+            'estd_modalidad',
             'est_id__est_nombre',
+            'est_id',
             'estd_operario_meta',
             'estd_auxiliar_meta',
             'estd_tecnico_meta',
@@ -1132,6 +1141,7 @@ class estrategias_institucionales_filtros(TemplateView):
             'estd_sin_bilinguismo',
             'est_id__est_total_meta',
             'estd_meta',
+           
         )
         
 

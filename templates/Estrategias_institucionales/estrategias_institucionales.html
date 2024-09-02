@@ -236,7 +236,7 @@
 
      
       
-     <!-- Segundo Modal -->
+     <!-- Segundo Modal META -->
      <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content" id="Modal1-content">
@@ -341,7 +341,81 @@
      
     
     
- 
+  <!-- Modal meta estrategia editar-->
+  <div class="modal fade" id="editarModalEstrategia" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true"data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalEstrategia">Editar Meta estrategia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editarFormMetaEstrategiaTotal" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="" class="form-label">Modalidad</label>
+                        {{ form_meta_estrategia_detalle.estd_modalidad }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Estrategia</label>
+                        {{ form_meta_estrategia_detalle.est_id }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta</label>
+                        {{ form_meta_estrategia_detalle.estd_meta }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Profundización Técnica</label>
+                        {{ form_meta_estrategia_detalle.estd_profundizacion_tecnica_meta }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Curso Especial</label>
+                        {{ form_meta_estrategia_detalle.estd_curso_especial }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Técnico</label>
+                        {{ form_meta_estrategia_detalle.estd_tecnico_meta }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Evento</label>
+                        {{ form_meta_estrategia_detalle.estd_evento }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Tecnólogo</label>
+                        {{ form_meta_estrategia_detalle.estd_tecnologo }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Bilingüismo</label>
+                        {{ form_meta_estrategia_detalle.estd_bilinguismo }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Sin Bilingüismo</label>
+                        {{ form_meta_estrategia_detalle.estd_sin_bilinguismo }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Operario</label>
+                        {{ form_meta_estrategia_detalle.estd_operario_meta }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Auxiliar</label>
+                        {{ form_meta_estrategia_detalle.estd_auxiliar_meta }}
+                    </div>
+
+                </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                        <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</div>
         <!-- Modal meta estrategia -->
         <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -417,6 +491,7 @@
                 </div>
             </div>
         </div>
+       
         <!-- Modal de visualizacion de matas -->
         <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -490,7 +565,7 @@
 
 <script>
 
-  
+    //filtros
     document.addEventListener('DOMContentLoaded', function() {
       let modalidadesDisponibles = [];
       let modalidadSeleccionada = '';
@@ -567,6 +642,7 @@
                           <td>${dato.estd_evento}</td>
                           <td>${dato.estd_tecnologo}</td>
                           <td>${dato.estd_tecnico_meta}</td>
+                     
                           <td>
                             <button type="button" 
                                     onclick="openModal(${dato.estd_meta})" 
@@ -579,7 +655,7 @@
                             </button>
                           </td>   
                           <td>
-                            <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModal" data-id="${dato.estd_id}" data-nombre="${dato.est_id__est_nombre}" onclick="Editar_meta_estrategia(this)">Editar</button>
+                            <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModalEstrategia" data-id="${dato.estd_id}" data-modalidad="${dato.estd_modalidad}" data-estrategia="${dato.est_id}" data-meta="${dato.estd_meta}" data-total-profundizacion="${dato.estd_profundizacion_tecnica_meta}" data-cuso="${dato.estd_curso_especial}" data-tecnico="${dato.estd_tecnico_meta}" data-evento="${dato.estd_evento}"    data-tecnologo="${dato.estd_tecnologo}" data-bilinguismo="${dato.estd_bilinguismo}" data-sin_bilinguismo="${dato.estd_sin_bilinguismo}" data-operario="${dato.estd_operario_meta}" data-auxiliar="${dato.estd_auxiliar_meta}" onclick="Editar_meta_estrategia(this)">Editar</button>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModalTabla"  data-id="${dato.estd_id}" onclick="Delete_meta_estrategia(this)">Eliminar</button>
                           </td>                        
                 

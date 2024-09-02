@@ -81,33 +81,38 @@ document.addEventListener('DOMContentLoaded', function() {
 //maneja filtros dentro del formulario metas formacion (est_id)
 document.addEventListener('DOMContentLoaded', function () {
     
-    const estrategiaField = document.querySelector('#id_est_id');
-    const metaField = document.querySelector('#id_estd_meta');
-
-
-    estrategiaField.addEventListener('change', function(){
-        const id_estrategia = this.value;
-
-        fetch(`/meta_data/${id_estrategia}`)
-        .then(response => response.json())
-        .then(data =>{
-            console.log(data);
-
-            metaField.innerHTML = '<option value="">Seleccionar</option>';
+    const estrategiaFields = document.querySelectorAll('#id_est_id');
+    const metaFields = document.querySelectorAll('#id_estd_meta');
+    
+    estrategiaFields.forEach((estrategiaField,index)=>{
+        estrategiaField.addEventListener('change', function(){
+            const id_estrategia = this.value;
+       
+            fetch(`/meta_data/${id_estrategia}`)
+            .then(response => response.json())
+            .then(data =>{
+    
             
-
-            
-            if(data.meta){
-                    const meta = data.meta;
-                    const option = document.createElement('option');
-                    option.value = meta.met_id;
-                    option.textContent = meta.met_año;
-                    metaField.appendChild(option)
-
-
-            }
+                const metaField = metaFields[index]
+              
+                metaField.innerHTML = '<option value="">Seleccionar</option>';
+                
+    
+                
+                if(data.meta){
+                        const meta = data.meta;
+                        const option = document.createElement('option');
+                        option.value = meta.met_id;
+                        option.textContent = meta.met_año;
+                        metaField.appendChild(option)
+    
+    
+                }
+            })
         })
+
     })
+    
 });
 
 
@@ -218,12 +223,76 @@ function Delete_meta_estrategia(button) {
 }
 function Editar_meta_estrategia(button){
     const pk = button.getAttribute('data-id');
-    const id_est_nombre = button.getAttribute('data-nombre')
-    const id_met_id = button.getAttribute('data-meta')
-    const id_est_total_meta = button.getAttribute('data-total-meta')
+    const estd_modalidad = button.getAttribute('data-modalidad')
+    const id_est_id = button.getAttribute('data-estrategia')
+    const id_estd_meta = button.getAttribute('data-meta')
+    
 
-    document.getElementById('editarForm').action = `/estrategia_institucional/edit/${pk}`;
-    document.getElementById('id_est_nombre').value = id_est_nombre
-    document.getElementById('id_met_id').value = id_met_id
-    document.getElementById('id_est_total_meta').value = id_est_total_meta
+    const metaEstrategia = document.getElementById('id_est_id')
+    const metaField = document.getElementById('id_estd_meta')
+   
+    metaEstrategia.value = id_est_id
+
+    metaEstrategia.dispatchEvent(new Event('change'));
+
+    
+    //preseleccion meta
+    function opciones(id_est_id){
+        fetch(`/meta_data/${id_est_id}`)
+        .then(response => response.json())
+        .then(data =>{
+            console.log('dddd',data)
+
+            if(data.meta){
+                    const meta = data.meta;
+                    const option = document.createElement('option');
+                    option.value = meta.met_id;
+                    console.log('qqq',meta.met_id)
+                    option.textContent = meta.met_año;
+                    if (meta.met_id == id_estd_meta) {
+                        metaField.value = id_estd_meta;
+                    }
+                    metaField.appendChild(option)
+
+
+            }
+        })
+    }
+    
+    if(id_est_id){
+        opciones(id_est_id)
+    }
+
+    
+        
+        
+
+    
+
+    const id_estd_profundizacion_tecnica_meta = button.getAttribute('data-total-profundizacion')
+    const id_estd_curso_especial = button.getAttribute('data-cuso')
+    const id_estd_tecnico_meta = button.getAttribute('data-tecnico')
+    const id_estd_evento = button.getAttribute('data-evento')
+    const id_estd_tecnologo = button.getAttribute('data-tecnologo')
+    const id_estd_bilinguismo = button.getAttribute('data-bilinguismo')
+    const id_estd_sin_bilinguismo = button.getAttribute('data-sin_bilinguismo')
+    const id_estd_operario_meta = button.getAttribute('data-operario')
+    const id_estd_auxiliar_meta = button.getAttribute('data-auxiliar')
+   
+
+  
+ 
+    document.getElementById('editarFormMetaEstrategiaTotal').action = `/meta_estrategias_intitucionales/edit/${pk}`;
+    document.getElementById('id_estd_modalidad').value = estd_modalidad
+  
+    document.getElementById('id_estd_profundizacion_tecnica_meta').value = id_estd_profundizacion_tecnica_meta
+    document.getElementById('id_estd_curso_especial').value = id_estd_curso_especial
+    document.getElementById('id_estd_tecnico_meta').value = id_estd_tecnico_meta
+    document.getElementById('id_estd_evento').value = id_estd_evento
+    document.getElementById('id_estd_tecnologo').value = id_estd_tecnologo
+    document.getElementById('id_estd_bilinguismo').value = id_estd_bilinguismo
+    document.getElementById('id_estd_sin_bilinguismo').value = id_estd_sin_bilinguismo
+    document.getElementById('id_estd_operario_meta').value = id_estd_operario_meta
+    document.getElementById('id_estd_auxiliar_meta').value = id_estd_auxiliar_meta
+    
 }

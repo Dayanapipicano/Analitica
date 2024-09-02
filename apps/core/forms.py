@@ -155,11 +155,11 @@ class Form_meta_estrategia_detalle(forms.ModelForm):
             'estd_operario_meta': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
             'estd_auxiliar_meta': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
             'estd_tecnico_meta': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
-            'estd_profundizacion_tecnica_meta': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
-            'estd_tecnologo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
-            'estd_evento': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
-            'estd_curso_especial': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
-            'estd_bilinguismo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'estd_profundizacion_tecnica_meta': forms.TextInput(attrs={'class':'form-control'}),
+            'estd_tecnologo': forms.TextInput(attrs={'class':'form-control'}),
+            'estd_evento': forms.TextInput(attrs={'class':'form-control',}),
+            'estd_curso_especial': forms.TextInput(attrs={'class':'form-control'}),
+            'estd_bilinguismo': forms.TextInput(attrs={'class':'form-control'}),
             'estd_sin_bilinguismo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
   
            
