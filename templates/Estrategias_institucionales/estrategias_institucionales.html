@@ -111,8 +111,9 @@
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Tecnologo</th>   
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Tecnico</th>   
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Meta</th>
+                            {% if perms.can_view_admin_dashboard %}
                             <th scope="col" style="min-width: 150px;" class="fixed-header">Acciones</th>
-                            
+                            {%endif%}
 
                         </tr>
                     </thead>
@@ -654,10 +655,13 @@
                                      style="width: 20px; height: 20px;">
                             </button>
                           </td>   
+                          
+                          {% if perms.can_view_admin_dashboard %}
                           <td>
                             <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModalEstrategia" data-id="${dato.estd_id}" data-modalidad="${dato.estd_modalidad}" data-estrategia="${dato.est_id}" data-meta="${dato.estd_meta}" data-total-profundizacion="${dato.estd_profundizacion_tecnica_meta}" data-cuso="${dato.estd_curso_especial}" data-tecnico="${dato.estd_tecnico_meta}" data-evento="${dato.estd_evento}"    data-tecnologo="${dato.estd_tecnologo}" data-bilinguismo="${dato.estd_bilinguismo}" data-sin_bilinguismo="${dato.estd_sin_bilinguismo}" data-operario="${dato.estd_operario_meta}" data-auxiliar="${dato.estd_auxiliar_meta}" onclick="Editar_meta_estrategia(this)">Editar</button>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModalTabla"  data-id="${dato.estd_id}" onclick="Delete_meta_estrategia(this)">Eliminar</button>
-                          </td>                        
+                          </td>   
+                          {% endif %}                     
                 
                       `;
                       resultadosTableBody.appendChild(row);

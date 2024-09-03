@@ -14,10 +14,13 @@ urlpatterns = [
     path('perfil/', views.Perfil, name="perfil"),
     path('editar_perfil/<int:per_documento>/', views.Editar_perfil, name="editar_perfil"),
     path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
+    
+    #archivos
     path('subir_P04/', views.subir_P04, name='subir_P04'),
     path('P04/', views.p04, name="P04"),
     path('upload/', views.Subir_poblacion_vulnerable, name='upload_excel'),
     path('poblacion_vulnerable/index/', views.Poblacion_vulnerable, name="poblacion_vulnerable"),
+    path('poblacion_vulnerable_graficas/', views.Poblacion_vulnerable_graficas, name="poblacion_vulnerable_graficas"),
     #CRUD DE ROL
     path('roles/index/',views.Roles_index, name="roles_index"),
     path('roles/create/',views.Roles_create.as_view(), name="roles_create"),

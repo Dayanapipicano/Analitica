@@ -156,6 +156,7 @@ class Poblacion(models.Model):
     
 
 
+#este no
 class Indicador(models.Model):
     pobl_id = models.AutoField(primary_key=True)
     pobl_fecha_poblacion = models.DateField()

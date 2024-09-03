@@ -30,7 +30,12 @@ from apps.personas.decorators import permission_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from apps.personas.forms import Form_rol
-
+import json
+from django.utils import timezone
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from decimal import Decimal
 #MENSAJE DE CAMBIO DE CONTRASEÑA
 class CustomPasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('personas:perfil') 
@@ -46,17 +51,6 @@ def Home(request):
     return render(request, 'home.html')
 
 #REGISTRO DE PERSONA
-
-
-
-from django.utils import timezone
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
 
 def Registro(request):
     if request.method == 'POST':
@@ -283,6 +277,141 @@ def Poblacion_vulnerable(request):
 
     return render( request, 'Poblacion_vulnerable/poblacion_vulnerable.html', {'per_documento':per_documento})
     
+def Poblacion_vulnerable_graficas(request):
+    
+  
+    
+    datos_poblacion= Documento_vulnerables_poblaciones.objects.all()
+
+    
+    
+     #envio de datos 
+    cupos = 'Cupos'
+    aprendices = 'Aprendices'
+    poblacion_cupos = datos_poblacion.filter(grupos_poblaciones=cupos)
+    poblacion_aprendices = datos_poblacion.filter(grupos_poblaciones=aprendices)
+  
+    def porcentajes(valor):
+        conversiones_de_porcentajes = []
+        for poblaciones_cupos in valor:
+            datos_porcentaje= poblaciones_cupos.porcentaje_ejecucion_poblaciones 
+            conversiones =datos_porcentaje * 100
+            conversiones_de_porcentajes.append(conversiones)
+    
+        return conversiones_de_porcentajes
+    
+    conversiones_de_porcentajes_cupos = porcentajes(poblacion_cupos)
+    conversiones_de_porcentajes_aprendices = porcentajes(poblacion_aprendices)
+    
+    
+    
+    #datos de grfica para los valores en ejecucion (array)
+    def valores_grafica(valores):
+        resultado = []
+        for ejecucion in valores.values('ejecucion_poblaciones'):
+           data_ejecucion = ejecucion['ejecucion_poblaciones']
+           if isinstance(data_ejecucion, Decimal):
+               data_ejecucion = float(data_ejecucion)
+           
+           resultado.append(data_ejecucion)
+        
+        return resultado
+    #datos de grfica para las metas (array)
+    def valores_grafica_meta(valores):
+        resultado_meta = []
+        for meta in valores.values('meta_2024_poblaciones'):
+           data_meta = meta['meta_2024_poblaciones']
+           if isinstance(data_meta, Decimal):
+               data_meta = float(data_meta)
+           
+           resultado_meta.append(data_meta)
+        
+        return resultado_meta
+    data_cupos_grafica = valores_grafica(poblacion_cupos)
+    data_aprendices_grafica = valores_grafica(poblacion_aprendices)
+    meta_cupos_grafica = valores_grafica_meta(poblacion_cupos)
+    meta_aprendices_grafica = valores_grafica_meta(poblacion_aprendices)
+   
+    datos_grafica = data_cupos_grafica + data_aprendices_grafica
+    meta_grafica = meta_cupos_grafica + meta_aprendices_grafica
+    
+    
+    #DATOS PARA TIPO DE POBLACION
+    
+    
+    datos_tipo_poblacion= Documento_vulnerables_tipo_poblaciones.objects.all()
+
+    
+    
+     #envio de datos 
+    cupos = 'Cupos'
+    aprendices = 'Aprendices'
+    tipo_poblacion_cupos = datos_tipo_poblacion.filter(grupo=cupos)
+    tipo_poblacion_aprendices = datos_tipo_poblacion.filter(grupo=aprendices)
+  
+  
+  
+    #PORCENTAJE PARA TIPO DE POBLACION
+    def porcentajes_tipo_poblacion(valor):
+        conversiones_de_porcentajes = []
+        for tipo_poblaciones in valor:
+            datos_porcentaje= tipo_poblaciones.porcentaje_ejecucion
+            conversiones =datos_porcentaje * 100
+            conversiones_de_porcentajes.append(conversiones)
+    
+        return conversiones_de_porcentajes
+    
+    conversiones_de_porcentajes_cupos_tipo_poblacion = porcentajes_tipo_poblacion(tipo_poblacion_cupos)
+    conversiones_de_porcentajes_aprendices_tipo_poblacion = porcentajes_tipo_poblacion(tipo_poblacion_aprendices)
+    
+    #datos de grfica para los valores en ejecucion (array)
+    def valores_grafica_tipo_poblaciones(valores):
+        resultado = []
+        for ejecucion in valores.values('ejecucion'):
+           data_ejecucion = ejecucion['ejecucion']
+           if isinstance(data_ejecucion, Decimal):
+               data_ejecucion = float(data_ejecucion)
+           
+           resultado.append(data_ejecucion)
+        
+        return resultado
+    
+    #datos de grfica para las metas (array)
+    def valores_grafica_meta_tipo_poblaciones(valores):
+        resultado_meta = []
+        for meta in valores.values('meta_2024'):
+           data_meta = meta['meta_2024']
+           if isinstance(data_meta, Decimal):
+               data_meta = float(data_meta)
+           
+           resultado_meta.append(data_meta)
+        
+        return resultado_meta
+    
+    data_cupos_grafica_tipo_poblaciones = valores_grafica_tipo_poblaciones(tipo_poblacion_cupos)
+    data_aprendices_grafica_tipo_poblaciones = valores_grafica_tipo_poblaciones(tipo_poblacion_aprendices)
+    meta_cupos_grafica_tipo_poblaciones = valores_grafica_meta_tipo_poblaciones(tipo_poblacion_cupos)
+    meta_aprendices_grafica_tipo_poblaciones= valores_grafica_meta_tipo_poblaciones(tipo_poblacion_aprendices)
+    
+    data_tipo_poblaciones = data_cupos_grafica_tipo_poblaciones + data_aprendices_grafica_tipo_poblaciones
+    meta_tipo_poblaciones = meta_cupos_grafica_tipo_poblaciones + meta_aprendices_grafica_tipo_poblaciones
+
+    context = {
+        'poblacion_cupos':poblacion_cupos,
+        'poblacion_aprendices':poblacion_aprendices,
+        'conversiones_de_porcentajes_cupos':conversiones_de_porcentajes_cupos,
+        'conversiones_de_porcentajes_aprendices':conversiones_de_porcentajes_aprendices,
+        'datos_grafica':json.dumps(datos_grafica),
+        'meta_grafica':json.dumps(meta_grafica),
+        'tipo_poblacion_cupos':tipo_poblacion_cupos,
+       'tipo_poblacion_aprendices':tipo_poblacion_aprendices,
+       'conversiones_de_porcentajes_cupos_tipo_poblacion':conversiones_de_porcentajes_cupos_tipo_poblacion,
+       'conversiones_de_porcentajes_aprendices_tipo_poblacion':conversiones_de_porcentajes_aprendices_tipo_poblacion,
+       'data_tipo_poblaciones':json.dumps(data_tipo_poblaciones),
+       'meta_tipo_poblaciones':json.dumps(meta_tipo_poblaciones)
+    }
+    
+    return render(request,'Poblacion_vulnerable/poblacion_vulnerable_graficas.html',context)
 
 
 

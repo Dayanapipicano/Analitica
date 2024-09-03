@@ -98,9 +98,12 @@
                         <li class="sidebar-item">
                             <a href="{% url 'cores:estrategias_index'%}" class="sidebar-link">Estrategias</a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'personas:poblacion_vulnerable_graficas'%}" class="sidebar-link">Poblacion vulnerables</a>
+                        </li>
                         {% if perms.can_view_reporteador_dashboard %}
                         <li class="sidebar-item">
-                            <a href="{% url 'personas:poblacion_vulnerable'%}" class="sidebar-link">Poblacion Vulnerable</a>
+                            <a href="{% url 'personas:poblacion_vulnerable'%}" class="sidebar-link">Subir Poblacion Vulnerable</a>
                         </li>
                        {% endif%}
                     
@@ -131,6 +134,7 @@
                         </li>
                     </ul>
                 </li>
+                
          
             </ul>
             <div class="sidebar-footer">
