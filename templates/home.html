@@ -23,8 +23,10 @@
         <a class="navbar-brand" href="{% url 'personas:Home'%}">Analitica</a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <img src="{% static 'bootstrap/img/perfil.png' %}" alt="Foto de perfil" class="rounded-circle" style="width: 40px; height: 40px;">
                 {% if request.user.is_authenticated %}
+                  
+                  <img src="{{ request.user.per_image.url}}" alt="Foto de perfil" class="rounded-circle" style="width: 40px; height: 40px;">
+             
                 <span class="navbar-text">Bienvenido, <a href="{% url 'personas:perfil'%}">{{ request.user.per_nombres }}</a></span>
                 {% endif %}
             </li>
@@ -101,17 +103,7 @@
                         <li class="sidebar-item">
                             <a href="{% url 'personas:poblacion_vulnerable_graficas'%}" class="sidebar-link">Poblacion vulnerables</a>
                         </li>
-                        {% if perms.can_view_reporteador_dashboard %}
-                        <li class="sidebar-item">
-                            <a href="{% url 'personas:poblacion_vulnerable'%}" class="sidebar-link">Subir Poblacion Vulnerable</a>
-                        </li>
-                       {% endif%}
-                    
-                       {% if perms.can_view_reporteador_dashboard %}
-                        <li class="sidebar-item">
-                            <a href="{% url 'personas:P04'%}" class="sidebar-link">P04</a>
-                        </li>
-                        {% endif%}
+
                     </ul>
                 </li>
 
@@ -134,6 +126,24 @@
                         </li>
                     </ul>
                 </li>
+                {% if perms.can_view_reporteador_dashboard %}
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#nuevo" aria-expanded="false" aria-controls="nuevo">
+                        <img src="{% static 'bootstrap/img/carga-en-la-nube.png' %}" alt="Nuevo Icono" style="width: 20px; height: 20px;">
+                        <span>Subir archivos</span>
+                    </a>
+                    <ul id="nuevo" class="sidebar-dropdown list-unstyled collapse">
+                        <li class="sidebar-item">
+                            <a href="{% url 'personas:poblacion_vulnerable'%}" class="sidebar-link">Poblacion vulnerable</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'personas:P04'%}" class="sidebar-link">P04</a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif%}
+                
                 
          
             </ul>

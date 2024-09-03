@@ -60,7 +60,7 @@ class Persona(AbstractBaseUser, PermissionsMixin):
     per_nombres = models.CharField(max_length=60)
     per_apellidos = models.CharField(max_length=60)
     per_telefono = models.CharField(max_length=10)
-    per_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    per_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True, default='profile_pics/defecto.png')
     roles = models.ManyToManyField(Rol, through='Persona_rol')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -126,63 +126,6 @@ class P04(models.Model):
     per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
 
 
-    
-class Poblacion(models.Model):
-    pob_id = models.AutoField(primary_key=True)
-    pob_fecha_poblacion = models.DateField()
-    pob_total_cupos = models.CharField(max_length=150)
-    indicador = models.CharField(max_length=100)
-    desplazamiento_por_violencia = models.CharField(max_length=100)
-    hechos_victimizantes = models.CharField(max_length=100)
-    victimas = models.CharField(max_length=100)
-    otras_poblaciones_vulnerables = models.CharField(max_length=150)
-    total_poblaciones_vulnerables = models.CharField(max_length=150)
-    indigenas = models.CharField(max_length=100)
-    inpec = models.CharField(max_length=100)
-    jovenes_vulnerables = models.CharField(max_length=150)
-    adolescente_en_conflicto_con_la_ley_penal = models.CharField(max_length=100)
-    mujer_casa_de_hogar = models.CharField(max_length=100)
-    persona_con_discapacidad = models.CharField(max_length=100)
-    negritudes = models.CharField(max_length=100)
-    afrocolombianos = models.CharField(max_length=100)
-    raizales = models.CharField(max_length=100)
-    palenqueros = models.CharField(max_length=100)
-    narp = models.CharField(max_length=100)
-    reintegracion_y_adolescentes = models.CharField(max_length=100)
-    tercera_edad = models.CharField(max_length=100)
-    adolescente_trabajador = models.CharField(max_length=100)
-    rroom = models.CharField(max_length=100)
-    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
-    
-
-
-#este no
-class Indicador(models.Model):
-    pobl_id = models.AutoField(primary_key=True)
-    pobl_fecha_poblacion = models.DateField()
-    nombre = models.CharField(max_length=100)
-    indigenas_cupos_meta = models.IntegerField()
-    indigenas_aprendices_meta = models.IntegerField()
-    inpec_cupos_meta = models.IntegerField()
-    inpec_aprendices_meta = models.IntegerField()
-    jovenes_cupos_meta = models.IntegerField()
-    jovenes_aprendices_meta = models.IntegerField()
-    adolescente_cupos_meta = models.IntegerField()
-    adolescente_aprendices_meta = models.IntegerField()
-    mujer_cupos_meta = models.IntegerField()
-    mujer_aprendices_meta = models.IntegerField()
-    indigenas_cupos_ejecucion = models.IntegerField()
-    indigenas_aprendices_ejecucion = models.IntegerField()
-    inpec_cupos_ejecucion = models.IntegerField()
-    inpec_aprendices_ejecucion = models.IntegerField()
-    jovenes_cupos_ejecucion = models.IntegerField()
-    jovenes_aprendices_ejecucion = models.IntegerField()
-    adolescente_cupos_ejecucion = models.IntegerField()
-    adolescente_aprendices_ejecucion = models.IntegerField()
-    mujer_cupos_ejecucion = models.IntegerField()
-    mujer_aprendices_ejecucion = models.IntegerField()
-    per_documento = models.ForeignKey(Persona, on_delete=models.CASCADE,to_field='per_documento')
-    
 
 
 class Persona_rol(models.Model):

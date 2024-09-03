@@ -465,7 +465,7 @@ def Subir_poblacion_vulnerable(request):
         datos_profesion_integral = df.iloc[26:31,3:5].values
         reoranizado_profesion_integral = pd.DataFrame(datos_profesion_integral.T, columns=encabezado_profesion_integral)
         
-        print(reoranizado_profesion_integral)
+     
         #datos para poblacion
         datos_poblaciones_encabezado = df.iloc[7:12,1]
         encabezado_poblaciones =[header.strip() for header in datos_poblaciones_encabezado]

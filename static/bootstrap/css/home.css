@@ -63,6 +63,14 @@ body {
     height: calc(100vh - 67px); /* Ajusta esto a la altura de tu navbar */
 
 }
+.sidebar-link {
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
+/* Asegúrate de que el estilo no se sobreescriba */
+.sidebar-link:hover, .sidebar-link:focus {
+    text-decoration: none; /* Elimina el subrayado también al pasar el cursor sobre el enlace */
+}
 
 
 #sidebar.expand {

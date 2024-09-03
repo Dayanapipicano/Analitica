@@ -10,23 +10,7 @@
             <h1 class="h1 mb-4">Poblacion vulnerable</h1>
 
             <div class="row align-items-center">
-                <div class="col-md-3 mb-3">
-                   
-                    <div class="form-group row">
-                        <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
-                        <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}" onchange="aplicarFiltrosGeneral()">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="form-group row">
-                        <label class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
-                        <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" onchange="aplicarFiltrosGeneral()" value="{{ request.GET.fecha_fin }}">
-                        </div>
-                    </div>
-                </div>
+                
                 <input type="hidden" id="id_chart" value="chart1">
                 <input type="hidden" id="id_table" value="resultados_tabla">
                 
