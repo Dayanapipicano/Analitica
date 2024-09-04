@@ -207,10 +207,7 @@ def subir_P04(request):
                     df = pd.read_excel(archivo, header=4, sheet_name=hoja_principal)
                 else:
                     df = pd.read_excel(archivo, header=0, sheet_name=hoja_alternativa)
-                
-                
-                print(df.head())  # Muestra las primeras filas del DataFrame para ver cómo está la información
-                print(df.columns)  # Asegúrate de que todas las columnas necesarias están presentes
+
 
                 df['FECHA_INICIO_FICHA'] = pd.to_datetime(df['FECHA_INICIO_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                 df['FECHA_TERMINACION_FICHA'] = pd.to_datetime(df['FECHA_TERMINACION_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
@@ -291,6 +288,9 @@ def subir_P04(request):
             
             except Exception as e:
               messages.error(request, f"Error al procesar el archivo: {str(e)}")
+        else:
+            messages.error(request, "Por favor suba un archivo válido en formato .xlsx.")
+        
         
     return redirect('personas:P04')
 
@@ -530,7 +530,8 @@ def Subir_poblacion_vulnerable(request):
         except Exception as e:
             messages.error(request, f'Error al procesar el archivo: {str(e)}')
 
-        
+        else:
+            messages.error(request, 'El archivo no es un archivo Excel válido.')
 
         return redirect('personas:poblacion_vulnerable')
 

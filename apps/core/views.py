@@ -17,7 +17,7 @@ from django.utils import timezone
 from apps.personas.models import Rol,Persona_rol
 from apps.personas.decorators import permission_required
 from datetime import datetime, date
-
+from django.contrib import messages
 import json
 #redirecciones a las vistas
 def menu(request):
@@ -62,7 +62,7 @@ def estrategias(request):
     
     if select_fecha_inicio and select_fecha_fin:
         datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio, fecha_inicio_ficha__lte=select_fecha_fin)
-        print(datos_p04)
+   
     
     
     
@@ -135,9 +135,25 @@ def estrategias(request):
     #DATOS DE LAS METAS DE ESTRATEGIA 
 
     select_estrategia = request.GET.get('estrategia')
-    if not select_estrategia:
-        select_estrategia = Estrategia_detalle.objects.first().est_id
     
+    
+    if not select_estrategia:
+        estrategia_predeterminada = Estrategia_detalle.objects.first()
+        if estrategia_predeterminada:
+            # Si hay una estrategia, asignarla a select_estrategia
+            select_estrategia = estrategia_predeterminada.est_id
+        else:
+            # Enviar un mensaje de error si no hay estrategias en la base de datos
+            messages.error(request, 'No hay estrategias disponibles en la base de datos.')
+            return render(request, 'Estrategias/estrategias.html') 
+    try:
+        # Comprobar si el ID de la estrategia existe
+        Estrategia_detalle.objects.get(est_id=select_estrategia)
+    except Estrategia_detalle.DoesNotExist:
+        # Enviar un mensaje de error si la estrategia no existe
+        messages.error(request, 'La estrategia seleccionada no existe en la base de datos.')
+        return redirect('nombre_de_tu_vista')  # Cambia 'nombre_de_tu_vista' por el nombre adecuado
+
     metas_estrategias = Estrategia_detalle.objects.all()
     if select_estrategia:
         metas_estrategias = Estrategia_detalle.objects.filter(est_id=select_estrategia)

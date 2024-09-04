@@ -9,8 +9,27 @@
     <div class="text-center">
         
          <div class="container">
+            {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% elif message.tags == 'success' %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
             <h1 class="h1 mb-4">Estrategias</h1>
-            
+           
             <!-- Filtros de Fecha y Estrategia -->
             <div class="container mt-1 filtros">
                 <div class="row align-items-center">
