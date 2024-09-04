@@ -444,111 +444,96 @@ def Subir_poblacion_vulnerable(request):
         excel_file = request.FILES.get('excel_file')
         per_documento = request.POST.get('per_documento')
         selected_persona = Persona.objects.get(per_documento=per_documento)
+
+        try:
+            df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None)
+            
+            # TABLA TIPO DE POBLACIONES Y POBLACIONES
+            # renombrar cabeceras
+            df.iloc[18, 1] = 'Grupos'
+            df.iloc[21, 1] = 'Porcentaje_ejecicion'
+            df.iloc[7, 1] = 'Indicadores_poblaciones'
+            df.iloc[8, 1] = 'Grupos_poblaciones'
+            df.iloc[9, 1] = 'Meta_2024_poblaciones'
+            df.iloc[10, 1] = 'Ejecucion_poblaciones'
+            df.iloc[11, 1] = 'porcentaje_de_poblaciones'
+            
+            # rellenar grupos de nan a el valor anterior para poblaciones
+            fila_remplazar_poblaciones = 7
+            df.loc[fila_remplazar_poblaciones] = df.loc[fila_remplazar_poblaciones].fillna(method='ffill')
+
+            # rellenar grupos de nan a el valor anterior para tipo de poblaciones
+            fila_remplazar = 17
+            df.loc[fila_remplazar] = df.loc[fila_remplazar].fillna(method='ffill')
+
+            # rellenar fila con valor anterior para profesion integral
+            fila_remplazar_profesion_nivel = 26
+            fila_remplazar_profesion_sobreejecucion = 30
+
+            df.loc[fila_remplazar_profesion_nivel] = df.loc[fila_remplazar_profesion_nivel].fillna(method='ffill')
+            df.loc[fila_remplazar_profesion_sobreejecucion] = df.loc[fila_remplazar_profesion_sobreejecucion].fillna(method='ffill')
+
+            # datos para formación profesional integral
+            datos_profesion_integral = df.iloc[26:31, 2]
+            encabezado_profesion_integral = [header.strip() for header in datos_profesion_integral]
+            datos_profesion_integral = df.iloc[26:31, 3:5].values
+            reorganizado_profesion_integral = pd.DataFrame(datos_profesion_integral.T, columns=encabezado_profesion_integral)
+
+            # datos para población
+            datos_poblaciones_encabezado = df.iloc[7:12, 1]
+            encabezado_poblaciones = [header.strip() for header in datos_poblaciones_encabezado]
+            datos_poblaciones = df.iloc[7:12, 2:12].values
+            reorganizado_poblaciones = pd.DataFrame(datos_poblaciones.T, columns=encabezado_poblaciones)
+
+            # datos tipo poblaciones
+            datos = df.iloc[17:22, 1]
+            encabezado = [header.strip() for header in datos]
+            datos_documento = df.iloc[17:22, 2:].values
+            reorganizado = pd.DataFrame(datos_documento.T, columns=encabezado)
+
+            for _, row in reorganizado.iterrows():
+                datos_vulnerables = Documento_vulnerables_tipo_poblaciones(
+                    indicadores=row['Indicador'],
+                    grupo=row['Grupos'],
+                    meta_2024=row['Meta 2024'],
+                    ejecucion=row['Ejecución'],
+                    porcentaje_ejecucion=row['Porcentaje_ejecicion'],
+                    per_documento=selected_persona
+                )
+                datos_vulnerables.save()
+
+            for _, row in reorganizado_poblaciones.iterrows():
+                datos_poblaciones = Documento_vulnerables_poblaciones(
+                    indicadores_poblaciones=row['Indicadores_poblaciones'],
+                    grupos_poblaciones=row['Grupos_poblaciones'],
+                    meta_2024_poblaciones=row['Meta_2024_poblaciones'],
+                    ejecucion_poblaciones=row['Ejecucion_poblaciones'],
+                    porcentaje_ejecucion_poblaciones=row['porcentaje_de_poblaciones'],
+                    per_documento=selected_persona
+                )
+                datos_poblaciones.save()
+
+            for _, row in reorganizado_profesion_integral.iterrows():
+                datos_profesion_integral_save = Formacion_profesional_integral(
+                    nivel_ejecucion=row['Nivel de Ejecución'],
+                    buena=row['Buena'],
+                    vulnerable=row['Vulnerable'],
+                    baja=row['Baja'],
+                    sobreejecucion=row['Sobreejecución'],
+                )
+                datos_profesion_integral_save.save()
+
+            # Mensaje de éxito general
+            messages.success(request, 'Todos los datos se han guardado exitosamente.')
+
         
-        df = pd.read_excel(excel_file, sheet_name='RESUMEN', header=None )
-        
-       
-   
-   
-        #TABLA TIPO DE POBLACIONES Y POBLACIONES
-        #renombrar cabeceras
-        df.iloc[18,1] = 'Grupos'
-        df.iloc[21,1] = 'Porcentaje_ejecicion'
-        df.iloc[7,1] = 'Indicadores_poblaciones'
-        df.iloc[8,1] = 'Grupos_poblaciones'
-        df.iloc[9,1] = 'Meta_2024_poblaciones'
-        df.iloc[10,1] = 'Ejecucion_poblaciones'
-        df.iloc[11,1] ='porcentaje_de_poblaciones'
-     
-  
-        # Imprimir la fila para verificar el contenido
+        except Exception as e:
+            messages.error(request, f'Error al procesar el archivo: {str(e)}')
+
         
 
-        #rellenar grupos de nan a el valor anterior para poblaciones
-        fila_remplazar_poblaciones = 7
-        df.loc[fila_remplazar_poblaciones] = df.loc[fila_remplazar_poblaciones].fillna(method='ffill')  
-        
-        #rellenar grupos de nan a el valor anterior para tipo de poblaciones
-        fila_remplazar = 17
-        df.loc[fila_remplazar] = df.loc[fila_remplazar].fillna(method='ffill')  
-        
-        #rellenar fila con valor anterior para profesion integral 
-        fila_remplazar_profesion_nivel = 26
-        fila_remplazar_profesion_sobreejecucion = 30
-        
-        df.loc[fila_remplazar_profesion_nivel] = df.loc[fila_remplazar_profesion_nivel].fillna(method='ffill')
-        df.loc[fila_remplazar_profesion_sobreejecucion] = df.loc[fila_remplazar_profesion_sobreejecucion].fillna(method='ffill')
-        
-        
-        #datos para formacion profesional integral
-        
-        datos_profesion_integral = df.iloc[26:31,2]
-        
-        encabezado_profesion_integral = [header.strip() for header in datos_profesion_integral]
-        
-        datos_profesion_integral = df.iloc[26:31,3:5].values
-        reoranizado_profesion_integral = pd.DataFrame(datos_profesion_integral.T, columns=encabezado_profesion_integral)
-        
-     
-        #datos para poblacion
-        datos_poblaciones_encabezado = df.iloc[7:12,1]
-        encabezado_poblaciones =[header.strip() for header in datos_poblaciones_encabezado]
-        
-        datos_poblaciones = df.iloc[7:12,2:12].values
-        reoranizado_poblaciones =  pd.DataFrame(datos_poblaciones.T, columns=encabezado_poblaciones)
-        
-        
-        
-        
-        #datos tipo poblaciones
-        datos = df.iloc[17:22,1]
-        encabezado  = [header.strip() for header in datos]
-     
-        datos_documento = df.iloc[17:22,2:].values
-        reoranizado = pd.DataFrame(datos_documento.T, columns=encabezado)
-        
-        
-  
-        for _, row in reoranizado.iterrows():
-            datos_vulnerables = Documento_vulnerables_tipo_poblaciones(
-                
-                indicadores=row['Indicador'],
-                grupo=row['Grupos'],
-                meta_2024=row['Meta 2024'],
-                ejecucion=row['Ejecución'],
-                porcentaje_ejecucion=row['Porcentaje_ejecicion'],
-                per_documento=selected_persona
-           )
-            datos_vulnerables.save()
-            
-        for _, row in reoranizado_poblaciones.iterrows():
-            datos_poblaciones = Documento_vulnerables_poblaciones(
-                indicadores_poblaciones=row['Indicadores_poblaciones'],
-                grupos_poblaciones = row['Grupos_poblaciones'],
-                meta_2024_poblaciones = row['Meta_2024_poblaciones'],
-                ejecucion_poblaciones = row['Ejecucion_poblaciones'],
-                porcentaje_ejecucion_poblaciones = row['porcentaje_de_poblaciones'],
-                per_documento = selected_persona
-            )
-            
-            datos_poblaciones.save()
-            
-        for _, row in reoranizado_profesion_integral.iterrows():
-            datos_profesion_integral_save = Formacion_profesional_integral(
-                nivel_ejecucion = row['Nivel de Ejecución'],
-                buena = row['Buena'],
-                vulnerable = row['Vulnerable'],
-                baja = row['Baja'],
-                sobreejecucion = row['Sobreejecución'],
-                
-                
-            )
-            datos_profesion_integral_save.save()
-           
-           
-        
         return redirect('personas:poblacion_vulnerable')
-    
+
 #CRUD DE ROL
 def Roles_index(request):
     
