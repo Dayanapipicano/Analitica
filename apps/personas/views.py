@@ -286,12 +286,11 @@ def subir_P04(request):
                     p.save()
 
             
-                print("Datos guardados exitosamente.")
+                messages.success(request, "Datos guardados exitosamente.")
 
-            except KeyError as e:
-                print(f"Columna faltante en el archivo: {str(e)}")
+            
             except Exception as e:
-                print(f"Error al procesar el archivo: {str(e)}")
+              messages.error(request, f"Error al procesar el archivo: {str(e)}")
         
     return redirect('personas:P04')
 
