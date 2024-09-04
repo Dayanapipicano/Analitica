@@ -59,7 +59,7 @@
 
                                    
 
-                                <option value="" disabled {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                                <option value="" {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
                                 {% for choice in modalidad%}
                                 
                                         <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>

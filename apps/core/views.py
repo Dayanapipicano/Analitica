@@ -679,10 +679,10 @@ class Desercion(TemplateView):
        
             
         
-        
+        if select_fecha_inicio_ficha:
         # Convertir la fecha de inicio a formato de fecha y aplicar filtro mayor o igual
-        fecha_inicio = datetime.strptime(select_fecha_inicio_ficha, '%Y-%m-%d').date()
-        filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
+            fecha_inicio = datetime.strptime(select_fecha_inicio_ficha, '%Y-%m-%d').date()
+            filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
 
         # Si se proporciona fecha de terminación, convertirla a formato de fecha y aplicar filtro menor o igual
         if select_fecha_terminacion_ficha:
@@ -697,19 +697,19 @@ class Desercion(TemplateView):
             '2':'VIRTUAL',
             '3':'DISTANCIA'
         }
-        if select_modalidad and select_fecha_inicio_ficha:
+        if select_modalidad:
             modalidad = modalidades.get(select_modalidad)
             
             
             filtros_desercion['modalidad_formacion'] = modalidad
         
         
-        if select_regional and select_modalidad:
+        if select_regional:
             filtros_desercion['nombre_regional'] = select_regional
         if select_centro_de_formacion and select_regional:
             filtros_desercion['nombre_centro'] =select_centro_de_formacion;
             
-        if select_municipio and select_centro_de_formacion:
+        if select_municipio:
       
             filtros_desercion['nombre_municipio_curso'] = select_municipio
         
