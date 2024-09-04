@@ -188,6 +188,7 @@ def p04(request):
     return render(request,'p04.html',  {'per_documento':per_documento})
 
 
+
 def subir_P04(request):
     if request.method == 'POST':
         archivo = request.FILES.get('fileUpload')
@@ -197,15 +198,33 @@ def subir_P04(request):
         if archivo and archivo.name.endswith('.xlsx'):
             try:
                 selected_persona = Persona.objects.get(per_documento=per_documento)
-                df = pd.read_excel(archivo, header=4, sheet_name='Reporte')
+                hoja_principal = 'Reporte'
+                hoja_alternativa = 'Hoja1'
+                
+                
+                hojas = pd.ExcelFile(archivo).sheet_names
+                if hoja_principal in hojas:
+                    df = pd.read_excel(archivo, header=4, sheet_name=hoja_principal)
+                else:
+                    df = pd.read_excel(archivo, header=0, sheet_name=hoja_alternativa)
+                
+                
+                print(df.head())  # Muestra las primeras filas del DataFrame para ver cómo está la información
+                print(df.columns)  # Asegúrate de que todas las columnas necesarias están presentes
+
                 df['FECHA_INICIO_FICHA'] = pd.to_datetime(df['FECHA_INICIO_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                 df['FECHA_TERMINACION_FICHA'] = pd.to_datetime(df['FECHA_TERMINACION_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                
+                
+ 
+ 
                 df = df.replace(r'^\s*$', np.nan, regex=True)
                 
+       
+ 
                 P04.objects.all().delete()
 
-           
+                
 
                 # Itera sobre las filas del DataFrame
                 for index, row in df.iterrows():
@@ -234,7 +253,7 @@ def subir_P04(request):
                         codigo_programa=row['CODIGO_PROGRAMA'],
                         version_programa=row['VERSION_PROGRAMA'],
                         nombre_programa_formacion=row['NOMBRE_PROGRAMA_FORMACION'],
-                        red=row['RED'],
+                        red=row['RED'] if 'RED' in df.columns else None, 
                         codigo_pais_curso=row['CODIGO_PAIS_CURSO'],
                         nombre_pais_curso=row['NOMBRE_PAIS_CURSO'],
                         codigo_departamento_curso=row['CODIGO_DEPARTAMENTO_CURSO'],
@@ -249,12 +268,16 @@ def subir_P04(request):
                         numero_cursos=row['NUMERO_CURSOS'],
                         total_aprendices_masculinos=row['TOTAL_APRENDICES_MASCULINOS'],
                         total_aprendices_femeninos=row['TOTAL_APRENDICES_FEMENINOS'],
-                        total_aprendices_nobinario=row['TOTAL_APRENDICES_NOBINARIO'],
+                        total_aprendices_nobinario=row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
                         total_aprendices=row['TOTAL_APRENDICES'],
-
-                        total_aprendices_activos=row['TOTAL_APRENDICES_ACTIVOS'],
                         duracion_programa=row['DURACION_PROGRAMA'],
                         nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
+                        
+
+
+                        total_aprendices_activos=row['TOTAL_APRENDICES_ACTIVOS'],
+                        
+                        
                         per_documento=selected_persona
                      
                     )
@@ -265,6 +288,8 @@ def subir_P04(request):
             
                 print("Datos guardados exitosamente.")
 
+            except KeyError as e:
+                print(f"Columna faltante en el archivo: {str(e)}")
             except Exception as e:
                 print(f"Error al procesar el archivo: {str(e)}")
         
