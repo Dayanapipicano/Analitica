@@ -807,6 +807,48 @@ class Meta_create(CreateView):
             return JsonResponse({'success': False, 'errors': form.errors})
         else:
             return super().form_invalid(form)
+        
+class meta_delete(DeleteView):
+    print('hello')
+    model = Meta
+    success_url = reverse_lazy('cores:meta_index')
+
+
+def meta_index(request):
+    view_meta = Meta.objects.all()
+    form_meta  = Form_meta
+  
+    
+    context = {
+         'view_metas':view_meta,
+         'form_meta':form_meta
+ 
+    }
+    
+    return render(request, 'Metas/meta.html',context)
+
+class meta_edit(UpdateView):
+    model = Meta
+    from_class = Form_meta
+    fields = [
+        'met_centro_formacion',
+        'met_codigo',
+        'met_fecha_inicio',
+        'met_fecha_fin',
+        'met_año',
+        'met_total_otras_poblaciones',
+        'met_total_victimas',
+        'met_total_hechos_victimizantes',
+        'met_total_desplazados_violencia',
+        'met_total_titulada',
+        'met_total_complementaria',
+        'met_total_poblacion_vulnerable',
+
+              ]
+   
+    success_url = reverse_lazy('cores:meta_index')
+    
+#meta formacion
 
 class Meta_formacion_create(CreateView):
     model = Metas_formacion

@@ -54,6 +54,11 @@ urlpatterns = [
 
     path('meta_estrategias_intitucionales/delete/<int:pk>', core_views.meta_estrategias_intitucionales_delete.as_view(), name='meta_estrategias_intitucionales_delete'),
     path('meta_estrategias_intitucionales/edit/<int:pk>', core_views.meta_estrategias_intitucionales_edit.as_view(), name='meta_estrategias_intitucionales_edit'),
+    
+    #eliminar y editar  meta estrategia (estrategias institucionales)
+    path('meta/edit/<int:pk>', core_views.meta_edit.as_view(), name='meta_edit'),
+    path('meta/delete/<int:pk>', core_views.meta_delete.as_view(), name='meta_delete'),
+    path('meta/index/', core_views.meta_index, name='meta_index'),
 
 ]   
 
