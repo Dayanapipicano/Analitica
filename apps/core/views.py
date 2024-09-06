@@ -737,8 +737,10 @@ class Desercion(TemplateView):
 
         
         resultado_activo = sum(aprendices_activos_resultado)
+        print('activos',resultado_activo)
+        
         resultado_total_aprendices = sum(aprendices_totales_resultado)
-      
+        print('activos_res',resultado_total_aprendices)
         deserciones = resultado_total_aprendices - resultado_activo
    
         context = self.get_context_data(
@@ -809,7 +811,7 @@ class Meta_create(CreateView):
             return super().form_invalid(form)
         
 class meta_delete(DeleteView):
-    print('hello')
+
     model = Meta
     success_url = reverse_lazy('cores:meta_index')
 

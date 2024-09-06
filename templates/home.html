@@ -50,7 +50,7 @@
                 <li class="sidebar-item">
                     <a href="{% url 'administrador'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
-                        <span>Admin</span>
+                        <span>Gestionar Usuario</span>
                     </a>
                 </li>
                 {% endif %}
@@ -58,7 +58,7 @@
                 <li class="sidebar-item">
                     <a href="{% url 'cores:modalidad_index'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
-                        <span>Modalidad</span>
+                        <span>Gestionar Modalidad</span>
                     </a>
                 </li>
                 {% endif %}
@@ -66,7 +66,7 @@
                 <li class="sidebar-item">
                     <a href="{% url 'cores:meta_index'%}" class="sidebar-link">
                         <img src="{% static 'bootstrap/img/usuario.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
-                        <span>Meta</span>
+                        <span>Gestionar Meta</span>
                     </a>
                 </li>
                 {% endif %}
@@ -85,37 +85,6 @@
                         <span>Permisos</span>
                     </a>
                 </li>
-                {% endif %}
-                <li class="sidebar-item">
-                    <a href="{% url 'cores:general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                        <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
-                        <span>Reportes</span>
-                    </a>
-                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" >
-                        <li class="sidebar-item">
-                            <a href="{% url 'cores:general'%}" class="sidebar-link">General</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{% url 'cores:cobertura'%}" class="sidebar-link">Cobertura</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{% url 'cores:programa'%}" class="sidebar-link">Programa</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{% url 'cores:desercion_index'%}" class="sidebar-link">Desercion</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{% url 'cores:estrategias_index'%}" class="sidebar-link">Estrategias</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{% url 'personas:poblacion_vulnerable_graficas'%}" class="sidebar-link">Poblacion vulnerables</a>
-                        </li>
-
-                    </ul>
-                </li>
-
-               
                 <li class="sidebar-item">
                     <a href="{% url 'cores:formacion_regular_index'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
@@ -151,6 +120,38 @@
                     </ul>
                 </li>
                 {% endif%}
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'cores:general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                        <img src="{% static 'bootstrap/img/reporte.png' %}" alt="Protection Icon" style="width: 20px; height: 20px;">
+                        <span>Reportes</span>
+                    </a>
+                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" >
+                        <li class="sidebar-item">
+                            <a href="{% url 'cores:general'%}" class="sidebar-link">General</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'cores:cobertura'%}" class="sidebar-link">Cobertura</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'cores:programa'%}" class="sidebar-link">Programa</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'cores:desercion_index'%}" class="sidebar-link">Desercion</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'cores:estrategias_index'%}" class="sidebar-link">Estrategias</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'personas:poblacion_vulnerable_graficas'%}" class="sidebar-link">Poblacion vulnerables</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+               
+               
                 
                 
          

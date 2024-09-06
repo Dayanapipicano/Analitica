@@ -71,3 +71,20 @@
 .error-message{
     color: red;
 }
+
+
+
+.custom-select {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control-sm, .col-form-label-sm {
+    font-size: 0.875rem; /* Tamaño pequeño */
+}
+
+.icono {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}

@@ -2,8 +2,11 @@
 
 {% block contenido %}
 {% load static %}
+
+
 <link rel="stylesheet" href="{% static 'bootstrap/css/administrador.css' %}">
 <div class="main p-3">
+<meta name="csrf-token" content="{{ csrf_token }}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -12,7 +15,6 @@
                 </div>
                 <div class="mt-4">
 
-                    <button type="button" class="btn btn-success btn-sm mr-2" data-toggle="modal" data-target="#crearModal">Agregar</button>
 
                     
                     <table class="table table-striped">
@@ -73,7 +75,106 @@
     </div>
 
 
-  
+   <!-- Segundo Modal META -->
+   <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" id="Modal1-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitulo">Metas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="second-modal-form_meta" action="{% url 'cores:meta_estrategia_detalle' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="" class="form-label">Centro de formacion</label>
+                        {{ form_meta.met_centro_formacion }}
+                      
+
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="" class="form-label">Fecha Inicio</label>
+                        {{ form_meta.met_fecha_inicio }}
+                      
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Fecha Fin</label>
+                        {{ form_meta.met_fecha_fin }}
+                        <span class="error-message" id="dateErrorMeta" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
+                        
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Año</label>
+                        {{ form_meta.met_año }}
+                        
+                        <span class="error-message" id="errorDocumentoExists" style="display: none;  bottom: -45px;">El año ya esta registrado</span>
+                        
+                        
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Codigo</label>
+                        {{ form_meta.met_codigo}}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Otras Poblaciones </label>
+                        {{ form_meta.met_total_otras_poblaciones }} 
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Total De Victimas</label>
+                        {{ form_meta.met_total_victimas }}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Hechos Victimizantes</label>
+                        {{ form_meta.met_total_hechos_victimizantes }}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Desplazados Violencia</label>
+                        {{ form_meta.met_total_desplazados_violencia }}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Poblacion Vulnerable</label>
+                        {{ form_meta.met_total_poblacion_vulnerable }}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Titulada</label>
+                        {{ form_meta.met_total_titulada }}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Meta Complementaria</label>
+                        {{ form_meta.met_total_complementaria }}
+
+                    </div>
+                    
+                  
+                    <input id="per_documento" name="per_documento"  type="hidden" class="form-control" value="{{user.per_documento}}">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                    <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
+
+                </div>
+                </form>
+            
+        </div>
+    </div>
+</div>
+
 
     <!-- Contenedor para los modales -->
     <div class="modal-container">
@@ -204,13 +305,13 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="eliminarModalLabel">Eliminar Usuario</h5>
+                        <h5 class="modal-title" id="eliminarModalLabel">Eliminar Meta</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>¿Estás seguro de que quieres eliminar este usuario?</p>
+                        <p>¿Estás seguro de que quieres eliminar esta meta?</p>
                     </div>
                     <div class="modal-footer">
                         <form id="deleteFormMeta" method="post">

@@ -106,7 +106,7 @@
     flex: 1; /* Hace que el cuerpo del modal ocupe el espacio restante */
 }
 #eliminarModal .modal-content{
-    max-height: 3000px;
+    max-height: 200px;
     height: 60vh;
 }
 #Modal_estrategia .modal-content{
@@ -125,3 +125,4 @@
 .error-message{
     color: red;
 }
+

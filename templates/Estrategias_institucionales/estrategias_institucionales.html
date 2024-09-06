@@ -17,10 +17,15 @@
             <h1 class="h1 mb-4">Gestionar estrategia institucionales</h1>
 
             <div class="row justify-content-center">
+               
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="selectAnio">Selecciona un año:</label>
-                        <select class="form-control form-control-sm custom-select" name="año" id="año"></select>
+                        <label for="selectAnio" class="col-sm-5 col-form-label col-form-label-sm">Selecciona un año:</label>
+                        <div class="col-sm-7">
+                            <select class="form-control form-control-sm custom-select-scroll" id="año" name="año">
+                                <!-- Los años se llenarán dinámicamente -->
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -42,11 +47,12 @@
             </div>
 
             <div class="row justify-content-center">
+               
                 <div class="col-md-3 mb-3">
                     <div class="form-group row">
-                        <label for="modalidad" class="col-sm-3 col-form-label col-form-label-sm">Modalidad:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control form-control-sm custom-select" id="modalidad">
+                        <label for="modalidad" class="col-sm-5 col-form-label col-form-label-sm">Modalidad:</label>
+                        <div class="col-sm-7">
+                            <select class="form-control form-control-sm custom-select" id="modalidad" name="modalidad">
                                 <!-- Opciones se llenarán dinámicamente -->
                             </select>
                         </div>
@@ -200,7 +206,7 @@
                     
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </form>
                     </div>
