@@ -117,7 +117,7 @@
                             <div class="form-group">
                                 {% csrf_token %}
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Fecha Inicio</label>
+                                    <label for="" class="form-label">Centro formacion</label>
                                     {{ form_meta.met_centro_formacion }}
                                   
         
@@ -137,7 +137,7 @@
         
                                 </div>
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Año</label>
+                                    <label for="" class="some-class" class="form-label">Año</label>
                                     {{ form_meta.met_año }}
                                     
                                     <span class="error-message" id="errorDocumentoExists" style="display: none;  bottom: -45px;">El año ya esta registrado</span>
@@ -190,8 +190,9 @@
                             </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                   
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-second-modal">Cerrar</button>
+                        <button type="submit" id="submit-second-modal_meta" class="btn btn-primary">Guardar Cambios</button>
                     </div>
                 </form>
                 </div>
@@ -358,5 +359,57 @@
 
   
     }
+
+    //fechas inicio y fin 
+document.getElementById('id_met_fecha_inicio').addEventListener('change', validateDates);
+document.getElementById('id_met_fecha_fin').addEventListener('change', validateDates);
+
+function validateDates() {
+    const startDateInput = document.getElementById('id_met_fecha_inicio');
+    const endDateInput = document.getElementById('id_met_fecha_fin');
+    const errorDiv = document.getElementById('dateErrorMeta');
+    const submitButton = document.getElementById('submit-second-modal_meta');
+
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+
+    if (startDate && endDate && startDate >= endDate) {
+        errorDiv.style.display = 'block';  // Mostrar mensaje de error
+        submitButton.disabled = true;      // Desactivar el botón
+    } else {
+        errorDiv.style.display = 'none';   // Ocultar mensaje de error
+        submitButton.disabled = false;     // Activar el botón
+    }
+}
+
+
+  //alaertas para el formulario de meta create
+  document.getElementById('id_met_año').addEventListener('input',function(){
+    const id_met_año = this.value
+
+
+    fetch('/verificar-año/',{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ id_met_año: id_met_año })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const errorAño = document.getElementById('errorDocumentoExists');
+        const botonBloqueado = document.getElementById('submit-second-modal_meta');
+        
+        if(data.existe){
+            errorAño.style.display = 'block';
+            botonBloqueado.disabled = true;
+        }else{
+            errorAño.style.display = 'none';
+            botonBloqueado.disabled = false;
+        }
+    });
+});
+
 </script>
 {% endblock contenido %}
