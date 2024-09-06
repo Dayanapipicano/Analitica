@@ -176,3 +176,23 @@
     width: auto;
     max-width: 300px; /* Ajusta según sea necesario */
 }
+
+
+.messages-box {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    z-index: 1000;
+}
+
+.alert {
+    text-align: center;
+}
+
+.form-boxes {
+    position: relative;
+    margin-top: 150px; /* Ajusta esto para mover el formulario si es necesario */
+}

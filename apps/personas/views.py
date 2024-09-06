@@ -86,6 +86,7 @@ def Registro(request):
             user = authenticate(username=per_documento, password=raw_password)
             if user is not None:
                 login(request, user)
+                messages.success(request, "¡Registro exitoso! Bienvenido.")
                 return redirect('personas:inicio_sesion')
             else:
                 messages.error(request, 'Error en autenticación')
