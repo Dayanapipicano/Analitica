@@ -226,6 +226,18 @@ def subir_P04(request):
 
                 # Itera sobre las filas del DataFrame
                 for index, row in df.iterrows():
+                    total_masculinos = row['TOTAL_APRENDICES_MASCULINOS']
+                    total_femeninos = row['TOTAL_APRENDICES_FEMENINOS']
+                    total_nobinario = row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else 0
+                    
+                    # Sumar los aprendices masculinos, femeninos y no binarios
+                    suma_aprendices = total_masculinos + total_femeninos + total_nobinario
+
+                    # Si 'TOTAL_APRENDICES' no coincide con la suma, se corrige
+                    if row['TOTAL_APRENDICES'] != suma_aprendices:
+                        total_aprendices = suma_aprendices
+                    else:
+                        total_aprendices = row['TOTAL_APRENDICES']
                     p = P04(
                         fecha_p04=timezone.now(),
                         codigo_regional=row['CODIGO_REGIONAL'],
@@ -264,10 +276,10 @@ def subir_P04(request):
                         codigo_programa_especial=row['CODIGO_PROGRAMA_ESPECIAL'],
                         nombre_programa_especial=row['NOMBRE_PROGRAMA_ESPECIAL'],
                         numero_cursos=row['NUMERO_CURSOS'],
-                        total_aprendices_masculinos=row['TOTAL_APRENDICES_MASCULINOS'],
-                        total_aprendices_femeninos=row['TOTAL_APRENDICES_FEMENINOS'],
-                        total_aprendices_nobinario=row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
-                        total_aprendices=row['TOTAL_APRENDICES'],
+                        total_aprendices_masculinos=total_masculinos,
+                        total_aprendices_femeninos=total_femeninos,
+                        total_aprendices_nobinario=total_nobinario if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
+                        total_aprendices=total_aprendices, 
                         duracion_programa=row['DURACION_PROGRAMA'],
                         nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
                         
