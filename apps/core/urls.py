@@ -59,6 +59,13 @@ urlpatterns = [
     path('meta/edit/<int:pk>', core_views.meta_edit.as_view(), name='meta_edit'),
     path('meta/delete/<int:pk>', core_views.meta_delete.as_view(), name='meta_delete'),
     path('meta/index/', core_views.meta_index, name='meta_index'),
+    
+    #BILINGUISMO
+    path('bilinguismo/index/', core_views.Bilinguismo_index, name='bilinguismo_index'),
+    path('bilinguismo/create/', core_views.Bilinguismo_create.as_view(), name='bilinguismo_create'),
+    path('bilinguismo/delete/<int:pk>', core_views.Bilinguismo_delete.as_view(), name='bilinguismo_delete'),
+    path('bilinguismo/edit/<int:pk>', core_views.Bilinguismo_edit.as_view(), name='bilinguismo_edit'),
+    
 
 ]   
 

@@ -2,8 +2,8 @@ from django.forms import BaseModelForm
 from django.shortcuts import render
 from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from apps.core.models import Municipio,Regional,Centro_de_formacion,Bilinguismo
-from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad
+from apps.core.models import Municipio,Regional,Centro_de_formacion,Bilinguismo,Bilinguismo_programa
+from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad, Form_Bilinguismo_programa
 from django.views.generic import TemplateView, CreateView, UpdateView
 from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
@@ -1069,7 +1069,7 @@ def get_estrategia_data(request,id_estd_modalidad):
 def meta_data(request,id_estrategia):
     
     estrategia = Estrategia.objects.get(est_id=id_estrategia)
-    print('asdsad',estrategia)
+
     metas = estrategia.met_id
     meta_serializer = MetaSerializer(metas)
     
@@ -1091,7 +1091,7 @@ def meta_detalle(request, estd_meta):
             'met_año' : meta.met_año,
             
         }
-        print(data)
+      
         return JsonResponse(data)
     except Meta.DoesNotExist:
         return JsonResponse({'Error':'Meta not found'}, status=404)
@@ -1283,7 +1283,37 @@ class Modalidad_edit(UpdateView):
     fields = ['modalidad']
     success_url = reverse_lazy('cores:modalidad_index')
     
+#CRUD DE BILINGUISMO PROGRAMAS
+def Bilinguismo_index(request):
+    bilinguismo =  Bilinguismo_programa.objects.all()
+    print('hoala')
+    form_bilinguismo =  Form_Bilinguismo_programa
+    context = {
+        'bilinguismo':bilinguismo,
+        'form_bilinguismo':form_bilinguismo
+    }
+    return render(request, 'Bilinguismo/bilinguismo.html', context)
+class Bilinguismo_create(CreateView):
+    model = Bilinguismo_programa
+    form_class =  Form_Bilinguismo_programa
+    template_name = 'Bilinguismo/bilinguismo.html'
+    success_url = reverse_lazy('cores:bilinguismo_index')
     
+class Bilinguismo_delete(DeleteView):
+    model = Bilinguismo_programa
+    success_url = reverse_lazy('cores:bilinguismo_index')
+class Bilinguismo_edit(UpdateView):
+    model = Bilinguismo_programa
+    from_class = Form_Bilinguismo_programa
+    success_url = reverse_lazy('cores:bilinguismo_index')
+    fields = [ 'bil_codigo',
+            'bil_version',
+            'bil_modalidad',
+            'Bil_programa',
+            'bil_duracion']
+    
+    
+     
 #ROLES
 
 def Asignacion_roles(request):

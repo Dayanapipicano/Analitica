@@ -1,6 +1,6 @@
 from django.db import models
 
-
+from apps.personas.models import Modalidad
     
 class Bilinguismo(models.Model):
     
@@ -14,9 +14,22 @@ class Bilinguismo(models.Model):
      
         
     nombre_bilinguismo = models.CharField(max_length=150, choices=Bilinguismo_choices.choices)
+
+
+class Bilinguismo_programa(models.Model):
+    
+    bil_codigo = models.IntegerField(primary_key=True)
+    bil_version = models.CharField(max_length=150)
+    bil_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
+    Bil_programa = models.CharField(max_length=200)
+    bil_duracion = models.CharField(max_length=150)
+    
+
+
+
     
 class Municipio(models.Model):
-    
+
     
     class Municipio_choices(models.TextChoices):
     

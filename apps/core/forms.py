@@ -1,5 +1,5 @@
 from apps.personas.models import Meta
-from apps.core.models import Centro_de_formacion
+from apps.core.models import Centro_de_formacion, Bilinguismo_programa
 from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona
 from django.core.exceptions import ValidationError
 from django import forms
@@ -179,3 +179,22 @@ class Form_modalidad(forms.ModelForm):
         
     
     
+class Form_Bilinguismo_programa(forms.ModelForm):
+    class Meta:
+        model = Bilinguismo_programa
+        fields = [
+            'bil_codigo',
+            'bil_version',
+            'bil_modalidad',
+            'Bil_programa',
+            'bil_duracion'
+
+        ]
+        widgets =  {
+            'bil_codigo': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'bil_version': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'bil_modalidad': forms.Select(attrs={'class':'form-control'}),
+            'Bil_programa': forms.TextInput(attrs={'class':'form-control'}),
+            'bil_duracion': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+        }
+   
