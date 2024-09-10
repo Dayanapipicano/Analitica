@@ -224,22 +224,8 @@ class Programas_formacion(models.Model):
         
         
 class Nivel_formacion(models.Model):
-    
-    class Nivel_formacion_choices(models.TextChoices):
-        
-        AUXILIAR = 'AUXILIAR','Auxiliar',
-        CURSO_ESPECIAL ='CURSO ESPECIAL','Curso especial',
-        EVENTO ='EVENTO','Evento',
-        OPERARIO ='OPERARIO','Operario',
-        TECNICO ='TÉCNICO','Técnico',
-        TECNOLOGO ='TECNÓLOGO','Tecnólogo',
-        PROFUNDIZACION = 'PROFUNDIZACION', 'Profundizacion',
-        BILINGUISMO = 'BILINGUISMO', 'Bilinguismo',
-        SIN_BILINGUISMO = 'SIN BILINGUISMO','Sin_bilinguismo',
-    
-       
-    
-    nivel_formacion = models.CharField(max_length=150, choices=Nivel_formacion_choices.choices)
+
+    nivel_formacion = models.CharField(max_length=150)
    
 
 class Centro_de_formacion(models.Model):

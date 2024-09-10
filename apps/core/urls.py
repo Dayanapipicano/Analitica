@@ -10,7 +10,6 @@ urlpatterns = [
     path('programa/index', core_views.Programa_index, name="programa_index"),
     path('programa/', core_views.Programa.as_view(), name='programa'),
     path('ficha/<int:identificador_ficha>/', core_views.detalle_ficha, name='detalle_ficha'),
-    path('desercion/index', core_views.Desercion_index, name="desercion_index"),
     path('desercion', core_views.Desercion.as_view(), name="Desercion"),
     path('formacion_regular/index', core_views.Formacion_regular_index, name='formacion_regular_index'),
     path('metas/create/', core_views.Meta_create.as_view(), name="meta_create"),
@@ -75,6 +74,12 @@ urlpatterns = [
     path('regional/create/', core_views.Regional_create.as_view(), name='regional_create'),
     path('regional/delete/<int:pk>', core_views.Regional_delete.as_view(), name='regional_delete'),
     path('regional/edit/<int:pk>', core_views.Regional_edit.as_view(), name='regional_edit'),
+    
+    #NIVEL FORMACION
+    path('nivel_formacion/index/', core_views.Nivel_formacion_index, name='nivel_formacion_index'),
+    path('nivel_formacion/create/', core_views.Nivel_formacion_create.as_view(), name='nivel_formacion_create'),
+    path('nivel_formacion/delete/<int:pk>', core_views.Nivel_formacion_delete.as_view(), name='nivel_formacion_delete'),
+    path('nivel_formacion/edit/<int:pk>', core_views.Nivel_formacion_edit.as_view(), name='nivel_formacion_edit'),
     
 
 

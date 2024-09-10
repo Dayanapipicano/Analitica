@@ -16,12 +16,26 @@
                 <div class="row justify-content-center">
                     <div class="col-md-4 mb-3">
                         <div class="form-group row">
+                            <label for="filtroSeleccion2" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Centro de formacion:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control form-control-sm custom-select" id="centro_de_formacion" onchange="aplicarFiltros()" required>
+
+                                    <option value=""  {% if not selected_centro_de_formacion %}selected{% endif %}>Selecciona centro de formacion</option>
+                                    {% for choice in centro_de_formacion%}
+                                        <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == selected_centro_de_formacion %}selected{% endif %}>{{ choice.centro_de_formacion|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group row">
                             <label for="filtroSeleccion1" class="col-sm-5 col-form-label col-form-label-sm text-md-right">Tipo de formación:</label>
                             <div class="col-sm-7">
                                 <select class="form-control form-control-sm custom-select" id="nivel_formacion" onchange="aplicarFiltros()">
                                     <option value="" disabled {% if not selected_nivel_formacion %}selected{% endif %}>Selecciona Nivel de Formación</option>
                                     {% for choice in nivel_formacion %}
-                                        <option value="{{ choice.0 }}" {% if choice.0 == selected_nivel_formacion %}selected{% endif %}>{{ choice.1 }}</option>
+                                        <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == selected_nivel_formacion %}selected{% endif %}>{{ choice.nivel_formacion|title }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -40,6 +54,8 @@
                             </div>
                         </div>
                     </div>
+   
+                    
                     <div class="col-md-4 mb-3"> <!-- Ajustado el ancho de la columna para Modalidad -->
                         <div class="form-group row">
                             <label for="filtroSeleccion3" class="col-sm-4 col-form-label col-form-label-sm text-md-right">Modalidad:</label>
@@ -185,11 +201,15 @@
 
 
     function aplicarFiltros() {
+        const centro_de_formacion = document.getElementById('centro_de_formacion').value;
         const nivelFormacion = document.getElementById('nivel_formacion').value;
         const programaFormacion = document.getElementById('programa_formacion').value;
         const modalidad = document.getElementById('modalidad').value;
       
         let url = "{% url 'cores:programa' %}?";
+        if (centro_de_formacion) {
+            url += `centro_de_formacion=${centro_de_formacion}&`;
+        }
         if (nivelFormacion) {
             url += `nivel_formacion=${nivelFormacion}&`;
         }

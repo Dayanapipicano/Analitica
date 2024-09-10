@@ -3,7 +3,7 @@ from django.shortcuts import render
 from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion,Bilinguismo,Bilinguismo_programa
-from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad, Form_Bilinguismo_programa, Form_centro_de_formacion,Form_regional
+from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad, Form_Bilinguismo_programa, Form_centro_de_formacion,Form_regional,Form_nivel_formacion
 from django.views.generic import TemplateView, CreateView, UpdateView
 from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
@@ -507,9 +507,8 @@ class Programa(TemplateView):
     template_name = 'Programa/programa.html'
     
     def get(self, request, *args, **kwargs):
+        selected_centro_de_formacion = request.GET.get('centro_de_formacion','')
         selected_nivel_formacion = request.GET.get('nivel_formacion','')
-        
-        
         selected_programa_formacion = request.GET.get('programa_formacion')
         selected_modalidad = request.GET.get('modalidad')
         
@@ -549,7 +548,7 @@ class Programa(TemplateView):
         modalidad_id = {
             'PRESENCIAL':1,
             'VIRTUAL':2,
-            'DISTANCIA':3,
+            'A DISTANCIA':3,
             
         }
         modalidades_habilitados = P04.objects.filter(nombre_programa_formacion=selected_programa_formacion).values('modalidad_formacion').distinct()
@@ -568,38 +567,59 @@ class Programa(TemplateView):
         filtros_programa = {}
         
         
+        if selected_centro_de_formacion:
+            def obtener_nombre_centro_formacion(id_centro_formacion):
+                nombre_centro_formacion= get_object_or_404(Centro_de_formacion, id=id_centro_formacion)
+                return nombre_centro_formacion.centro_de_formacion
         
+            centro_de_formacion_res = obtener_nombre_centro_formacion(selected_centro_de_formacion)
+            filtros_programa['nombre_centro'] = centro_de_formacion_res
         
-        if selected_nivel_formacion == 'BILINGUISMO':
-            filtros_programa['nombre_programa_especial'] = 'PROGRAMA DE BILINGUISMO'
             
+        if selected_nivel_formacion:
+            
+            def obtener_nombre_nivel_formacion(id_nivel_formacion):
+                nombre_nivel_formacion = get_object_or_404(Nivel_formacion, id=id_nivel_formacion)
+                return nombre_nivel_formacion.nivel_formacion
         
+            nivel_formacion_res = obtener_nombre_nivel_formacion(selected_nivel_formacion)
+            
+            
+            if nivel_formacion_res == 'BILINGUISMO':
+                filtros_programa['nombre_programa_especial'] = 'PROGRAMA DE BILINGUISMO'
+                
+                programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
        
             
-        elif selected_nivel_formacion:
-            filtros_programa['nivel_formacion'] = selected_nivel_formacion
+                programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL', nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
+          
+                valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
+            elif nivel_formacion_res == 'SIN BILINGUISMO':
             
-        
-        if selected_programa_formacion and selected_nivel_formacion:
+                programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
+                filtros_programa['nivel_formacion'] = 'CURSO ESPECIAL'
+                lista_filtros = P04.objects.filter(**filtros_programa).exclude(nombre_programa_formacion__in=programas_bilinguismo)
+            else:
+                filtros_programa['nivel_formacion'] = nivel_formacion_res
+                
+        if selected_programa_formacion:
             
             filtros_programa['nombre_programa_formacion'] = selected_programa_formacion
           
-        if selected_modalidad and selected_programa_formacion:
+        if selected_modalidad:
             if selected_modalidad == '1':
                 selected_modalidad = 'PRESENCIAL'
             elif selected_modalidad == '2':
                 selected_modalidad = 'VIRTUAL'  
+            elif selected_modalidad == '3':
+                selected_modalidad = 'A DISTANCIA' 
             filtros_programa['modalidad_formacion'] = selected_modalidad
        
         
-        if selected_nivel_formacion == 'SIN BILINGUISMO':
+        
             
-            programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
-            filtros_programa['nivel_formacion'] = 'CURSO ESPECIAL'
-            lista_filtros = P04.objects.filter(**filtros_programa).exclude(nombre_programa_formacion__in=programas_bilinguismo)
-            
-        else:
-            lista_filtros = P04.objects.filter(**filtros_programa)
+        
+        lista_filtros = P04.objects.filter(**filtros_programa)
         
         
         municipios_filtro = lista_filtros.values('nombre_municipio_curso').annotate(programa_count=Count('nombre_programa_formacion')).order_by('nombre_municipio_curso')
@@ -609,7 +629,8 @@ class Programa(TemplateView):
 
      
         context = self.get_context_data(
-            nivel_formacion=Nivel_formacion.Nivel_formacion_choices.choices,
+            nivel_formacion=Nivel_formacion.objects.all(),
+            centro_de_formacion= Centro_de_formacion.objects.all(),
             programa_formacion=valores_programa,
             modalidad=valores_modalidad,
             
@@ -617,6 +638,7 @@ class Programa(TemplateView):
             selected_nivel_formacion=selected_nivel_formacion,
             selected_programa_formacion=selected_programa_formacion,
             selected_modalidad=selected_modalidades,
+            selected_centro_de_formacion=selected_centro_de_formacion,
             
             lista_municipios=municipios_filtro,
             lista_fichas = fichas_filtro,
@@ -649,40 +671,6 @@ def detalle_ficha(request, identificador_ficha):
 
 
 
-def Desercion_index(request):
-    municipio = Municipio.nombre.field.choices
-    regional = Regional.regional.field.choices
-    centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices
-    #deserciones
-    resultado_activo = P04.objects.aggregate(total_aprendices=Sum('total_aprendices_activos'))
-    resultado_total = P04.objects.aggregate(total_aprendices=Sum('total_aprendices'))
-    aprendices_activos = int(resultado_activo['total_aprendices'])
-    total_aprendices = int(resultado_total['total_aprendices'])
-    deserciones = total_aprendices - aprendices_activos
-    fecha_inicio = date(date.today().year, 1, 1)
-    select_fecha_inicio_ficha = fecha_inicio.strftime('%Y-%m-%d')
-
-    
-    fecha_fin = date.today()
-    select_fecha_terminacion_ficha = fecha_fin.strftime('%Y-%m-%d')
-           
-    modalidad = Modalidad.objects.all()
-    
-    desercion_datos = P04.objects.all()
-   
-    context = {
-        'municipio':municipio,
-        'regional': regional,
-        'centro_de_formacion' : centro_de_formacion,
-        'modalidad': modalidad,
-        'deserciones':deserciones,
-        'aprendices_activos':aprendices_activos,
-        'desercion_datos':desercion_datos,
-        'select_fecha_inicio_ficha':select_fecha_inicio_ficha,
-        'select_fecha_terminacion_ficha':select_fecha_terminacion_ficha
-
-    }
-    return render(request, 'Desercion/desercion.html', context)
 
 class Desercion(TemplateView):
     template_name = 'Desercion/desercion.html'
@@ -1393,6 +1381,39 @@ class Regional_edit(UpdateView):
     ]
     success_url = reverse_lazy('cores:regional_index')
     
+
+#CRUD DE NIVEL FORMAICON
+def Nivel_formacion_index(request):
+    nivel_formacion = Nivel_formacion.objects.all()
+    form_nivel_formacion = Form_nivel_formacion
+    
+    context = {
+        'nivel_formacion':nivel_formacion,
+        'form_nivel_formacion':form_nivel_formacion
+    }
+    return render(request, 'Nivel_formacion/nivel_formacion.html', context)
+
+class Nivel_formacion_create(CreateView):
+    model = Nivel_formacion
+    form_class = Form_nivel_formacion
+    template_name = 'Nivel_formacion/nivel_formacion.html'
+    success_url = reverse_lazy('cores:nivel_formacion_index')
+class Nivel_formacion_delete(DeleteView):
+    model = Nivel_formacion
+    success_url = reverse_lazy('cores:nivel_formacion_index')
+    
+class Nivel_formacion_edit(UpdateView):
+    model = Nivel_formacion
+    from_class =Form_nivel_formacion
+    fields = [
+        'nivel_formacion'
+    ]
+    success_url = reverse_lazy('cores:nivel_formacion_index')
+    
+     
+    
+
+
 #ROLES
 
 def Asignacion_roles(request):

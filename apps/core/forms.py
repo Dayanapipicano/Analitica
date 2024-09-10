@@ -1,5 +1,5 @@
 from apps.personas.models import Meta
-from apps.core.models import Centro_de_formacion, Bilinguismo_programa,Regional
+from apps.core.models import Centro_de_formacion, Bilinguismo_programa,Regional, Nivel_formacion
 from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona
 from django.core.exceptions import ValidationError
 from django import forms
@@ -218,4 +218,15 @@ class Form_regional(forms.ModelForm):
         ]
         widgets =  {
             'regional': forms.TextInput(attrs={'class':'form-control'}),
+        }
+
+class Form_nivel_formacion(forms.ModelForm):
+    
+    class Meta:
+        model = Nivel_formacion
+        fields = [
+            'nivel_formacion'
+        ]
+        widgets =  {
+            'nivel_formacion': forms.TextInput(attrs={'class':'form-control'}),
         }
