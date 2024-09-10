@@ -758,14 +758,11 @@ class Desercion(TemplateView):
         resultado_total_aprendices = sum(aprendices_totales_resultado)
       
         deserciones = resultado_total_aprendices - resultado_activo
-         # Crear el paginador con 10 elementos por página (puedes ajustar el número)
-        paginator = Paginator(desercion_datos, 10)  # 10 elementos por página
-    
-    # Obtener el número de página actual
+        
+        paginator = Paginator(desercion_datos, 10)  
         page_number = request.GET.get('page')
-    
-    # Obtener la página correspondiente
         page_obj = paginator.get_page(page_number)
+        
         context = self.get_context_data(
             
             modalidad = Modalidad.objects.all(),

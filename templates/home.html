@@ -103,6 +103,7 @@
                         </li>
                     </ul>
                 </li>
+                {% endif %}
                 {% if perms.can_view_reporteador_dashboard %}
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
@@ -120,7 +121,7 @@
                     </ul>
                 </li>
                 {% endif%}
-                {% endif %}
+             
                 <li class="sidebar-item">
                     <a href="{% url 'cores:general'%}" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                         data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
