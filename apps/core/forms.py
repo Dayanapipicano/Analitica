@@ -1,5 +1,5 @@
 from apps.personas.models import Meta
-from apps.core.models import Centro_de_formacion, Bilinguismo_programa
+from apps.core.models import Centro_de_formacion, Bilinguismo_programa,Regional
 from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona
 from django.core.exceptions import ValidationError
 from django import forms
@@ -197,4 +197,25 @@ class Form_Bilinguismo_programa(forms.ModelForm):
             'Bil_programa': forms.TextInput(attrs={'class':'form-control'}),
             'bil_duracion': forms.TextInput(attrs={'class':'form-control','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
         }
-   
+
+class Form_centro_de_formacion(forms.ModelForm):
+    
+    class Meta:
+        model = Centro_de_formacion
+        fields = [
+            'centro_de_formacion'
+        ]
+        widgets =  {
+            'centro_de_formacion': forms.TextInput(attrs={'class':'form-control'}),
+        }
+        
+class Form_regional(forms.ModelForm):
+    
+    class Meta:
+        model = Regional
+        fields = [
+            'regional'
+        ]
+        widgets =  {
+            'regional': forms.TextInput(attrs={'class':'form-control'}),
+        }

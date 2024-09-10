@@ -244,16 +244,8 @@ class Nivel_formacion(models.Model):
 
 class Centro_de_formacion(models.Model):
     
-    class Centro_de_formacion_choices(models.TextChoices):
-        CENTRO_DE_COMERCIO_Y_SERVICIOS = 'CENTRO DE COMERCIO Y SERVICIOS','Centro de comercio y servicio',
-        
-    centro_de_formacion = models.CharField(max_length=150, choices=Centro_de_formacion_choices.choices)
-    
+    centro_de_formacion = models.CharField(max_length=150)
+
 
 class Regional(models.Model):
-    
-    class Regional_choices(models.TextChoices):
-        
-        REGIONAL_CAUCA = 'REGIONAL CAUCA','Regional cauca'
-    
-    regional = models.CharField(max_length=150, choices=Regional_choices.choices)
+    regional = models.CharField(max_length=150)

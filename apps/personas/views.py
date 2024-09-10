@@ -196,7 +196,7 @@ def subir_P04(request):
         per_documento = request.POST.get('per_documento')
       
     
-        if archivo and archivo.name.endswith('.xlsx'):
+        if archivo and archivo.name.endswith(('.xlsx','.xls')):
             try:
                 selected_persona = Persona.objects.get(per_documento=per_documento)
                 hoja_principal = 'Reporte'
@@ -205,7 +205,7 @@ def subir_P04(request):
                 
                 hojas = pd.ExcelFile(archivo).sheet_names
                 if hoja_principal in hojas:
-                    df = pd.read_excel(archivo, header=4, sheet_name=hoja_principal)
+                    df = pd.read_excel(archivo, header=4, sheet_name=hoja_principal, engine='xlrd')
                 else:
                     df = pd.read_excel(archivo, header=0, sheet_name=hoja_alternativa)
 
@@ -220,7 +220,6 @@ def subir_P04(request):
                 
        
  
-
                 
 
                 # Itera sobre las filas del DataFrame
@@ -300,15 +299,16 @@ def subir_P04(request):
             messages.error(request, "Por favor suba un archivo válido en formato .xlsx.")
         
         
-    return redirect('personas:P04')
-""" 
+    return redirect('personas:P04') 
+"""
+
 def subir_P04(request):
     if request.method == 'POST':
         archivo = request.FILES.get('fileUpload')
         per_documento = request.POST.get('per_documento')
       
     
-        if archivo and archivo.name.endswith('.xlsx'):
+        if archivo and archivo.name.endswith(('.xlsx','.xls')):
             try:
                 selected_persona = Persona.objects.get(per_documento=per_documento)
                 hoja_principal = 'Reporte'

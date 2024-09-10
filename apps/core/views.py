@@ -3,7 +3,7 @@ from django.shortcuts import render
 from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from apps.core.models import Municipio,Regional,Centro_de_formacion,Bilinguismo,Bilinguismo_programa
-from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad, Form_Bilinguismo_programa
+from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad, Form_Bilinguismo_programa, Form_centro_de_formacion,Form_regional
 from django.views.generic import TemplateView, CreateView, UpdateView
 from apps.core.models import Programas_formacion,Nivel_formacion
 from django.db.models import Count
@@ -531,12 +531,14 @@ class Programa(TemplateView):
         
         #DATOS DE LOS SELECT
         if selected_nivel_formacion == 'BILINGUISMO':
-            programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
+            programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
+       
             
             programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL', nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
+          
             valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
         elif selected_nivel_formacion =='SIN BILINGUISMO':
-            programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
+            programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
 
             programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL').exclude(nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
             valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
@@ -736,10 +738,27 @@ class Desercion(TemplateView):
             filtros_desercion['modalidad_formacion'] = modalidad
         
         
+        
+        
+        
         if select_regional:
-            filtros_desercion['nombre_regional'] = select_regional
-        if select_centro_de_formacion and select_regional:
-            filtros_desercion['nombre_centro'] =select_centro_de_formacion;
+            def obtener_nombre_regional(id_regional):
+                nombre_regional = get_object_or_404(Regional, id=id_regional)
+            
+                return nombre_regional.regional
+            
+            regional_res = obtener_nombre_regional(select_regional)
+            
+            filtros_desercion['nombre_regional'] = regional_res
+        if select_centro_de_formacion:
+            def obtener_nombre_centro_de_formacion(id_centro):
+                nombre_centro_formacion = get_object_or_404(Centro_de_formacion, id=id_centro)
+            
+                return nombre_centro_formacion.centro_de_formacion
+            
+            centro_de_formacion_res = obtener_nombre_centro_de_formacion(select_centro_de_formacion)
+            
+            filtros_desercion['nombre_centro'] =centro_de_formacion_res;
             
         if select_municipio:
       
@@ -767,8 +786,8 @@ class Desercion(TemplateView):
             
             modalidad = Modalidad.objects.all(),
             municipio = Municipio.Municipio_choices.choices,
-            regional = Regional.Regional_choices.choices,
-            centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices,
+            regional = Regional.objects.all(),
+            centro_de_formacion = Centro_de_formacion.objects.all(),
             page_obj=page_obj,
             #mantiene la opcion 
             select_modalidad= select_modalidad,
@@ -1286,13 +1305,26 @@ class Modalidad_edit(UpdateView):
 #CRUD DE BILINGUISMO PROGRAMAS
 def Bilinguismo_index(request):
     bilinguismo =  Bilinguismo_programa.objects.all()
-    print('hoala')
+   
     form_bilinguismo =  Form_Bilinguismo_programa
     context = {
         'bilinguismo':bilinguismo,
         'form_bilinguismo':form_bilinguismo
     }
     return render(request, 'Bilinguismo/bilinguismo.html', context)
+
+class Bilinguismo_edit(UpdateView):
+    model = Bilinguismo_programa
+    from_class =  Form_Bilinguismo_programa
+   
+    fields = ['bil_version','bil_modalidad','Bil_programa','bil_duracion']
+
+    success_url = reverse_lazy('cores:bilinguismo_index')
+ 
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.success_url)
+    
 class Bilinguismo_create(CreateView):
     model = Bilinguismo_programa
     form_class =  Form_Bilinguismo_programa
@@ -1302,18 +1334,65 @@ class Bilinguismo_create(CreateView):
 class Bilinguismo_delete(DeleteView):
     model = Bilinguismo_programa
     success_url = reverse_lazy('cores:bilinguismo_index')
-class Bilinguismo_edit(UpdateView):
-    model = Bilinguismo_programa
-    from_class = Form_Bilinguismo_programa
-    success_url = reverse_lazy('cores:bilinguismo_index')
-    fields = [ 'bil_codigo',
-            'bil_version',
-            'bil_modalidad',
-            'Bil_programa',
-            'bil_duracion']
     
     
-     
+#CRUD DE CENTRO DE FORMACION
+def Centro_de_formacion_index(request):
+    centro_de_formacion = Centro_de_formacion.objects.all()
+    form_centro_de_formacion = Form_centro_de_formacion
+    
+    context = {
+        'centro_de_formacion':centro_de_formacion,
+        'form_centro_de_formacion':form_centro_de_formacion
+    }
+    return render(request, 'Centro_de_formacion/centro_de_formacion.html', context)
+
+class Centro_de_formacion_create(CreateView):
+    model = Centro_de_formacion
+    form_class = Form_centro_de_formacion
+    template_name = 'Centro_de_formacion/centro_de_formacion.html'
+    success_url = reverse_lazy('cores:centro_de_formacion_index')
+class Centro_de_formacion_delete(DeleteView):
+    model = Centro_de_formacion
+    success_url = reverse_lazy('cores:centro_de_formacion_index')
+    
+class Centro_de_formacion_edit(UpdateView):
+    model = Centro_de_formacion
+    from_class =Form_centro_de_formacion
+    fields = [
+        'centro_de_formacion'
+    ]
+    success_url = reverse_lazy('cores:centro_de_formacion_index')
+    
+
+#CRUD DE Regional
+def Regional_index(request):
+    regional = Regional.objects.all()
+    form_regional = Form_regional
+    
+    context = {
+        'regional':regional,
+        'form_regional':form_regional
+    }
+    return render(request, 'Regional/regional.html', context)
+
+class Regional_create(CreateView):
+    model = Regional
+    form_class = Form_regional
+    template_name = 'Regional/regional.html'
+    success_url = reverse_lazy('cores:regional_index')
+class Regional_delete(DeleteView):
+    model = Regional
+    success_url = reverse_lazy('cores:regional_index')
+    
+class Regional_edit(UpdateView):
+    model = Regional
+    from_class =Form_regional
+    fields = [
+        'regional'
+    ]
+    success_url = reverse_lazy('cores:regional_index')
+    
 #ROLES
 
 def Asignacion_roles(request):

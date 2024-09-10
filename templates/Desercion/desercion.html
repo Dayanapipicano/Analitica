@@ -83,7 +83,7 @@
 
                                 <option value="" disabled {% if not select_regional %}selected{% endif %}>Selecciona regional</option>
                                 {% for choice in regional%}
-                                    <option value="{{ choice.0 }}" {% if choice.0 == select_regional %}selected{% endif %}>{{ choice.1 }}</option>
+                                    <option value="{{ choice.id}}" {% if choice.id == select_regional %}selected{% endif %}>{{ choice.regional|title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -97,7 +97,7 @@
 
                                 <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona centro de formacion</option>
                                 {% for choice in centro_de_formacion%}
-                                    <option value="{{ choice.0 }}" {% if choice.0 == select_centro_de_formacion %}selected{% endif %}>{{ choice.1 }}</option>
+                                    <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == select_centro_de_formacion %}selected{% endif %}>{{ choice.centro_de_formacion|title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -131,8 +131,10 @@
                             <th scope="col" style="min-width: 100px;">Estado</th>
                             <th scope="col" style="min-width: 100px;">Fecha de inicio de la ficha</th>
                             <th scope="col" style="min-width: 100px;">Fecha de fin de la ficha</th>
-                       
+                            <th scope="col" style="min-width: 100px;">Regional</th>
+                            <th scope="col" style="min-width: 150px;">Centro de formación</th>
                             <th scope="col" style="min-width: 150px;">Código nivel de formación</th>
+                           
                             <th scope="col" style="min-width: 150px;">Nivel de formación</th>
                             <th scope="col" style="min-width: 100px;">Código jornada</th>
                             <th scope="col" style="min-width: 100px;">Jornada</th>
@@ -163,8 +165,12 @@
                                     <td>{{desercion.estado_curso}}</td>
                                     <td>{{desercion.fecha_inicio_ficha}}</td>
                                     <td>{{desercion.fecha_fin_ficha}}</td>
+                                    <td>{{desercion.nombre_regional}}</td>
+                                    <td>{{desercion.nombre_centro}}</td>
                                     <td>{{desercion.codigo_nivel_formacion}}</td>
+                                    
                                     <td>{{desercion.nivel_formacion}}</td>
+                             
                                     <td>{{desercion.codigo_jornada}}</td>
                                     <td>{{desercion.nombre_jornada}}</td>
                                     <td>{{desercion.tipo_de_formacion}}</td>

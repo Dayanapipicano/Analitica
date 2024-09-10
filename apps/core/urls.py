@@ -65,7 +65,18 @@ urlpatterns = [
     path('bilinguismo/create/', core_views.Bilinguismo_create.as_view(), name='bilinguismo_create'),
     path('bilinguismo/delete/<int:pk>', core_views.Bilinguismo_delete.as_view(), name='bilinguismo_delete'),
     path('bilinguismo/edit/<int:pk>', core_views.Bilinguismo_edit.as_view(), name='bilinguismo_edit'),
+    #CENTRO_DE_FORMACION
+    path('centro_de_formacion/index/', core_views.Centro_de_formacion_index, name='centro_de_formacion_index'),
+    path('centro_de_formacion/create/', core_views.Centro_de_formacion_create.as_view(), name='centro_de_formacion_create'),
+    path('centro_de_formacion/delete/<int:pk>', core_views.Centro_de_formacion_delete.as_view(), name='centro_de_formacion_delete'),
+    path('centro_de_formacion/edit/<int:pk>', core_views.Centro_de_formacion_edit.as_view(), name='centro_de_formacion_edit'),
+    #REGIONAL
+    path('regional/index/', core_views.Regional_index, name='regional_index'),
+    path('regional/create/', core_views.Regional_create.as_view(), name='regional_create'),
+    path('regional/delete/<int:pk>', core_views.Regional_delete.as_view(), name='regional_delete'),
+    path('regional/edit/<int:pk>', core_views.Regional_edit.as_view(), name='regional_edit'),
     
+
 
 ]   
 
