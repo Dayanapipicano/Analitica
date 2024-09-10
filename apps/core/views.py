@@ -656,6 +656,13 @@ def Desercion_index(request):
     aprendices_activos = int(resultado_activo['total_aprendices'])
     total_aprendices = int(resultado_total['total_aprendices'])
     deserciones = total_aprendices - aprendices_activos
+    fecha_inicio = date(date.today().year, 1, 1)
+    select_fecha_inicio_ficha = fecha_inicio.strftime('%Y-%m-%d')
+
+    
+    fecha_fin = date.today()
+    select_fecha_terminacion_ficha = fecha_fin.strftime('%Y-%m-%d')
+           
     modalidad = Modalidad.objects.all()
     
     desercion_datos = P04.objects.all()
@@ -667,7 +674,10 @@ def Desercion_index(request):
         'modalidad': modalidad,
         'deserciones':deserciones,
         'aprendices_activos':aprendices_activos,
-        'desercion_datos':desercion_datos
+        'desercion_datos':desercion_datos,
+        'select_fecha_inicio_ficha':select_fecha_inicio_ficha,
+        'select_fecha_terminacion_ficha':select_fecha_terminacion_ficha
+
     }
     return render(request, 'Desercion/desercion.html', context)
 
@@ -686,27 +696,30 @@ class Desercion(TemplateView):
         select_centro_de_formacion = request.GET.get('centro_de_formacion')
         select_fecha_inicio_ficha = request.GET.get('fecha_inicio_ficha')
         select_fecha_terminacion_ficha = request.GET.get('fecha_terminacion_ficha')
-        
+      
         
        
        
         filtros_desercion = {}
         
-       
-            
-        
+
         if select_fecha_inicio_ficha:
         # Convertir la fecha de inicio a formato de fecha y aplicar filtro mayor o igual
             fecha_inicio = datetime.strptime(select_fecha_inicio_ficha, '%Y-%m-%d').date()
             filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
-
+        else:
+            # Si no se proporciona fecha de inicio, asignar por defecto
+            fecha_inicio = date(date.today().year, 1, 1)
+            select_fecha_inicio_ficha = fecha_inicio.strftime('%Y-%m-%d')
+            filtros_desercion['fecha_inicio_ficha__gte'] = fecha_inicio
         # Si se proporciona fecha de terminación, convertirla a formato de fecha y aplicar filtro menor o igual
         if select_fecha_terminacion_ficha:
             fecha_fin = datetime.strptime(select_fecha_terminacion_ficha, '%Y-%m-%d').date()
             filtros_desercion['fecha_inicio_ficha__lte'] = fecha_fin
         else:
             # Si no se proporciona fecha de terminación, establecerla como la fecha actual
-            fecha_fin = date.today()
+            fecha_fin = date(date.today().year, 12, 31)
+            select_fecha_terminacion_ficha = fecha_fin.strftime('%Y-%m-%d')
             filtros_desercion['fecha_inicio_ficha__lte'] = fecha_fin
         modalidades = {
             '1':'PRESENCIAL',
@@ -737,10 +750,10 @@ class Desercion(TemplateView):
 
         
         resultado_activo = sum(aprendices_activos_resultado)
-        print('activos',resultado_activo)
+       
         
         resultado_total_aprendices = sum(aprendices_totales_resultado)
-        print('activos_res',resultado_total_aprendices)
+      
         deserciones = resultado_total_aprendices - resultado_activo
    
         context = self.get_context_data(
