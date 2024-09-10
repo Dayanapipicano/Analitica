@@ -19,6 +19,7 @@ from apps.personas.decorators import permission_required
 from datetime import datetime, date
 from django.contrib import messages
 import json
+from django.core.paginator import Paginator
 #redirecciones a las vistas
 def menu(request):
     return render(request,'home.html')
@@ -698,6 +699,8 @@ class Desercion(TemplateView):
         select_fecha_terminacion_ficha = request.GET.get('fecha_terminacion_ficha')
       
         
+        
+       
        
        
         filtros_desercion = {}
@@ -755,14 +758,21 @@ class Desercion(TemplateView):
         resultado_total_aprendices = sum(aprendices_totales_resultado)
       
         deserciones = resultado_total_aprendices - resultado_activo
-   
+         # Crear el paginador con 10 elementos por página (puedes ajustar el número)
+        paginator = Paginator(desercion_datos, 10)  # 10 elementos por página
+    
+    # Obtener el número de página actual
+        page_number = request.GET.get('page')
+    
+    # Obtener la página correspondiente
+        page_obj = paginator.get_page(page_number)
         context = self.get_context_data(
             
             modalidad = Modalidad.objects.all(),
             municipio = Municipio.Municipio_choices.choices,
             regional = Regional.Regional_choices.choices,
             centro_de_formacion = Centro_de_formacion.Centro_de_formacion_choices.choices,
-            
+            page_obj=page_obj,
             #mantiene la opcion 
             select_modalidad= select_modalidad,
  
