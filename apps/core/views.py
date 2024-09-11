@@ -1,8 +1,8 @@
 from django.forms import BaseModelForm
 from django.shortcuts import render
-from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol
+from apps.personas.models import P04,Meta,Persona,Modalidad,Metas_formacion,Estrategia, Estrategia_detalle,Rol,Centro_de_formacion
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from apps.core.models import Municipio,Regional,Centro_de_formacion,Bilinguismo,Bilinguismo_programa
+from apps.core.models import Municipio,Regional,Bilinguismo_programa
 from apps.core.forms import Form_meta, Form_meta_formacion, Form_estrategias, Form_meta_estrategia_detalle,Form_modalidad, Form_Bilinguismo_programa, Form_centro_de_formacion,Form_regional,Form_nivel_formacion
 from django.views.generic import TemplateView, CreateView, UpdateView
 from apps.core.models import Programas_formacion,Nivel_formacion
@@ -494,7 +494,15 @@ class Cobertura_mapa(TemplateView):
             
             p04 = p04.filter(nombre_centro=centro_de_formacion_res)
             print(p04)
-        
+        elif selected_centro_de_formacion and selected_municipio:
+            def seleccionar_nombre_centro(id_centro):
+                nombre_centro = get_object_or_404(Centro_de_formacion, id=id_centro)
+                
+                return nombre_centro.centro_de_formacion
+            centro_de_formacion_res = seleccionar_nombre_centro(selected_centro_de_formacion)
+            
+            p04 = p04.filter(nombre_centro=centro_de_formacion_res,nombre_municipio_curso=selected_municipio)
+            print(p04)
         programas_lista = list(p04.values_list('nombre_programa_formacion', flat=True))
         programas_conteo = Counter(programas_lista)
         
@@ -1113,12 +1121,12 @@ def get_estrategia_data(request,id_estd_modalidad):
         return JsonResponse(data)
     
 #datos para los filtros de meta_estrategia
-def meta_data(request,id_estrategia):
+def meta_data(request,id_estd_meta):
+  
+    meta = Estrategia.objects.get(met_id=id_estd_meta)
     
-    estrategia = Estrategia.objects.get(est_id=id_estrategia)
 
-    metas = estrategia.met_id
-    meta_serializer = MetaSerializer(metas)
+    meta_serializer = MetaSerializer(meta)
     
     data = {
         'meta': meta_serializer.data
@@ -1132,7 +1140,7 @@ def meta_detalle(request, estd_meta):
         meta = Meta.objects.get(met_id=estd_meta)
         data = {
             'met_codigo': meta.met_codigo,
-            'met_centro_formacion' :meta.met_centro_formacion,
+            'met_centro_formacion' :meta.met_centro_formacion.centro_de_formacion,
             'met_fecha_inicio' : meta.met_fecha_inicio,
             'met_fecha_fin': meta.met_fecha_fin,
             'met_año' : meta.met_año,

@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from apps.personas.manages import UsuarioManage
 from django.utils import timezone
 from django.contrib.auth.models import Permission
+
 class Formacion(models.Model):
     
     class Formacion_choices(models.TextChoices):
@@ -136,10 +137,16 @@ class Persona_rol(models.Model):
     persona_id = models.ForeignKey(Persona, on_delete=models.CASCADE)
     rol_id = models.ForeignKey(Rol, on_delete=models.CASCADE)
     
+class Centro_de_formacion(models.Model):
+    
+    centro_de_formacion = models.CharField(max_length=150)
+    
+    def __str__(self):
+        return self.centro_de_formacion
 
 class Meta(models.Model):
     met_id = models.AutoField(primary_key=True)
-    met_centro_formacion = models.CharField(max_length=150)
+    met_centro_formacion = models.ForeignKey(Centro_de_formacion, on_delete=models.CASCADE)
     met_codigo = models.CharField(max_length=150)
     met_fecha_inicio = models.DateField()
     met_fecha_fin = models.DateField()
@@ -179,7 +186,7 @@ class Estrategia_detalle(models.Model):
     estd_bilinguismo = models.CharField(max_length=150)
     estd_sin_bilinguismo = models.CharField(max_length=150)
     est_id = models.ForeignKey(Estrategia, on_delete=models.CASCADE, to_field='est_id')
-    estd_meta = models.IntegerField()
+    estd_meta = models.ForeignKey(Meta, on_delete=models.CASCADE, to_field='met_id')
 
     
     

@@ -251,7 +251,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="second-modal-form_meta" action="{% url 'cores:meta_estrategia_detalle' %}" method="post">
+                    <form id="second-modal-form_meta" action="{% url 'cores:meta_create' %}" method="post">
                         {% csrf_token %}
                         
                         <div class="mb-3">
@@ -364,13 +364,14 @@
                         {{ form_meta_estrategia_detalle.estd_modalidad }}
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Estrategia</label>
-                        {{ form_meta_estrategia_detalle.est_id }}
-                    </div>
-                    <div class="mb-3">
                         <label for="" class="form-label">Meta</label>
                         {{ form_meta_estrategia_detalle.estd_meta }}
                     </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Estrategia</label>
+                        {{ form_meta_estrategia_detalle.est_id }}
+                    </div>
+                    
                     <div class="mb-3">
                         <label for="" class="form-label">Meta Profundización Técnica</label>
                         {{ form_meta_estrategia_detalle.estd_profundizacion_tecnica_meta }}
@@ -439,13 +440,14 @@
                                 {{ form_meta_estrategia_detalle.estd_modalidad }}
                             </div>
                             <div class="mb-3">
-                                <label for="" class="form-label">Estrategia</label>
-                                {{ form_meta_estrategia_detalle.est_id }}
-                            </div>
-                            <div class="mb-3">
                                 <label for="" class="form-label">Meta</label>
                                 {{ form_meta_estrategia_detalle.estd_meta }}
                             </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Estrategia</label>
+                                {{ form_meta_estrategia_detalle.est_id }}
+                            </div>
+                            
                             <div class="mb-3">
                                 <label for="" class="form-label">Meta Profundización Técnica</label>
                                 {{ form_meta_estrategia_detalle.estd_profundizacion_tecnica_meta }}

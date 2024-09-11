@@ -81,30 +81,31 @@ document.addEventListener('DOMContentLoaded', function() {
 //maneja filtros dentro del formulario metas formacion (est_id)
 document.addEventListener('DOMContentLoaded', function () {
     
-    const estrategiaFields = document.querySelectorAll('#id_est_id');
-    const metaFields = document.querySelectorAll('#id_estd_meta');
     
-    estrategiaFields.forEach((estrategiaField,index)=>{
-        estrategiaField.addEventListener('change', function(){
-            const id_estrategia = this.value;
-       
-            fetch(`/meta_data/${id_estrategia}`)
+    const metaFields = document.querySelectorAll('#id_estd_meta');
+    const estrategiaFields = document.querySelectorAll('#id_est_id');
+   
+    metaFields.forEach((metaField,index)=>{
+        metaField.addEventListener('change', function(){
+            const id_estd_meta = this.value;
+         
+            fetch(`/meta_data/${id_estd_meta}`)
             .then(response => response.json())
             .then(data =>{
     
             
-                const metaField = metaFields[index]
+                const estrategiaField = estrategiaFields[index]
               
-                metaField.innerHTML = '<option value="">Seleccionar</option>';
+                estrategiaField.innerHTML = '<option value="">Seleccionar</option>';
                 
     
                 
                 if(data.meta){
                         const meta = data.meta;
                         const option = document.createElement('option');
-                        option.value = meta.met_id;
-                        option.textContent = meta.met_año;
-                        metaField.appendChild(option)
+                        option.value = meta.est_id;
+                        option.textContent = meta.est_nombre;
+                        estrategiaField.appendChild(option)
     
     
                 }
@@ -225,19 +226,24 @@ function Editar_meta_estrategia(button){
     const estd_modalidad = button.getAttribute('data-modalidad')
     const id_est_id = button.getAttribute('data-estrategia')
     const id_estd_meta = button.getAttribute('data-meta')
-    
+    console.log('kkk',id_estd_meta)
 
     const metaEstrategia = document.getElementById('id_est_id')
     const metaField = document.getElementById('id_estd_meta')
    
-    metaEstrategia.value = id_est_id
+    metaField.value = id_estd_meta
+ 
 
-    metaEstrategia.dispatchEvent(new Event('change'));
+    const event = new Event('change')
+    metaField.dispatchEvent(event)
+  
+
 
     
+    
     //preseleccion meta
-    function opciones(id_est_id){
-        fetch(`/meta_data/${id_est_id}`)
+    function opciones(id_estd_meta){
+        fetch(`/meta_data/${id_estd_meta}`)
         .then(response => response.json())
         .then(data =>{
             console.log('dddd',data)
@@ -245,21 +251,21 @@ function Editar_meta_estrategia(button){
             if(data.meta){
                     const meta = data.meta;
                     const option = document.createElement('option');
-                    option.value = meta.met_id;
-                    console.log('qqq',meta.met_id)
-                    option.textContent = meta.met_año;
-                    if (meta.met_id == id_estd_meta) {
-                        metaField.value = id_estd_meta;
+                    option.value = meta.est_id;
+                    console.log('qqq',meta.est_id)
+                    option.textContent = meta.est_nombre;
+                    if (meta.est_id == id_est_id) {
+                        metaEstrategia.value = id_est_id;
                     }
-                    metaField.appendChild(option)
+                    metaEstrategia.appendChild(option)
 
 
             }
         })
     }
     
-    if(id_est_id){
-        opciones(id_est_id)
+    if(id_estd_meta){
+        opciones(id_estd_meta)
     }
 
     

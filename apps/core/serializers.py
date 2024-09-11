@@ -3,8 +3,8 @@ from apps.personas.models import Meta,Estrategia
 
 class MetaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Meta
-        fields = ['met_id','met_año']
+        model = Estrategia
+        fields = ['est_id','est_nombre']
         
 class EstrateiaSerializer(serializers.ModelSerializer):
     

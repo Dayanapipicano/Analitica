@@ -1,12 +1,10 @@
 from apps.personas.models import Meta
-from apps.core.models import Centro_de_formacion, Bilinguismo_programa,Regional, Nivel_formacion
-from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona
+from apps.core.models import  Bilinguismo_programa,Regional, Nivel_formacion
+from apps.personas.models import Metas_formacion,Modalidad,Estrategia, Estrategia_detalle,Persona,Centro_de_formacion
 from django.core.exceptions import ValidationError
 from django import forms
 class Form_meta(forms.ModelForm):
     
-    
-    met_centro_formacion = forms.ChoiceField(choices=[],widget=forms.Select(attrs={'class':'form-control'}))
     
     class Meta:
         model = Meta
@@ -31,7 +29,7 @@ class Form_meta(forms.ModelForm):
             'met_fecha_inicio': forms.DateInput(attrs={'class':'form-control', 'type': 'date'}),
             'met_fecha_fin': forms.DateInput(attrs={'class':'form-control', 'type': 'date'}),
             
-            'met_centro_formacion': forms.Select(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
+            'met_centro_formacion': forms.Select(attrs={'class':'form-control'}),
             'met_codigo': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion'}),
             'met_año': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
             'met_total_otras_poblaciones': forms.TextInput(attrs={'class':'form-control','aria-label':'Centro de formacion','oninput': 'this.value = this.value.replace(/[^0-9]/g, "");'}),
@@ -46,7 +44,6 @@ class Form_meta(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['met_centro_formacion'].choices = Centro_de_formacion.Centro_de_formacion_choices.choices
         self.fields['per_documento'].widget =  forms.HiddenInput()
        
     def clean_meta_año(self):
@@ -130,7 +127,7 @@ class Form_estrategias(forms.ModelForm):
         
         
 class Form_meta_estrategia_detalle(forms.ModelForm):
-    
+
  
     class Meta: 
         model = Estrategia_detalle
