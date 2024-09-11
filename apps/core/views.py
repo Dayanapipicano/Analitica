@@ -592,13 +592,21 @@ class Programa(TemplateView):
        
             
                 programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL', nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
-          
-                valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
+                
+                valores_programa = [capitalizar_texto(programa['nombre_programa_formacion'])for programa in programas_habilitados]
+                print('fff',valores_programa)
             elif nivel_formacion_res == 'SIN BILINGUISMO':
-            
-                programas_bilinguismo = Bilinguismo.Bilinguismo_choices.values
-                filtros_programa['nivel_formacion'] = 'CURSO ESPECIAL'
+
+                programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
                 lista_filtros = P04.objects.filter(**filtros_programa).exclude(nombre_programa_formacion__in=programas_bilinguismo)
+
+                programas_sin_bilinguismo = P04.objects.all().values_list('nombre_programa_formacion', flat=True).exclude(nombre_programa_formacion__in=programas_bilinguismo)
+                
+                valores_programa = programas_sin_bilinguismo
+                print(programas_habilitados)
+
+                filtros_programa['nivel_formacion'] = 'CURSO ESPECIAL'
+               
             else:
                 filtros_programa['nivel_formacion'] = nivel_formacion_res
                 
@@ -664,6 +672,7 @@ def detalle_ficha(request, identificador_ficha):
         'campo5': ficha.fecha_terminacion_ficha,
         'campo6': ficha.red,
         'campo7': ficha.nombre_municipio_curso,
+        'campo8': ficha.nombre_programa_formacion,
         
     }
    

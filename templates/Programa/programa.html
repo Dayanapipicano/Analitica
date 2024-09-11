@@ -48,7 +48,7 @@
                                 <select class="form-control form-control-sm custom-select" id="programa_formacion" onchange="aplicarFiltros()">
                                     <option value="" >Selecciona programa</option>
                                     {% for choice in programa_formacion %}
-                                        <option value="{{ choice.0 }}" {% if choice.0 == selected_programa_formacion %}selected{% endif %}>{{ choice.1 }}</option>
+                                        <option value="{{ choice }}" {% if choice == selected_programa_formacion %}selected{% endif %}>{{ choice|title }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -162,13 +162,15 @@
                                       
                             
                                       <p><strong>Identificador Ficha:</strong> <span id="detalleIdentificador"></span></p>
+                                      
                                       <p><strong>Modalidad:</strong> <span id="detalleCampo1"></span></p>
                                       <p><strong>Centro de formacion:</strong> <span id="detalleCampo2"></span></p>
-                                      <p><strong>Tipo de formacion:</strong> <span id="detalleCampo3"></span></p>
+                                     
                                       <p><strong>Fecha inicio ficha:</strong> <span id="detalleCampo4"></span></p>
                                       <p><strong>Fecha fin ficha:</strong> <span id="detalleCampo5"></span></p>
                                       <p><strong>Red:</strong> <span id="detalleCampo6"></span></p>
                                       <p><strong>Municipio:</strong> <span id="detalleCampo7"></span></p>
+                                      <p><strong>Programa:</strong> <span id="detalleCampo8"></span></p>
                                     </div>
                                    
                                   </form>
