@@ -283,26 +283,37 @@
 
 
             function obtenerProgramas(nombre_municipio) {
-            
+                
+
+                var id_centro_de_formacion = $('#id_centro_de_formacion').val();
                 var filtroFechaInicio = $('#filtroFechaInicio').val();
                 var filtroFechaFin = $('#filtroFechaFin').val();
+            
+               
             
                 // Si nombre_municipio es nulo o undefined, asignarle una cadena vacía
                 nombre_municipio = nombre_municipio || '';
             
                 var url = "{% url 'cores:cobertura_mapa' %}?";
-            
+                if (id_centro_de_formacion) {
+                   
+                    url += "id_centro_de_formacion=" + encodeURIComponent(id_centro_de_formacion) + "&";
+                }
                 // Agregar nombre_municipio
                 if (nombre_municipio) {
                     url += "nombre_municipio=" + encodeURIComponent(nombre_municipio) + "&";
                 }
+                
+
+
+
             
                 // Agregar las fechas si están definidas
                 if (filtroFechaInicio) {
                     url += "filtroFechaInicio=" + encodeURIComponent(filtroFechaInicio) + "&";
                 }
                 if (filtroFechaFin) {
-                    console.log(filtroFechaFin)
+                    
                     url += "filtroFechaFin=" + encodeURIComponent(filtroFechaFin) + "&";
                 }
             
@@ -314,10 +325,13 @@
                 $.ajax({
                     url: "{% url 'cores:cobertura_mapa' %}",
                     data: {
-                        'nombre_municipio': nombre_municipio  // Siempre enviamos nombre_municipio, aunque sea vacío
+                        'nombre_municipio': nombre_municipio,
+                        'id_centro_de_formacion':id_centro_de_formacion
+                         // Siempre enviamos nombre_municipio, aunque sea vacío
                     },
                     success: function(data) {
                         // Redirige a la URL construida
+                        
                         window.location.href = url;
                     },
                     error: function(xhr, status, error) {
@@ -330,6 +344,7 @@
             $(document).ready(function() {
                 // Obtiene el parámetro nombre_municipio de la URL
                 const urlParams = new URLSearchParams(window.location.search);
+                
                 const nombreMunicipio = urlParams.get('nombre_municipio');
                 
                 // Si hay un nombre de municipio, pinta el mapa
@@ -339,6 +354,24 @@
                     // También selecciona el municipio en el select
                     $('#municipioSelect').val(nombreMunicipio);
                 }
+
+                $('#id_municipio').change(function(){
+                    const nuevoMunicipio = $(this).val()
+                    
+                    actualizar_Url(nuevoMunicipio)
+                })
+
+
+                $('#id_centro_de_formacion').change(function(){
+                    const nombreMunicipio = $('#id_municipio').val()
+                    console.log('ddd',nombreMunicipio)
+                    actualizar_Url(nombreMunicipio)
+                })
+
+                function actualizar_Url(nombreMunicipios) {
+                    obtenerProgramas(nombreMunicipios);
+                }
+
             });
             
             function pintaMunicipio(nombre_municipio) {
@@ -349,7 +382,7 @@
             
                 // Añade la clase 'selected' al path correspondiente usando el atributo data-nombre
                 $('path[data-nombre="' + (nombre_municipio) + '"]').addClass('selected');
-                console.log('corres')
+             
             }
             
             </script>

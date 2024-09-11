@@ -449,7 +449,13 @@ def administrador(request):
 
 def cobertura(request):
     municipio = Municipio.nombre.field.choices
-    return render(request, 'Cobertura/cobertura.html', {'municipio':municipio})
+    centro_de_formacion= Centro_de_formacion.objects.all(),
+ 
+    context = {
+        'centro_de_formacion':centro_de_formacion,
+        'municipio':municipio
+    }
+    return render(request, 'Cobertura/cobertura.html', context)
 from collections import Counter
 class Cobertura_mapa(TemplateView):
     template_name = 'Cobertura/cobertura.html'
@@ -458,7 +464,8 @@ class Cobertura_mapa(TemplateView):
         selected_municipio = request.GET.get('nombre_municipio', '')
         selected_fecha_inicio = request.GET.get('filtroFechaInicio')
         selected_fecha_fin = request.GET.get('filtroFechaFin')
-       
+        selected_centro_de_formacion = request.GET.get('id_centro_de_formacion')
+        print('id',selected_centro_de_formacion)
         
         
         municipio = Municipio.nombre.field.choices
@@ -478,13 +485,33 @@ class Cobertura_mapa(TemplateView):
 
         if selected_municipio:
             p04 = p04.filter(nombre_municipio_curso=selected_municipio)
-
+        if selected_centro_de_formacion:
+            def seleccionar_nombre_centro(id_centro):
+                nombre_centro = get_object_or_404(Centro_de_formacion, id=id_centro)
+                
+                return nombre_centro.centro_de_formacion
+            centro_de_formacion_res = seleccionar_nombre_centro(selected_centro_de_formacion)
+            
+            p04 = p04.filter(nombre_centro=centro_de_formacion_res)
+            print(p04)
+        
         programas_lista = list(p04.values_list('nombre_programa_formacion', flat=True))
         programas_conteo = Counter(programas_lista)
         
         programa_data = [{'programa': programa, 'programa_count': count} for programa, count in programas_conteo.items()]
     
-        context = self.get_context_data(programa_data=programa_data,municipio=municipio,selected_municipio=selected_municipio,selected_fecha_inicio=selected_fecha_inicio,selected_fecha_fin=selected_fecha_fin,programas_conteo=programas_conteo)
+        context = self.get_context_data(
+            programa_data=programa_data,
+            centro_de_formacion= Centro_de_formacion.objects.all(),
+            municipio=municipio,
+            selected_municipio=selected_municipio,
+            selected_fecha_inicio=selected_fecha_inicio,
+            selected_fecha_fin=selected_fecha_fin,
+            programas_conteo=programas_conteo,
+            
+            selected_centro_de_formacion=selected_centro_de_formacion
+            
+            )
         return self.render_to_response(context)
 
 
@@ -499,7 +526,10 @@ def Programa_index(request):
     context = {
         'modalidad': modalidad,
         'programa_formacion': programa_formacion_choices,
-        'nivel_formacion':nivel_formacion
+        'nivel_formacion':nivel_formacion,
+       
+        
+       
     }
     return render(request, 'Programa/programa.html', context)
 
@@ -594,7 +624,7 @@ class Programa(TemplateView):
                 programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL', nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
                 
                 valores_programa = [capitalizar_texto(programa['nombre_programa_formacion'])for programa in programas_habilitados]
-                print('fff',valores_programa)
+           
             elif nivel_formacion_res == 'SIN BILINGUISMO':
 
                 programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
@@ -603,7 +633,7 @@ class Programa(TemplateView):
                 programas_sin_bilinguismo = P04.objects.all().values_list('nombre_programa_formacion', flat=True).exclude(nombre_programa_formacion__in=programas_bilinguismo)
                 
                 valores_programa = programas_sin_bilinguismo
-                print(programas_habilitados)
+             
 
                 filtros_programa['nivel_formacion'] = 'CURSO ESPECIAL'
                
@@ -785,6 +815,7 @@ class Desercion(TemplateView):
             municipio = Municipio.Municipio_choices.choices,
             regional = Regional.objects.all(),
             centro_de_formacion = Centro_de_formacion.objects.all(),
+            
             page_obj=page_obj,
             #mantiene la opcion 
             select_modalidad= select_modalidad,

@@ -33,7 +33,7 @@
                             <label for="filtroSeleccion" class="col-sm-3 col-form-label col-form-label-sm">Municipio:</label>
                             <div class="col-sm-9">
                                 <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="obtenerProgramas(this.value)">
-                                    <option value="" disabled {% if not selected_municipio %}selected{% endif %}>Selecciona Municipio</option>
+                                    <option value=""  {% if not selected_municipio %}selected{% endif %}>Selecciona Municipio</option>
                                     {% for choice in municipio %}
                                         <option value="{{ choice.0 }}" {% if selected_municipio == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
                                     {% endfor %}
@@ -43,6 +43,24 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-5 mb-3"> 
+                        <div class="form-group row">
+                            <label for="filtroMunicipio3" class="col-sm-3 col-form-label col-form-label-sm">Centro de centro de formacion:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control form-control-sm custom-select" id="id_centro_de_formacion"required  onchange="obtenerProgramas()">
+    
+                                    <option value="" {% if not selected_centro_de_formacion %}selected{% endif %}>Selecciona centro de formacion</option>
+                                    {% for choice in centro_de_formacion%}
+                                        <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == selected_centro_de_formacion %}selected{% endif %}>{{ choice.centro_de_formacion|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+
+                    
                 </div>
 
             </div>
