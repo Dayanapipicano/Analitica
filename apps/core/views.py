@@ -1295,7 +1295,6 @@ class estrategias_institucionales_filtros(TemplateView):
             'estd_curso_especial',
             'estd_bilinguismo',
             'estd_sin_bilinguismo',
-            'est_id__est_total_meta',
             'estd_meta',
            
         )

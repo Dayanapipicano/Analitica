@@ -78,44 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-//maneja filtros dentro del formulario metas formacion (est_id)
-document.addEventListener('DOMContentLoaded', function () {
-    
-    
-    const metaFields = document.querySelectorAll('#id_estd_meta');
-    const estrategiaFields = document.querySelectorAll('#id_est_id');
-   
-    metaFields.forEach((metaField,index)=>{
-        metaField.addEventListener('change', function(){
-            const id_estd_meta = this.value;
-         
-            fetch(`/meta_data/${id_estd_meta}`)
-            .then(response => response.json())
-            .then(data =>{
-    
-            
-                const estrategiaField = estrategiaFields[index]
-              
-                estrategiaField.innerHTML = '<option value="">Seleccionar</option>';
-                
-    
-                
-                if(data.meta){
-                        const meta = data.meta;
-                        const option = document.createElement('option');
-                        option.value = meta.est_id;
-                        option.textContent = meta.est_nombre;
-                        estrategiaField.appendChild(option)
-    
-    
-                }
-            })
-        })
-
-    })
-    
-});
-
 
 
 
@@ -208,13 +170,11 @@ function Delete_estrategia(button) {
 function Editar_estrategia(button){
     const pk = button.getAttribute('data-id');
     const id_est_nombre = button.getAttribute('data-nombre')
-    const id_met_id = button.getAttribute('data-meta')
-    const id_est_total_meta = button.getAttribute('data-total-meta')
+ 
 
     document.getElementById('editarForm').action = `/estrategia_institucional/edit/${pk}`;
     document.getElementById('id_est_nombre').value = id_est_nombre
-    document.getElementById('id_met_id').value = id_met_id
-    document.getElementById('id_est_total_meta').value = id_est_total_meta
+  
 }
 
 function Delete_meta_estrategia(button) {
@@ -232,11 +192,10 @@ function Editar_meta_estrategia(button){
     const metaField = document.getElementById('id_estd_meta')
    
     metaField.value = id_estd_meta
- 
+    
+    
 
-    const event = new Event('change')
-    metaField.dispatchEvent(event)
-  
+    
 
 
     
@@ -248,17 +207,27 @@ function Editar_meta_estrategia(button){
         .then(data =>{
             console.log('dddd',data)
 
+         
+           
+
             if(data.meta){
                     const meta = data.meta;
                     const option = document.createElement('option');
                     option.value = meta.est_id;
-                    console.log('qqq',meta.est_id)
-                    option.textContent = meta.est_nombre;
-                    if (meta.est_id == id_est_id) {
-                        metaEstrategia.value = id_est_id;
-                    }
-                    metaEstrategia.appendChild(option)
 
+                    metaEstrategia.innerHTML = '';
+                 
+                    option.textContent = meta.est_nombre;
+                    console.log('Opción en el select:', option);
+                    
+                    console.log('Opción en el select:', option);
+                    metaEstrategia.appendChild(option);
+
+                    setTimeout(() => {
+
+                    metaEstrategia.value = String(id_est_id);
+                    
+                },100);
 
             }
         })
@@ -266,6 +235,11 @@ function Editar_meta_estrategia(button){
     
     if(id_estd_meta){
         opciones(id_estd_meta)
+
+        metaField.dispatchEvent(new Event('change'))
+ 
+     
+  
     }
 
     

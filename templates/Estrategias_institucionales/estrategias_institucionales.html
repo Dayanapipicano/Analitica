@@ -83,15 +83,22 @@
             
             <div class="card-title">{{estrategias.est_nombre}}</div>
             <div class="card-content">
-                <div class="card-item"><strong>Meta:</strong><button type="button" data-toggle="modal" data-target="#viewModal" onclick="openModal('{{ estrategias.met_id_id }}')"class="btn-icon">
-                    <img src="{% static 'bootstrap/img/visualizar.png' %}" 
-                         alt="Protection Icon" 
-                         style="width: 20px; height: 20px;">
-                </button>
-                </div>
+                
                 {% if perms.can_view_admin_dashboard %}  
-                <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarModal" data-id="{{estrategias.est_id}}" data-nombre="{{estrategias.est_nombre}}" data-meta="{{estrategias.met_id_id}}" data-total-meta="{{estrategias.est_total_meta}}"onclick="Editar_estrategia(this)">Editar</button>
-                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#eliminarModal"  data-id="{{estrategias.est_id}}" onclick="Delete_estrategia(this)">Eliminar</button>
+                <img src="{% static 'bootstrap/img/boligrafo.png' %}" 
+                alt="Editar" 
+                style="width: 20px; height: 20px; cursor: pointer;" 
+                data-toggle="modal" 
+                data-target="#editarModal" 
+                data-id="{{estrategias.est_id}}" 
+                data-nombre="{{estrategias.est_nombre}}" 
+    
+                onclick="Editar_estrategia(this)">
+                <img src="{% static 'bootstrap/img/boton-eliminar.png' %}" 
+                alt="Editar" 
+                style="width: 20px; height: 20px; cursor: pointer;" 
+                data-toggle="modal" 
+                data-target="#eliminarModal"  data-id="{{estrategias.est_id}}" onclick="Delete_estrategia(this)">
                 {%endif%}
             </div>
             
@@ -151,16 +158,7 @@
                                     {{ form_estrategias_institucionales.est_nombre}}
                                     <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="" class="form-label">Meta</label>
-                                    {{ form_estrategias_institucionales.met_id}}
-                                    <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="" class="form-label">Total Meta</label>
-                                    {{ form_estrategias_institucionales.est_total_meta}}
-                                    <span class="error-message" id="dateError" style="display: none;  bottom: -45px;">La fecha final debe ser mayor que la fecha inicial</span>
-                                </div>
+                                
                             </div>
                     </div>
                     <div class="modal-footer">
@@ -191,17 +189,7 @@
                                 <label for="" class="form-label">Estrategia</label>
                                 {{ form_estrategias_institucionales.est_nombre}}
                             </div>
-                            <div class="mb-3">
-                                <label for="" class="form-label">Meta</label>
-                                {{ form_estrategias_institucionales.met_id}}
-                            </div>
-                            <div class="mb-3">
-                                <label for="" class="form-label">Total Meta</label>
-                                {{ form_estrategias_institucionales.est_total_meta}}
-                            </div>
-                            Meta
-                            <img src="{% static 'bootstrap/img/agregar.png' %}" alt="Ícono de reporte" style="width: 20px; height: 20px;" data-toggle="modal" data-target="#myModal3">
-                            <br><br>                    
+                                   
                         </div>
                     
                             <div class="modal-footer">

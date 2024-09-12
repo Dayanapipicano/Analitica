@@ -189,7 +189,7 @@ def p04(request):
     return render(request,'p04.html',  {'per_documento':per_documento})
 
 
-
+""""
 def subir_P04(request):
     if request.method == 'POST':
         archivo = request.FILES.get('fileUpload')
@@ -198,6 +198,13 @@ def subir_P04(request):
     
         if archivo and archivo.name.endswith(('.xlsx','.xls')):
             try:
+                
+                if archivo.name.endswith('.xlsx'):
+                    engine = 'openpyxl'
+                elif archivo.name.endswith('.xls'):
+                    engine = 'xlrd'
+                else:
+                    raise ValueError('Formato de archivo no soportado')
                 selected_persona = Persona.objects.get(per_documento=per_documento)
                 hoja_principal = 'Reporte'
                 hoja_alternativa = 'Hoja1'
@@ -205,7 +212,7 @@ def subir_P04(request):
                 
                 hojas = pd.ExcelFile(archivo).sheet_names
                 if hoja_principal in hojas:
-                    df = pd.read_excel(archivo, header=4, sheet_name=hoja_principal, engine='xlrd')
+                    df = pd.read_excel(archivo, header=4, sheet_name=hoja_principal, engine=engine)
                 else:
                     df = pd.read_excel(archivo, header=0, sheet_name=hoja_alternativa)
 
@@ -227,7 +234,7 @@ def subir_P04(request):
                     total_masculinos = row['TOTAL_APRENDICES_MASCULINOS']
                     total_femeninos = row['TOTAL_APRENDICES_FEMENINOS']
                     total_nobinario = row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else 0
-                    
+                    identificador_ficha =row['IDENTIFICADOR_FICHA'],
                     # Sumar los aprendices masculinos, femeninos y no binarios
                     suma_aprendices = total_masculinos + total_femeninos + total_nobinario
 
@@ -236,8 +243,8 @@ def subir_P04(request):
                         total_aprendices = suma_aprendices
                     else:
                         total_aprendices = row['TOTAL_APRENDICES']
-                    p, created = P04.objects.update_or_create(
-                        identificador_ficha=row['IDENTIFICADOR_FICHA'],
+                    p, creado = P04.objects.update_or_create(
+                        identificador_ficha =row['IDENTIFICADOR_FICHA'],
                         defaults={
                             'fecha_p04': timezone.now(),
                             'codigo_regional': row['CODIGO_REGIONAL'],
@@ -286,15 +293,21 @@ def subir_P04(request):
                         }
                     )
                     
-                    p.per_documento = selected_persona
-                    p.save()
+                  
+                    if creado:
+                        print(f"Nuevo registro creado: {p}")
+                    else:
+                        print(f"Registro actualizado: {p}")
+
+             
+                        
 
             
                 messages.success(request, "Datos guardados exitosamente.")
 
             
             except Exception as e:
-              messages.error(request, f"Error al procesar el archivo: {str(e)}")
+              messages.error(request,f"Error al procesar la fila {index}: {e}")
         else:
             messages.error(request, "Por favor suba un archivo válido en formato .xlsx.")
         
@@ -310,6 +323,13 @@ def subir_P04(request):
     
         if archivo and archivo.name.endswith(('.xlsx','.xls')):
             try:
+            
+                if archivo.name.endswith('.xlsx'):
+                    engine = 'openpyxl'
+                elif archivo.name.endswith('.xls'):
+                    engine = 'xlrd'
+                else:
+                    raise ValueError('Formato de archivo no soportado')
                 selected_persona = Persona.objects.get(per_documento=per_documento)
                 hoja_principal = 'Reporte'
                 hoja_alternativa = 'Hoja1'
@@ -332,80 +352,73 @@ def subir_P04(request):
                 
        
  
-                P04.objects.all().delete()
+               
 
                 
 
                 # Itera sobre las filas del DataFrame
                 for index, row in df.iterrows():
-                    total_masculinos = row['TOTAL_APRENDICES_MASCULINOS']
-                    total_femeninos = row['TOTAL_APRENDICES_FEMENINOS']
-                    total_nobinario = row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else 0
-                    
-                    # Sumar los aprendices masculinos, femeninos y no binarios
-                    suma_aprendices = total_masculinos + total_femeninos + total_nobinario
-
-                    # Si 'TOTAL_APRENDICES' no coincide con la suma, se corrige
-                    if row['TOTAL_APRENDICES'] != suma_aprendices:
-                        total_aprendices = suma_aprendices
-                    else:
-                        total_aprendices = row['TOTAL_APRENDICES']
-                    p = P04(
-                        fecha_p04=timezone.now(),
-                        codigo_regional=row['CODIGO_REGIONAL'],
-                        nombre_regional=row['NOMBRE_REGIONAL'],
-                        codigo_centro=row['CODIGO_CENTRO'],
-                        nombre_centro=row['NOMBRE_CENTRO'],
-                        identificador_ficha=row['IDENTIFICADOR_FICHA'],
-                        identificador_unico_ficha=row['IDENTIFICADOR_UNICO_FICHA'],
-                        estado_curso=row['ESTADO_CURSO'],
-                        codigo_nivel_formacion=row['CODIGO_NIVEL_FORMACION'],
-                        nivel_formacion=row['NIVEL_FORMACION'],
-                        codigo_jornada=row['CODIGO_JORNADA'],
-                        nombre_jornada=row['NOMBRE_JORNADA'],
-                        tipo_de_formacion=row['TIPO_DE_FORMACION'],
-                        fecha_inicio_ficha = row['FECHA_INICIO_FICHA'],
-                        fecha_terminacion_ficha = row['FECHA_TERMINACION_FICHA'],
-                        etapa_ficha=row['ETAPA_FICHA'],
-                        modalidad_formacion=row['MODALIDAD_FORMACION'],
-                        codigo_sector_programa=row['CODIGO_SECTOR_PROGRAMA'],
-                        nombre_sector_programa=row['NOMBRE_SECTOR_PROGRAMA'],
-                        codigo_ocupacion=row['CODIGO_OCUPACION'],
-                        nombre_ocupacion=row['NOMBRE_OCUPACION'],
-                        codigo_programa=row['CODIGO_PROGRAMA'],
-                        version_programa=row['VERSION_PROGRAMA'],
-                        nombre_programa_formacion=row['NOMBRE_PROGRAMA_FORMACION'],
-                        red=row['RED'] if 'RED' in df.columns else None, 
-                        codigo_pais_curso=row['CODIGO_PAIS_CURSO'],
-                        nombre_pais_curso=row['NOMBRE_PAIS_CURSO'],
-                        codigo_departamento_curso=row['CODIGO_DEPARTAMENTO_CURSO'],
-                        nombre_departamento_curso=row['NOMBRE_DEPARTAMENTO_CURSO'],
-                        codigo_municipio_curso=row['CODIGO_MUNICIPIO_CURSO'],
-                        nombre_municipio_curso=row['NOMBRE_MUNICIPIO_CURSO'],
-                        codigo_convenio=row['CODIGO_CONVENIO'],
-                        nombre_convenio=row['NOMBRE_CONVENIO'],
-                        ampliacion_cobertura=row['AMPLIACION_COBERTURA'],
-                        codigo_programa_especial=row['CODIGO_PROGRAMA_ESPECIAL'],
-                        nombre_programa_especial=row['NOMBRE_PROGRAMA_ESPECIAL'],
-                        numero_cursos=row['NUMERO_CURSOS'],
-                        total_aprendices_masculinos=total_masculinos,
-                        total_aprendices_femeninos=total_femeninos,
-                        total_aprendices_nobinario=total_nobinario if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
-                        total_aprendices=total_aprendices, 
-                        duracion_programa=row['DURACION_PROGRAMA'],
-                        nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
-                        
-
-
-                        total_aprendices_activos=row['TOTAL_APRENDICES_ACTIVOS'],
-                        
-                        
-                        per_documento=selected_persona
+               
+                    try:
+                        p = P04(
+                            fecha_p04=timezone.now(),
+                            codigo_regional=row['CODIGO_REGIONAL'],
+                            nombre_regional=row['NOMBRE_REGIONAL'],
+                            codigo_centro=row['CODIGO_CENTRO'],
+                            nombre_centro=row['NOMBRE_CENTRO'],
+                            identificador_ficha=row['IDENTIFICADOR_FICHA'],
+                            identificador_unico_ficha=row['IDENTIFICADOR_UNICO_FICHA'],
+                            estado_curso=row['ESTADO_CURSO'],
+                            codigo_nivel_formacion=row['CODIGO_NIVEL_FORMACION'],
+                            nivel_formacion=row['NIVEL_FORMACION'],
+                            codigo_jornada=row['CODIGO_JORNADA'],
+                            nombre_jornada=row['NOMBRE_JORNADA'],
+                            tipo_de_formacion=row['TIPO_DE_FORMACION'],
+                            fecha_inicio_ficha = row['FECHA_INICIO_FICHA'],
+                            fecha_terminacion_ficha = row['FECHA_TERMINACION_FICHA'],
+                            etapa_ficha=row['ETAPA_FICHA'],
+                            modalidad_formacion=row['MODALIDAD_FORMACION'],
+                            codigo_sector_programa=row['CODIGO_SECTOR_PROGRAMA'],
+                            nombre_sector_programa=row['NOMBRE_SECTOR_PROGRAMA'],
+                            codigo_ocupacion=row['CODIGO_OCUPACION'],
+                            nombre_ocupacion=row['NOMBRE_OCUPACION'],
+                            codigo_programa=row['CODIGO_PROGRAMA'],
+                            version_programa=row['VERSION_PROGRAMA'],
+                            nombre_programa_formacion=row['NOMBRE_PROGRAMA_FORMACION'],
+                            red=row['RED'] if 'RED' in df.columns else None, 
+                            codigo_pais_curso=row['CODIGO_PAIS_CURSO'],
+                            nombre_pais_curso=row['NOMBRE_PAIS_CURSO'],
+                            codigo_departamento_curso=row['CODIGO_DEPARTAMENTO_CURSO'],
+                            nombre_departamento_curso=row['NOMBRE_DEPARTAMENTO_CURSO'],
+                            codigo_municipio_curso=row['CODIGO_MUNICIPIO_CURSO'],
+                            nombre_municipio_curso=row['NOMBRE_MUNICIPIO_CURSO'],
+                            codigo_convenio=row['CODIGO_CONVENIO'],
+                            nombre_convenio=row['NOMBRE_CONVENIO'],
+                            ampliacion_cobertura=row['AMPLIACION_COBERTURA'],
+                            codigo_programa_especial=row['CODIGO_PROGRAMA_ESPECIAL'],
+                            nombre_programa_especial=row['NOMBRE_PROGRAMA_ESPECIAL'],
+                            numero_cursos=row['NUMERO_CURSOS'],
+                            total_aprendices_masculinos=row['TOTAL_APRENDICES_MASCULINOS'],
+                            total_aprendices_femeninos=row['TOTAL_APRENDICES_FEMENINOS'],
+                            total_aprendices_nobinario=row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
+                            total_aprendices=row['TOTAL_APRENDICES'], 
+                            duracion_programa=row['DURACION_PROGRAMA'],
+                            nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
+                            
+    
+    
+                            total_aprendices_activos=row['TOTAL_APRENDICES_ACTIVOS'],
+                            
+                            
+                            per_documento=selected_persona
                      
-                    )
+                        )
+                        p.per_documento = selected_persona
+                        p.save()
+                        print(f"Registro guardado: ID {p.p04_id}")
+                    except Exception as e:
+                        print(f"Error al guardar el registro en la fila {index}: {e}")
                     
-                    p.per_documento = selected_persona
-                    p.save()
 
             
                 messages.success(request, "Datos guardados exitosamente.")
@@ -417,7 +430,7 @@ def subir_P04(request):
             messages.error(request, "Por favor suba un archivo válido en formato .xlsx.")
         
         
-    return redirect('personas:P04') """
+    return redirect('personas:P04')
 @permission_required('can_view_reporteador_dashboard')
 def Poblacion_vulnerable(request):
     

@@ -165,8 +165,7 @@ class Meta(models.Model):
 class Estrategia(models.Model):
     est_id = models.AutoField(primary_key=True)
     est_nombre = models.CharField(max_length=100)
-    est_total_meta = models.CharField(max_length=100)
-    met_id = models.ForeignKey(Meta, on_delete=models.CASCADE, to_field='met_id')
+ 
     def __str__(self):
         return self.est_nombre
     
