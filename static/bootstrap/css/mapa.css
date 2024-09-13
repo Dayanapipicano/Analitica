@@ -7,10 +7,10 @@
     display: block; /* Asegura que el SVG se muestre como un bloque */
 }
 
-.mapadiv path {
-    fill: rgb(174, 174, 167);
-    stroke: rgb(0, 0, 0);
-    stroke-width: 1px; /* Ajusta el ancho del borde según tus preferencias */
+.mapadiv path{
+  
+    stroke: rgb(98, 94, 94);
+    stroke-width: 2px;
 }
 
 .mapadiv path:hover {
