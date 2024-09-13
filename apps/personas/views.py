@@ -229,7 +229,6 @@ def subir_P04(request):
                 
        
  
-                P04.objects.all().delete()
 
                 
 
@@ -237,62 +236,57 @@ def subir_P04(request):
                 for index, row in df.iterrows():
                
                     try:
-                        p = P04(
-                            fecha_p04=timezone.now(),
-                            codigo_regional=row['CODIGO_REGIONAL'],
-                            nombre_regional=row['NOMBRE_REGIONAL'],
-                            codigo_centro=row['CODIGO_CENTRO'],
-                            nombre_centro=row['NOMBRE_CENTRO'],
-                            identificador_ficha=row['IDENTIFICADOR_FICHA'],
-                            identificador_unico_ficha=row['IDENTIFICADOR_UNICO_FICHA'],
-                            estado_curso=row['ESTADO_CURSO'],
-                            codigo_nivel_formacion=row['CODIGO_NIVEL_FORMACION'],
-                            nivel_formacion=row['NIVEL_FORMACION'],
-                            codigo_jornada=row['CODIGO_JORNADA'],
-                            nombre_jornada=row['NOMBRE_JORNADA'],
-                            tipo_de_formacion=row['TIPO_DE_FORMACION'],
-                            fecha_inicio_ficha = row['FECHA_INICIO_FICHA'],
-                            fecha_terminacion_ficha = row['FECHA_TERMINACION_FICHA'],
-                            etapa_ficha=row['ETAPA_FICHA'],
-                            modalidad_formacion=row['MODALIDAD_FORMACION'],
-                            codigo_sector_programa=row['CODIGO_SECTOR_PROGRAMA'],
-                            nombre_sector_programa=row['NOMBRE_SECTOR_PROGRAMA'],
-                            codigo_ocupacion=row['CODIGO_OCUPACION'],
-                            nombre_ocupacion=row['NOMBRE_OCUPACION'],
-                            codigo_programa=row['CODIGO_PROGRAMA'],
-                            version_programa=row['VERSION_PROGRAMA'],
-                            nombre_programa_formacion=row['NOMBRE_PROGRAMA_FORMACION'],
-                            red=row['RED'] if 'RED' in df.columns else None, 
-                            codigo_pais_curso=row['CODIGO_PAIS_CURSO'],
-                            nombre_pais_curso=row['NOMBRE_PAIS_CURSO'],
-                            codigo_departamento_curso=row['CODIGO_DEPARTAMENTO_CURSO'],
-                            nombre_departamento_curso=row['NOMBRE_DEPARTAMENTO_CURSO'],
-                            codigo_municipio_curso=row['CODIGO_MUNICIPIO_CURSO'],
-                            nombre_municipio_curso=row['NOMBRE_MUNICIPIO_CURSO'],
-                            codigo_convenio=row['CODIGO_CONVENIO'],
-                            nombre_convenio=row['NOMBRE_CONVENIO'],
-                            ampliacion_cobertura=row['AMPLIACION_COBERTURA'],
-                            codigo_programa_especial=row['CODIGO_PROGRAMA_ESPECIAL'],
-                            nombre_programa_especial=row['NOMBRE_PROGRAMA_ESPECIAL'],
-                            numero_cursos=row['NUMERO_CURSOS'],
-                            total_aprendices_masculinos=row['TOTAL_APRENDICES_MASCULINOS'],
-                            total_aprendices_femeninos=row['TOTAL_APRENDICES_FEMENINOS'],
-                            total_aprendices_nobinario=row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
-                            total_aprendices=row['TOTAL_APRENDICES'], 
-                            duracion_programa=row['DURACION_PROGRAMA'],
-                            nombre_nuevo_sector=row['NOMBRE_NUEVO_SECTOR'],
-                            
-    
-    
-                            total_aprendices_activos=row['TOTAL_APRENDICES_ACTIVOS'],
-                            
-                            
-                            per_documento=selected_persona
-                     
-                        )
-                        p.per_documento = selected_persona
-                        p.save()
-                     
+                        
+                        p, creado = P04.objects.update_or_create(
+                        identificador_ficha =row['IDENTIFICADOR_FICHA'],
+                        defaults={
+                            'fecha_p04': timezone.now(),
+                            'codigo_regional': row['CODIGO_REGIONAL'],
+                            'nombre_regional': row['NOMBRE_REGIONAL'],
+                            'codigo_centro': row['CODIGO_CENTRO'],
+                            'nombre_centro': row['NOMBRE_CENTRO'],
+                            'identificador_unico_ficha': row['IDENTIFICADOR_UNICO_FICHA'],
+                            'estado_curso': row['ESTADO_CURSO'],
+                            'codigo_nivel_formacion': row['CODIGO_NIVEL_FORMACION'],
+                            'nivel_formacion': row['NIVEL_FORMACION'],
+                            'codigo_jornada': row['CODIGO_JORNADA'],
+                            'nombre_jornada': row['NOMBRE_JORNADA'],
+                            'tipo_de_formacion': row['TIPO_DE_FORMACION'],
+                            'fecha_inicio_ficha': row['FECHA_INICIO_FICHA'],
+                            'fecha_terminacion_ficha': row['FECHA_TERMINACION_FICHA'],
+                            'etapa_ficha': row['ETAPA_FICHA'],
+                            'modalidad_formacion': row['MODALIDAD_FORMACION'],
+                            'codigo_sector_programa': row['CODIGO_SECTOR_PROGRAMA'],
+                            'nombre_sector_programa': row['NOMBRE_SECTOR_PROGRAMA'],
+                            'codigo_ocupacion': row['CODIGO_OCUPACION'],
+                            'nombre_ocupacion': row['NOMBRE_OCUPACION'],
+                            'codigo_programa': row['CODIGO_PROGRAMA'],
+                            'version_programa': row['VERSION_PROGRAMA'],
+                            'nombre_programa_formacion': row['NOMBRE_PROGRAMA_FORMACION'],
+                            'red': row['RED'] if 'RED' in df.columns else None,
+                            'codigo_pais_curso': row['CODIGO_PAIS_CURSO'],
+                            'nombre_pais_curso': row['NOMBRE_PAIS_CURSO'],
+                            'codigo_departamento_curso': row['CODIGO_DEPARTAMENTO_CURSO'],
+                            'nombre_departamento_curso': row['NOMBRE_DEPARTAMENTO_CURSO'],
+                            'codigo_municipio_curso': row['CODIGO_MUNICIPIO_CURSO'],
+                            'nombre_municipio_curso': row['NOMBRE_MUNICIPIO_CURSO'],
+                            'codigo_convenio': row['CODIGO_CONVENIO'],
+                            'nombre_convenio': row['NOMBRE_CONVENIO'],
+                            'ampliacion_cobertura': row['AMPLIACION_COBERTURA'],
+                            'codigo_programa_especial': row['CODIGO_PROGRAMA_ESPECIAL'],
+                            'nombre_programa_especial': row['NOMBRE_PROGRAMA_ESPECIAL'],
+                            'numero_cursos': row['NUMERO_CURSOS'],
+                            'total_aprendices_masculinos': row['TOTAL_APRENDICES_MASCULINOS'],
+                            'total_aprendices_femeninos': row['TOTAL_APRENDICES_FEMENINOS'],
+                            'total_aprendices_nobinario': row['TOTAL_APRENDICES_NOBINARIO'] if 'TOTAL_APRENDICES_NOBINARIO' in df.columns else None,
+                            'total_aprendices': row['IDENTIFICADOR_FICHA'],
+                            'duracion_programa': row['DURACION_PROGRAMA'],
+                            'nombre_nuevo_sector': row['NOMBRE_NUEVO_SECTOR'],
+                            'total_aprendices_activos': row['TOTAL_APRENDICES_ACTIVOS'],
+                            'per_documento': selected_persona
+                        }
+                       )
+
                     except Exception as e:
                         print(f"Error al guardar el registro en la fila {index}: {e}")
                     

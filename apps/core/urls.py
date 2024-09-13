@@ -23,7 +23,7 @@ urlpatterns = [
     path('meta_detalle/<int:estd_meta>/', core_views.meta_detalle, name='meta_detalle'),
     path('filtrar_datos_y_modalidades/',core_views.metas_formacion_filtros.as_view(), name='filtrar_datos_y_modalidades'),
     path('filtrar_estrategias_institucionales/',core_views.estrategias_institucionales_filtros.as_view(), name='filtrar_estrategias_institucionales'),
-    
+    path('get_meta/<int:meta_id>/', core_views.get_meta, name='get_meta'),
     #MODALIDAD
     path('modalidad/index/', core_views.Modalidad_index, name='modalidad_index'),
     path('modalidad/create/', core_views.Modalidad_create.as_view(), name='modalidad_create'),

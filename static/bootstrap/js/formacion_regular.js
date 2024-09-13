@@ -20,10 +20,11 @@
         .then(data => {
             if (data.success) {
                 // Simula el clic en el botón de cerrar para cerrar el segundo modal
-                document.querySelector('#close-second-modal').click();
+                document.querySelector('#submit-second-modal').click();
 
                 // Limpia el formulario después de cerrar el modal
                 form.reset();
+                updateFirstModal(data.meta_id)
             } else {
                 // Muestra errores si la respuesta es fallida
                 console.log('Error:', data.errors);
@@ -33,6 +34,23 @@
             console.error('Error:', error);
         });
     });
+
+   // Función para actualizar el primer modal
+function updateFirstModal(metaId) {
+    fetch(`/get_meta/${metaId}/`) // Asegúrate de que la URL coincide con la ruta en tu servidor
+        .then(response => response.json())
+        .then(data => {
+            // Aquí actualizas los campos del primer modal con los datos recibidos
+            document.querySelector('#id_met_id').textContent = data.meta_id;
+            // Agrega más actualizaciones según sea necesario
+        })
+        .catch(error => {
+            console.error('Error al obtener datos de la meta:', error);
+        });
+}
+
+
+
 });
 
 

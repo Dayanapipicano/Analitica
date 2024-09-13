@@ -881,7 +881,17 @@ class meta_delete(DeleteView):
     model = Meta
     success_url = reverse_lazy('cores:meta_index')
 
-
+def get_meta(request, meta_id):
+    try:
+        meta = Meta.objects.get(met_id=meta_id)
+        data = {
+            'meta_id': meta.met_id,
+            'met_año': meta.met_año,  # Asegúrate de ajustar estos campos a los que realmente usas
+            # Agrega aquí otros campos que necesites
+        }
+        return JsonResponse(data)
+    except Meta.DoesNotExist:
+        return JsonResponse({'error': 'Meta no encontrada'}, status=404)
 def meta_index(request):
     view_meta = Meta.objects.all()
     form_meta  = Form_meta
