@@ -120,8 +120,8 @@
   border: none;
   border-radius: 10px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); 
-  width: 900px;
-  height: 500px;
+
+
  
 }
 
@@ -151,7 +151,4 @@
 
 .custom-table{
   border: 1px solid #dee2e6;
-}
-.modal-footer{
-  top: 200px
 }

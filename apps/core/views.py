@@ -608,6 +608,7 @@ class Programa(TemplateView):
         if selected_centro_de_formacion:
             def obtener_nombre_centro_formacion(id_centro_formacion):
                 nombre_centro_formacion= get_object_or_404(Centro_de_formacion, id=id_centro_formacion)
+                print('nombre_centro_formacion',nombre_centro_formacion)
                 return nombre_centro_formacion.centro_de_formacion
         
             centro_de_formacion_res = obtener_nombre_centro_formacion(selected_centro_de_formacion)
@@ -711,6 +712,7 @@ def detalle_ficha(request, identificador_ficha):
         'campo6': ficha.red,
         'campo7': ficha.nombre_municipio_curso,
         'campo8': ficha.nombre_programa_formacion,
+        'campo9': ficha.nivel_formacion,
         
     }
    
@@ -728,10 +730,10 @@ class Desercion(TemplateView):
         
        
         
-        select_modalidad = request.GET.get('id_modalidad')
-        select_municipio = request.GET.get('municipio')
-        select_regional = request.GET.get('regional')
-        select_centro_de_formacion = request.GET.get('centro_de_formacion')
+        select_modalidad = request.GET.get('id_modalidad','')
+        select_municipio = request.GET.get('municipio','')
+        select_regional = request.GET.get('regional', '')
+        select_centro_de_formacion = request.GET.get('centro_de_formacion','')
         select_fecha_inicio_ficha = request.GET.get('fecha_inicio_ficha')
         select_fecha_terminacion_ficha = request.GET.get('fecha_terminacion_ficha')
       
@@ -787,8 +789,9 @@ class Desercion(TemplateView):
             filtros_desercion['nombre_regional'] = regional_res
         if select_centro_de_formacion:
             def obtener_nombre_centro_de_formacion(id_centro):
+                
                 nombre_centro_formacion = get_object_or_404(Centro_de_formacion, id=id_centro)
-            
+                
                 return nombre_centro_formacion.centro_de_formacion
             
             centro_de_formacion_res = obtener_nombre_centro_de_formacion(select_centro_de_formacion)
@@ -800,7 +803,7 @@ class Desercion(TemplateView):
             filtros_desercion['nombre_municipio_curso'] = select_municipio
         
         desercion_datos = P04.objects.filter(**filtros_desercion)
-        
+       
         #deserciones
         aprendices_activos_resultado = [resultado.total_aprendices_activos for resultado in desercion_datos]
         aprendices_totales_resultado = [resultado_total.total_aprendices for resultado_total in desercion_datos]

@@ -30,6 +30,7 @@ botonesMostrar.forEach(boton => {
                 $('#detalleCampo6').text(data.campo6);
                 $('#detalleCampo7').text(data.campo7);
                 $('#detalleCampo8').text(data.campo8);
+                $('#detalleCampo9').text(data.campo9);
                 // Añade más campos según los necesites
             },
             error: function(xhr, status, error) {

@@ -59,7 +59,7 @@
 
                                    
 
-                                <option value="" {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
+                                <option value="{{ select_modalidad }}" {% if not select_modalidad %}selected{% endif %}>Selecciona modalidad</option>
                                 {% for choice in modalidad%}
                                 
                                         <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == select_modalidad %}selected{% endif %}>{{ choice.modalidad }}</option>
@@ -81,7 +81,7 @@
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="id_regional" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_regional %}selected{% endif %}>Selecciona regional</option>
+                                <option value="{{ select_regional }}" disabled {% if not select_regional %}selected{% endif %}>Selecciona regional</option>
                                 {% for choice in regional%}
                                     <option value="{{ choice.id}}" {% if choice.id == select_regional %}selected{% endif %}>{{ choice.regional|title }}</option>
                                 {% endfor %}
@@ -95,7 +95,7 @@
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="id_centro_de_formacion" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona centro de formacion</option>
+                                <option value="{{ select_centro_de_formacion }}" disabled {% if not select_centro_de_formacion %}selected{% endif %}>Selecciona centro de formacion</option>
                                 {% for choice in centro_de_formacion%}
                                     <option value="{{ choice.id }}" {% if choice.id|stringformat:"s" == select_centro_de_formacion %}selected{% endif %}>{{ choice.centro_de_formacion|title }}</option>
                                 {% endfor %}
@@ -109,7 +109,7 @@
                         <div class="col-sm-9">
                             <select class="form-control form-control-sm custom-select" id="id_municipio" onchange="filtros_desercion()" required>
 
-                                <option value="" disabled {% if not select_municipio %}selected{% endif %}>Selecciona municipio</option>
+                                <option value="{{ select_municipio }}" disabled {% if not select_municipio %}selected{% endif %}>Selecciona municipio</option>
                                 {% for choice in municipio%}
                                     <option value="{{ choice.0 }}" {% if choice.0 == select_municipio %}selected{% endif %}>{{ choice.1 }}</option>
                                 {% endfor %}
@@ -212,12 +212,12 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="First">
+                        <a class="page-link" href="?page=1&fecha_inicio_ficha={{ select_fecha_inicio_ficha }}&fecha_terminacion_ficha={{ select_fecha_terminacion_ficha }}&centro_de_formacion={{ select_centro_de_formacion }}&id_modalidad={{select_modalidad}}&municipio={{select_municipio}}&regional={{select_regional}}" aria-label="First">
                             <span aria-hidden="true">&laquo;&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&fecha_inicio_ficha={{ select_fecha_inicio_ficha }}&fecha_terminacion_ficha={{ select_fecha_terminacion_ficha }}&centro_de_formacion={{ select_centro_de_formacion }}&id_modalidad={{select_modalidad}}&municipio={{select_municipio}}&regional={{select_regional}}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -231,12 +231,12 @@
 
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&fecha_inicio_ficha={{ select_fecha_inicio_ficha }}&fecha_terminacion_ficha={{ select_fecha_terminacion_ficha }}&centro_de_formacion={{ select_centro_de_formacion }}&id_modalidad={{select_modalidad}}&municipio={{select_municipio}}&regional={{select_regional}}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&fecha_inicio_ficha={{ select_fecha_inicio_ficha }}&fecha_terminacion_ficha={{ select_fecha_terminacion_ficha }}&centro_de_formacion={{ select_centro_de_formacion }}&id_modalidad={{select_modalidad}}&municipio={{select_municipio}}&regional={{select_regional}}" aria-label="Last">
                             <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
                     </li>

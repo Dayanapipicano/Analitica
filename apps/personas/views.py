@@ -215,7 +215,7 @@ def subir_P04(request):
                 else:
                     df = pd.read_excel(archivo, header=0, sheet_name=hoja_alternativa)
                 
-                
+                print(f"nuemro: {len(df)}")
                 numero = df.shape[0]
                 print('numeo', numero)
 
