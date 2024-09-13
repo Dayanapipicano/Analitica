@@ -566,23 +566,7 @@ class Programa(TemplateView):
         
         
         
-        #DATOS DE LOS SELECT
-        if selected_nivel_formacion == 'BILINGUISMO':
-            programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
-       
-            
-            programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL', nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
-          
-            valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
-        elif selected_nivel_formacion =='SIN BILINGUISMO':
-            programas_bilinguismo = Bilinguismo_programa.objects.all().values_list('Bil_programa', flat=True)
-
-            programas_habilitados = P04.objects.filter(nivel_formacion='CURSO ESPECIAL').exclude(nombre_programa_formacion__in=programas_bilinguismo).values('nombre_programa_formacion').distinct()
-            valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
-        else:
-            programas_habilitados = P04.objects.filter(nivel_formacion=selected_nivel_formacion).values('nombre_programa_formacion').distinct()
-            valores_programa = [(programa['nombre_programa_formacion'], capitalizar_texto(programa['nombre_programa_formacion']) )for programa in programas_habilitados]
-
+    
         modalidad_id = {
             'PRESENCIAL':1,
             'VIRTUAL':2,
@@ -604,7 +588,7 @@ class Programa(TemplateView):
         
         filtros_programa = {}
         
-        
+        valores_programa = []
         if selected_centro_de_formacion:
             def obtener_nombre_centro_formacion(id_centro_formacion):
                 nombre_centro_formacion= get_object_or_404(Centro_de_formacion, id=id_centro_formacion)
@@ -623,7 +607,7 @@ class Programa(TemplateView):
         
             nivel_formacion_res = obtener_nombre_nivel_formacion(selected_nivel_formacion)
             
-            
+           
             if nivel_formacion_res == 'BILINGUISMO':
                 filtros_programa['nombre_programa_especial'] = 'PROGRAMA DE BILINGUISMO'
                 
@@ -648,6 +632,10 @@ class Programa(TemplateView):
                
             else:
                 filtros_programa['nivel_formacion'] = nivel_formacion_res
+                programas_habilitados = P04.objects.filter(nivel_formacion=nivel_formacion_res).values('nombre_programa_formacion').distinct()
+                
+                valores_programa = [capitalizar_texto(programa['nombre_programa_formacion'])for programa in programas_habilitados]
+                
                 
         if selected_programa_formacion:
             
