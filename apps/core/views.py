@@ -230,14 +230,18 @@ def estrategias(request):
 
     return render(request, 'Estrategias/estrategias.html',context)
 
-    
+from django.db.models import Q
 def general(request):
-    
+    year = datetime.now().year
+    select_fecha_inicio_default = f"{year}-01-01"
+    select_fecha_fin_default = f"{year}-12-31"
     #filtros de fecha
-    select_fecha_inicio = request.GET.get('fecha_inicio')
+    select_fecha_inicio = request.GET.get('fecha_inicio',select_fecha_inicio_default)
     
-    select_fecha_fin = request.GET.get('fecha_fin')
-    
+    select_fecha_fin = request.GET.get('fecha_fin',select_fecha_fin_default)
+    select_fecha_fin_ff = datetime.strptime(select_fecha_fin, "%Y-%m-%d").date()
+    select_fecha_inicio_ff = datetime.strptime(select_fecha_inicio, "%Y-%m-%d").date()
+    print('dsf',select_fecha_fin_ff)
     datos_p04= P04.objects.all()
     
     
@@ -245,7 +249,7 @@ def general(request):
     
     if select_fecha_inicio and select_fecha_fin:
         datos_p04 = datos_p04.filter(fecha_inicio_ficha__gte=select_fecha_inicio, fecha_inicio_ficha__lte=select_fecha_fin)
-        print(datos_p04)
+    
      
 
         
@@ -305,21 +309,28 @@ def general(request):
     
     
     #NOTA VERIFICA QUE PRESENCIAL=1,VIRTUAL=2,DISTANCIA=3
-    
+    print("Fecha Inicio:", type(select_fecha_fin_ff))
+    print("Fecha Fin:", select_fecha_fin_ff)
+
     modalidad_presencial_metas = 1
     modalidad_virtual_metas = 2
-    metas_presencial = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas)
-    metas_virtual = Metas_formacion.objects.filter(metd_id=modalidad_virtual_metas)
-   
-   
+    metas_ids = Meta.objects.filter(
+        met_fecha_inicio__lte=select_fecha_fin_ff,
+        met_fecha_fin__gte=select_fecha_inicio_ff,
+
+    ).values_list('met_id', flat=True)
+    print("IDs de Metas para el rango de fechas:", list(metas_ids))
     
+    
+  
     #METAS CON PORCENTAJES
-    metas_presencial_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas)
-    metas_virtual_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_virtual_metas)
+    metas_presencial_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_presencial_metas,met_id__met_fecha_inicio__lte=select_fecha_inicio,met_id__met_fecha_fin__gte=select_fecha_fin) 
+   
+    metas_virtual_porcentaje = Metas_formacion.objects.filter(metd_modalidad=modalidad_virtual_metas,met_id__met_fecha_inicio__lte=select_fecha_inicio, met_id__met_fecha_fin__gte=select_fecha_fin)
     
     metas_presencial_porcentaje_res = list(metas_presencial_porcentaje.values_list('met_formacion_curso_especial','met_formacion_tecnologo','met_formacion_tecnico','met_formacion_auxiliar','met_formacion_operario','met_formacion_evento'))
     metas_virtual_porcentaje_res = list(metas_virtual_porcentaje.values_list('met_formacion_curso_especial','met_formacion_tecnologo','met_formacion_tecnico','met_formacion_auxiliar','met_formacion_operario','met_formacion_evento'))
-    
+    print(metas_virtual_porcentaje_res)
     metas = metas_presencial_porcentaje_res + metas_virtual_porcentaje_res
     metas_conversion = sum(metas, ())
     metas_valores = list(metas_conversion)
@@ -362,9 +373,11 @@ def general(request):
     sin_bilinguismo_activos_data_presencial = sum(sin_bilinguismo_activos_presencial)
     
     
-    
+
+        
+        
     #metas presencial bilinguismo 
-    metas_presencial = Metas_formacion.objects.filter(metd_modalidad=1)
+    metas_presencial = Metas_formacion.objects.filter(metd_modalidad=1,met_id__in = Meta.objects.filter(Q(met_fecha_inicio__lte=select_fecha_inicio) & Q(met_fecha_fin__gte=select_fecha_fin) ))
     #bilinguismo presencial
     metas_formacion_bilinguismo_presencial = metas_presencial.values('met_formacion_bilinguismo')
     bilinguismo_meta_presencial = [bilinguismo_metas_presencial['met_formacion_bilinguismo'] for bilinguismo_metas_presencial in metas_formacion_bilinguismo_presencial]
@@ -373,7 +386,7 @@ def general(request):
     sin_bilinguismo_meta_presencial = [sin_bilinguismo_metas_presencial['met_formacion_sin_bilinguismo'] for sin_bilinguismo_metas_presencial in metas_formacion_sin_bilinguismo_presencial]
     
     #metas presencial sin bilinguismo 
-    metas_virtual = Metas_formacion.objects.filter(metd_modalidad=2)
+    metas_virtual = Metas_formacion.objects.filter(metd_modalidad=2,met_id__in = Meta.objects.filter(Q(met_fecha_inicio__lte=select_fecha_inicio) & Q(met_fecha_fin__gte=select_fecha_fin) ))
     #bilinguismo virtual
     metas_formacion_bilinguismo_virtual = metas_virtual.values('met_formacion_bilinguismo')
     bilinguismo_meta_virtual = [bilinguismo_metas_virtual['met_formacion_bilinguismo'] for bilinguismo_metas_virtual in metas_formacion_bilinguismo_virtual]
@@ -393,8 +406,7 @@ def general(request):
         'labels_virtuales':json.dumps(labels_virtuales),
         'data':data,
   
-        'metas_presencial':metas_presencial,
-        'metas_virtual':metas_virtual,
+       
         'data_tabla_presencial':data_values_presencial,
         'data_tabla_virtual':data_values_virtual,
      
@@ -408,8 +420,8 @@ def general(request):
         'sin_bilinguismo_activos_data_virtual':sin_bilinguismo_activos_data_virtual,
         'sin_bilinguismo_activos_data_presencial':sin_bilinguismo_activos_data_presencial,
         #metas tabla
-        'metas_presencial':metas_presencial,
-        'metas_virtual':metas_virtual,
+        'metas_presencial':metas_presencial_porcentaje,
+        'metas_virtual':metas_virtual_porcentaje,
         
         #metas_complementaria
         'metas_complementaria':metas_complementaria,
@@ -661,7 +673,7 @@ class Programa(TemplateView):
        
         fichas_filtro = lista_filtros.values('identificador_ficha').order_by('identificador_ficha')
 
-
+        print('ff',fichas_filtro)
      
         context = self.get_context_data(
             nivel_formacion=Nivel_formacion.objects.all(),
@@ -969,7 +981,7 @@ class Meta_formacion_edit(UpdateView):
               'met_formacion_sin_bilinguismo',
               'met_formacion_sin_bilinguismo',
               'met_id']
-    success_url = reverse_lazy('cores:estrategias_institucionales_index')
+    success_url = reverse_lazy('cores:formacion_regular_index')
     
 #ESTRATEGIAS_INSTITUCIONALES
 def Estrategias_institucionales_index(request):

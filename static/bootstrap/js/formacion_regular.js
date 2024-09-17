@@ -166,7 +166,7 @@ function Delete_meta_formacion(button) {
     
 
     
-    document.getElementById('editarFormMetaFormacion').action = `/modalidad/edit/${pk}`;
+    document.getElementById('editarFormMetaFormacion').action = `/meta_formacion/edit/${pk}`;
     document.getElementById('id_met_formacion_operario').value = id_met_formacion_operario
     document.getElementById('id_met_formacion_auxiliar').value = id_met_formacion_auxiliar
     document.getElementById('id_met_formacion_tecnico').value = id_met_formacion_tecnico

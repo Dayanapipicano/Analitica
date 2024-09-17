@@ -195,15 +195,18 @@ def subir_P04(request):
         per_documento = request.POST.get('per_documento')
       
     
-        if archivo and archivo.name.endswith(('.xlsx','.xls')):
+        if archivo and archivo.name.endswith(('.xlsx','.xls','xml')):
             try:
             
                 if archivo.name.endswith('.xlsx'):
                     engine = 'openpyxl'
                 elif archivo.name.endswith('.xls'):
                     engine = 'xlrd'
+                
                 else:
                     raise ValueError('Formato de archivo no soportado')
+                
+                
                 selected_persona = Persona.objects.get(per_documento=per_documento)
                 hoja_principal = 'Reporte'
                 hoja_alternativa = 'Hoja1'
@@ -215,9 +218,7 @@ def subir_P04(request):
                 else:
                     df = pd.read_excel(archivo, header=0, sheet_name=hoja_alternativa)
                 
-                print(f"nuemro: {len(df)}")
-                numero = df.shape[0]
-                print('numeo', numero)
+           
 
                 df['FECHA_INICIO_FICHA'] = pd.to_datetime(df['FECHA_INICIO_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
                 df['FECHA_TERMINACION_FICHA'] = pd.to_datetime(df['FECHA_TERMINACION_FICHA'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d') 
@@ -231,7 +232,7 @@ def subir_P04(request):
  
 
                 
-
+                
                 # Itera sobre las filas del DataFrame
                 for index, row in df.iterrows():
                

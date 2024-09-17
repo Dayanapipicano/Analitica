@@ -15,7 +15,7 @@
                     <div class="form-group row">
                         <label for="filtroFechaInicio" class="col-sm-5 col-form-label col-form-label-sm">Fecha Inicio:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}" onchange="aplicarFiltrosGeneral()">
+                            <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio" value="{{ select_fecha_inicio }}" onchange="aplicarFiltrosGeneral()">
                         </div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                     <div class="form-group row">
                         <label class="col-sm-5 col-form-label col-form-label-sm">Fecha Fin:</label>
                         <div class="col-sm-7">
-                            <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" onchange="aplicarFiltrosGeneral()" value="{{ request.GET.fecha_fin }}">
+                            <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" onchange="aplicarFiltrosGeneral()" value="{{ select_fecha_fin }}">
                         </div>
                     </div>
                 </div>
@@ -122,13 +122,13 @@
                             </tr>
                             <tr>
                                 <td class="fixed-column">Meta Virtual</td>
-                                {%for metas_virtual in metas_virtual%}
-                                <td>{{metas_virtual.met_formacion_curso_especial}}</td>
-                                <td>{{metas_virtual.met_formacion_tecnologo}}</td>
-                                <td>{{metas_virtual.met_formacion_tecnico}}</td>
-                                <td>{{metas_virtual.met_formacion_auxiliar}}</td>
-                                <td>{{metas_virtual.met_formacion_operario}}</td>
-                                <td>{{metas_virtual.met_formacion_evento}}</td>
+                                {%for metas_virtuales in metas_virtual%}
+                                <td>{{metas_virtuales.met_formacion_curso_especial}}</td>
+                                <td>{{metas_virtuales.met_formacion_tecnologo}}</td>
+                                <td>{{metas_virtuales.met_formacion_tecnico}}</td>
+                                <td>{{metas_virtuales.met_formacion_auxiliar}}</td>
+                                <td>{{metas_virtuales.met_formacion_operario}}</td>
+                                <td>{{metas_virtuales.met_formacion_evento}}</td>
                           
                                 {%endfor%}
                             </tr>
@@ -259,8 +259,15 @@ function aplicarFiltrosGeneral() {
     }
     window.location.href = url;
 
+
+
+    
  
   }
+
+  document.getElementById('fecha_inicio').addEventListener('change', filtros_desercion);
+  document.getElementById('fecha_fin').addEventListener('change', filtros_desercion);
+  
  
 </script>
 
