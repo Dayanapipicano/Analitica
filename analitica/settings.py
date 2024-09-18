@@ -136,7 +136,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-ALLOWED_HOSTS = ['localhost','analitica-production.up.railway.app'] 
+#ALLOWED_HOSTS = ['localhost','analitica-production.up.railway.app'] 
 # settings.py
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
