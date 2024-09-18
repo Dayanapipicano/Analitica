@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 # Application definition
 
