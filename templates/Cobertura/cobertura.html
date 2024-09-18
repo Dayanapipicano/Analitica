@@ -82,13 +82,19 @@
                   <table class="table-hover custom-table">
                       <thead class="custom-thead">
                           <tr>
+                              <th scope="col">Nivel de formacion</th>
                               <th scope="col">Programa</th>
+                              <th scope="col">Cantidad</th>
+                              
+                              
                           </tr>
                       </thead>
                       <tbody>
                         {% for programa in programa_data %}
                         <tr>
+                            <td>{{ programa.nivel_formacion }}</td>
                             <td>{{ programa.programa }}</td>
+                         
                             <td>{{ programa.programa_count }}</td>
                           
                         </tr>

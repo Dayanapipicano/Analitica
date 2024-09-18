@@ -241,7 +241,7 @@ def general(request):
     select_fecha_fin = request.GET.get('fecha_fin',select_fecha_fin_default)
     select_fecha_fin_ff = datetime.strptime(select_fecha_fin, "%Y-%m-%d").date()
     select_fecha_inicio_ff = datetime.strptime(select_fecha_inicio, "%Y-%m-%d").date()
-    print('dsf',select_fecha_fin_ff)
+
     datos_p04= P04.objects.all()
     
     
@@ -515,10 +515,10 @@ class Cobertura_mapa(TemplateView):
             
             p04 = p04.filter(nombre_centro=centro_de_formacion_res,nombre_municipio_curso=selected_municipio)
             print(p04)
-        programas_lista = list(p04.values_list('nombre_programa_formacion', flat=True))
+        programas_lista = list(p04.values_list('nombre_programa_formacion','nivel_formacion'))
         programas_conteo = Counter(programas_lista)
         
-        programa_data = [{'programa': programa, 'programa_count': count} for programa, count in programas_conteo.items()]
+        programa_data = [{'programa': programa,'nivel_formacion':nivel_formacion, 'programa_count': count} for (programa,nivel_formacion), count in programas_conteo.items()]
     
         context = self.get_context_data(
             programa_data=programa_data,

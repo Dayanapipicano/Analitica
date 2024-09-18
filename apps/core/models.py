@@ -38,7 +38,7 @@ class Municipio(models.Model):
         JAMBALO = 'JAMBALO','Jambaló',
         LA_SIERRA = 'LA SIERRA','La Sierra',
         LA_VEGA ='LA VEGA','La Vega',
-        LOPEZ = 'LOPEZ','López',
+        LOPEZ = 'LÓPEZ DE MICAY','López',
         MERCADERES = 'MERCADERES','Mercaderes',
         MIRANDA = 'MIRANDA','Miranda',
         MORALES = 'MORALES','Morales',
