@@ -84,16 +84,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'USER': 'root',
-        'PASSWORD': 'vFaZkEvjtbKqkrRJoMUCOdFaQxheWQVM',
-        'HOST':'mysql.railway.internal',
-        'PORT': '27787',
-    }
-}
+
 
 DATABASES = {
     'default': {
