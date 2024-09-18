@@ -1,1 +1,1 @@
-web : gunicorn analitica.wsgi
+web : python manage.py migrate && gunicorn analitica.wsgi

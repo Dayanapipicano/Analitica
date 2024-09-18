@@ -85,10 +85,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'analisis',
+        'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': '12345678',
-        'HOST':'localhost',
+        'PASSWORD': 'vFaZkEvjtbKqkrRJoMUCOdFaQxheWQVM',
+        'HOST':'mysql.railway.internal',
         'PORT': '3306',
     }
 }
