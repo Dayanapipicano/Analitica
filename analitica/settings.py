@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-9+%g4dk0x&@^d(gac*gf2p5o-oxbz87as5b$ru&k&wdg@x5f&l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['analitica-production.up.railway.app']
 
 import pymysql
 pymysql.install_as_MySQLdb()
